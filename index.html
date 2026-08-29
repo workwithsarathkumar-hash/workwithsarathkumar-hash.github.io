@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sarath Kumar — Forward Deployed Engineer</title>
+<meta name="description" content="Sarath Kumar is a Forward Deployed Engineer (FDE) and AI Systems Engineer leading a Generative AI team — building LLM and OCR-based document intelligence systems in production. I don't look for opportunities. I build them.">
+<meta name="author" content="Sarath Kumar">
+<link rel="canonical" href="https://sarathkumar1197.github.io/">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Sarath Kumar — Forward Deployed Engineer">
+<meta property="og:description" content="Forward Deployed Engineer (FDE) and AI Systems Engineer leading a Generative AI team. I don't look for opportunities. I build them.">
+<meta property="og:image" content="https://sarathkumar1197.github.io/poster.jpg">
+<meta property="og:url" content="https://sarathkumar1197.github.io/">
+<meta property="og:type" content="profile">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sarath Kumar — Forward Deployed Engineer">
+<meta name="twitter:description" content="Forward Deployed Engineer (FDE) and AI Systems Engineer leading a Generative AI team. I don't look for opportunities. I build them.">
+<meta name="twitter:image" content="https://sarathkumar1197.github.io/poster.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230B0C0E'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Georgia,serif' font-style='italic' fill='%23C9A55C' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Sarath Kumar",
+  "alternateName": "Sarath Kumar FDE",
+  "url": "https://sarathkumar1197.github.io/",
+  "image": "https://sarathkumar1197.github.io/poster.jpg",
+  "jobTitle": "Forward Deployed Engineer (FDE) / AI Systems Engineer",
+  "description": "Forward Deployed Engineer and AI Systems Engineer leading a Generative AI team, building enterprise-scale document intelligence and decision-automation systems with LLMs, OCR/ICR, and RAG.",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Mphasis"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bengaluru",
+    "addressRegion": "Karnataka",
+    "addressCountry": "IN"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/sarath-kumar-3b621316b"
+  ],
+  "knowsAbout": [
+    "Forward Deployed Engineering",
+    "Generative AI",
+    "Large Language Models",
+    "Retrieval-Augmented Generation",
+    "OCR",
+    "Document Intelligence",
+    "Conversational AI",
+    "AWS"
+  ]
+}
+</script>
+<style>
+  /* ---------- Theme tokens ---------- */
+  :root{
+    --bg:#0B0C0E;
+    --surface:#131418;
+    --surface-2:#1A1B20;
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.14);
+    --text:#EFEDE8;
+    --text-soft:#A8A6A0;
+    --text-faint:#6E6C67;
+    --accent:#C9A55C;
+    --accent-strong:#DEBB78;
+    --accent-ink:#191307;
+    --accent-soft:rgba(201,165,92,0.14);
+    --accent-border:rgba(201,165,92,0.32);
+    --shadow:rgba(0,0,0,0.5);
+  }
+  :root[data-theme="light"]{
+    --bg:#FAF9F6;
+    --surface:#FFFFFF;
+    --surface-2:#F2F0EA;
+    --border:rgba(20,18,12,0.09);
+    --border-strong:rgba(20,18,12,0.15);
+    --text:#1B1A17;
+    --text-soft:#5C5A54;
+    --text-faint:#96938B;
+    --accent:#9C7A32;
+    --accent-strong:#82652A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:rgba(156,122,50,0.1);
+    --accent-border:rgba(156,122,50,0.3);
+    --shadow:rgba(20,18,12,0.1);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Sora',system-ui,-apple-system,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    transition:background 0.25s ease, color 0.25s ease;
+    overflow-x:hidden;
+  }
+  img,video{max-width:100%;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent);}
+
+  /* ---------- Progress bar + nav ---------- */
+  .progress{position:fixed;top:0;left:0;height:2px;background:var(--accent);width:0%;z-index:100;transition:width 0.08s linear;}
+  nav.top{
+    position:sticky;top:0;z-index:90;
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    background:color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:920px;margin:0 auto;padding:16px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{font-weight:700;font-size:0.95rem;letter-spacing:0.01em;text-decoration:none;color:var(--text);}
+  .nav-links{display:flex;gap:28px;font-size:0.88rem;}
+  .nav-links a{color:var(--text-soft);text-decoration:none;transition:color 0.15s ease;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-right{display:flex;align-items:center;gap:18px;}
+  @media (max-width:680px){ .nav-links{display:none;} }
+
+  .theme-toggle{
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--border-strong);
+    background:var(--surface);
+    color:var(--text);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:border-color 0.15s ease, transform 0.15s ease;
+  }
+  .theme-toggle:hover{border-color:var(--accent-border);transform:translateY(-1px);}
+  .theme-toggle svg{width:17px;height:17px;}
+  .icon-sun{display:none;}
+  :root[data-theme="light"] .icon-moon{display:none;}
+  :root[data-theme="light"] .icon-sun{display:block;}
+
+  /* ---------- Reveal-on-scroll ---------- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+  .stagger > *{transition-delay:calc(var(--i,0) * 90ms);}
+
+  /* ---------- Hero ---------- */
+  header.hero{position:relative;padding:clamp(64px,12vh,120px) 0 clamp(48px,8vh,80px);text-align:left;overflow:hidden;}
+  #heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.55;pointer-events:none;}
+  header.hero .wrap{position:relative;z-index:1;}
+  h1 .letter{display:inline-block;opacity:0;transform:translateY(0.4em);animation:letterIn 0.6s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes letterIn{to{opacity:1;transform:translateY(0);}}
+  @media (prefers-reduced-motion: reduce){
+    h1 .letter{animation:none;opacity:1;transform:none;}
+    .reveal{transition:none;opacity:1;transform:none;}
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-size:0.78rem;
+    margin-bottom:24px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(2.3rem,6vw,3.8rem);
+    line-height:1.1;
+    letter-spacing:-0.01em;
+    margin:0 0 20px;
+  }
+  h1 .light{font-weight:300;color:var(--text-soft);}
+  h1 .accent{color:var(--accent);font-style:italic;font-weight:500;}
+  .title-line{
+    font-size:clamp(1rem,2vw,1.2rem);
+    color:var(--text-soft);
+    margin:0 0 6px;
+    font-weight:400;
+  }
+  .title-line strong{color:var(--text);font-weight:600;}
+  .tagline{
+    max-width:600px;
+    margin:28px 0 40px;
+    color:var(--text-soft);
+    font-size:1.08rem;
+  }
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 28px;
+    border-radius:6px;
+    font-weight:600;
+    text-decoration:none;
+    font-size:0.92rem;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--accent);color:var(--accent-ink);}
+  .btn-primary:hover{box-shadow:0 10px 30px var(--accent-soft);}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border-strong);}
+  .btn-ghost:hover{border-color:var(--accent-border);color:var(--accent);}
+
+  /* ---------- Sections ---------- */
+  section{padding:clamp(48px,9vh,96px) 0;}
+  .section-label{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--text-faint);
+    font-size:0.76rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .section-label span{color:var(--accent);}
+
+  .video-section .wrap{display:flex;flex-direction:column;align-items:center;text-align:center;}
+  .video-frame{
+    position:relative;
+    width:min(320px,78vw);
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    box-shadow:0 30px 70px var(--shadow);
+    background:var(--surface);
+  }
+  .video-frame video{display:block;width:100%;aspect-ratio:1080/1350;background:#000;}
+  .video-caption{margin-top:16px;color:var(--text-faint);font-size:0.85rem;font-family:'JetBrains Mono',monospace;}
+
+  .bio{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:clamp(32px,6vw,56px);
+  }
+  .bio-lead{
+    font-family:'Fraunces',serif;
+    font-size:clamp(1.2rem,2.4vw,1.5rem);
+    font-weight:500;
+    color:var(--text);
+    margin:0 0 18px;
+    letter-spacing:-0.01em;
+  }
+  .bio-body{color:var(--text-soft);font-size:1.02rem;margin:0 0 28px;max-width:640px;}
+  .bio-facts{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+  }
+  .bio-facts > div{display:flex;flex-direction:column;gap:5px;}
+  .bio-facts .k{font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);}
+  .bio-facts .v{font-size:0.95rem;color:var(--text);font-weight:600;}
+
+  .manifesto{
+    background:var(--surface);
+    border-radius:12px;
+    padding:clamp(32px,6vw,64px);
+    border:1px solid var(--border);
+  }
+  .manifesto p{
+    font-family:'Fraunces',serif;
+    font-size:clamp(1.2rem,2.6vw,1.7rem);
+    font-weight:500;
+    margin:0 0 18px;
+    color:var(--text);
+    letter-spacing:-0.01em;
+  }
+  .manifesto p:last-of-type{margin-bottom:0;}
+  .manifesto .accent{color:var(--accent);font-style:italic;}
+  .manifesto .muted{font-family:'Sora',sans-serif;color:var(--text-soft);font-weight:400;font-size:1rem;}
+  .question{
+    margin-top:30px;
+    padding-top:26px;
+    border-top:1px solid var(--border);
+    color:var(--text);
+    font-weight:600;
+    font-size:1.1rem;
+  }
+
+  .quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  .quote-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:clamp(28px,5vw,44px);
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .quote-card:hover{border-color:var(--accent-border);transform:translateY(-3px);}
+  .quote-card::before{
+    content:"\201C";
+    font-family:'Fraunces',serif;
+    font-size:3.2rem;
+    color:var(--accent);
+    opacity:0.4;
+    line-height:1;
+    display:block;
+    margin-bottom:4px;
+  }
+  .quote-card blockquote{margin:0;}
+  .quote-card p{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(1.1rem,2.2vw,1.35rem);
+    color:var(--text);
+    margin:0 0 16px;
+    letter-spacing:-0.01em;
+  }
+  .quote-attr{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);display:block;line-height:1.6;}
+  .quote-attr em{font-style:normal;opacity:0.75;}
+  .morph-icon{position:relative;width:64px;height:40px;margin-top:22px;color:var(--accent);}
+  .morph-icon svg{position:absolute;inset:0;width:100%;height:100%;transition:opacity 1s ease, transform 1s ease;}
+  .morph-icon .icon-horse{opacity:1;transform:translateX(0) scale(1);}
+  .morph-icon .icon-car{opacity:0;transform:translateX(6px) scale(0.94);}
+  .quote-card.morphed .icon-horse{opacity:0;transform:translateX(-6px) scale(0.94);}
+  .quote-card.morphed .icon-car{opacity:1;transform:translateX(0) scale(1);}
+
+  .beats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;}
+  @media (max-width:460px){ .beats{grid-template-columns:1fr;} }
+  .beat{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:24px 20px;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .beat:hover{border-color:var(--accent-border);transform:translateY(-3px);}
+  .beat .n{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    font-size:0.78rem;
+    margin-bottom:12px;
+    display:block;
+  }
+  .beat h3{margin:0 0 8px;font-size:1.08rem;color:var(--text);font-weight:600;}
+  .beat p{margin:0;color:var(--text-faint);font-size:0.9rem;}
+
+  .proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  .proof-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:clamp(26px,5vw,40px);
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .proof-card:hover{border-color:var(--accent-border);transform:translateY(-3px);}
+  .proof-card h3{margin:0 0 10px;font-family:'Fraunces',serif;font-size:1.35rem;font-weight:500;}
+  .proof-card p{margin:0;color:var(--text-soft);}
+  .proof-meta{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    font-size:0.8rem;
+    margin-top:14px;
+    display:block;
+  }
+  .proof-aside{
+    margin:28px 0 0;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+    color:var(--text-faint);
+    font-size:0.9rem;
+  }
+  .proof-aside a{font-weight:600;white-space:nowrap;}
+  .proof-aside strong{color:var(--text);font-style:italic;font-weight:600;}
+
+  footer{
+    text-align:center;
+    padding:70px 24px 90px;
+    color:var(--text-faint);
+    border-top:1px solid var(--border);
+    margin-top:24px;
+  }
+  footer .closing{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    color:var(--text);
+    font-size:1.8rem;
+    margin-bottom:22px;
+    letter-spacing:-0.01em;
+  }
+  footer .closing span{color:var(--accent);font-style:italic;}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600;}
+  footer a:hover{text-decoration:underline;}
+  .contact-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0 4px;row-gap:8px;}
+  .contact-row .sep{color:var(--text-faint);margin:0 6px;font-weight:400;}
+  footer .fine{margin-top:30px;font-size:0.76rem;font-family:'JetBrains Mono',monospace;color:var(--text-faint);opacity:0.6;}
+  .viewer-count{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:26px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;
+    color:var(--text-faint);
+  }
+  .viewer-count .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .viewer-count strong{color:var(--text);font-weight:600;}
+</style>
+<script data-goatcounter="https://sarath.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<nav class="top">
+  <div class="nav-inner">
+    <a class="brand" href="#top">Sarath Kumar</a>
+    <div class="nav-links">
+      <a href="#showcase">Showcase</a>
+      <a href="#background">Background</a>
+      <a href="#manifesto">Manifesto</a>
+      <a href="#quotes">Quotes</a>
+      <a href="#workflow">Method</a>
+      <a href="#proof">Proof</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="eyebrow reveal">I build the car. Not a faster horse.</div>
+    <h1 class="reveal" id="heroName">Sarath <span class="accent">Kumar</span></h1>
+    <p class="title-line reveal">Forward Deployed Engineer (FDE)</p>
+    <p class="title-line reveal"><strong>Sr. AI Systems Engineer</strong> <span class="light">— Leading a GenAI Team</span></p>
+    <p class="tagline reveal">I don't wait for the full picture before I move — I build, research, and learn in motion, then shape what nobody thought to ask for yet.</p>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">Connect on LinkedIn</a>
+      <a class="btn btn-ghost" href="#proof">See What I've Built →</a>
+    </div>
+  </div>
+</header>
+
+<section class="video-section" id="showcase">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>01</span> — Showcase</h2>
+    <div class="video-frame reveal">
+      <video id="showcaseVideo" src="fde-showcase.mp4" poster="poster.jpg" playsinline controls preload="metadata"></video>
+    </div>
+    <p class="video-caption reveal">46s · how I operate as a Forward Deployed Engineer</p>
+  </div>
+</section>
+
+<section id="background">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>02</span> — Background</h2>
+    <div class="bio reveal">
+      <p class="bio-lead">Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.</p>
+      <p class="bio-body">Currently working as an AI Systems and Forward Deployed Engineer at Mphasis, leading the Generative AI team — building enterprise-scale document intelligence in the financial domain, where OCR/ICR and LLM pipelines turn unstructured data into production-grade decisions. Before that: cloud contact-center modernization and conversational AI for banking, insurance, and retail clients at Accenture and Virtusa. Kore.ai, Amazon Connect, Google CCAI, AWS, Python — the stack has changed, the discipline hasn't.</p>
+      <div class="bio-facts">
+        <div><span class="k">Experience</span><span class="v">7+ years</span></div>
+        <div><span class="k">Current role</span><span class="v">AI Systems &amp; Forward Deployed Engineer, Mphasis</span></div>
+        <div><span class="k">Focus</span><span class="v">Building something valuable</span></div>
+        <div><span class="k">Based in</span><span class="v">Bengaluru, India</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="manifesto">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>03</span> — Manifesto</h2>
+    <div class="manifesto reveal">
+      <p>Most people wait for the perfect plan before they move.</p>
+      <p class="accent">I move first — and figure out the rest in motion.</p>
+      <p class="muted">Call it manifestation, call it a bias toward action: belief plus motion is how the unclear becomes real. This site and Jarvis — a personal AI operating system built from the ground up — are proof of the same instinct: build first, refine live.</p>
+      <p class="accent">I don't look for opportunities. I build them.</p>
+      <div class="question">What are you still waiting for the right time to start?</div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>04</span> — Words I Build By</h2>
+    <div class="quotes stagger">
+      <div class="quote-card reveal" style="--i:0" id="fordQuoteCard">
+        <blockquote>
+          <p>If I had asked people what they wanted, they would have said faster horses.</p>
+          <footer class="quote-attr">— widely attributed to <cite>Henry Ford</cite> <em>(the line's origin is disputed and unconfirmed — the idea still holds)</em></footer>
+        </blockquote>
+        <div class="morph-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 40" class="icon-horse">
+            <path d="M8 32 Q6 22 12 16 Q14 8 22 7 Q28 6 30 12 L34 12 Q40 12 42 18 L46 18 Q52 18 52 24 L52 30 L48 30 L48 34 L44 34 L44 30 L20 30 L20 34 L16 34 L16 30 L8 30 Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="42" cy="30" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="18" cy="30" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          </svg>
+          <svg viewBox="0 0 64 40" class="icon-car">
+            <path d="M6 28 L9 18 Q11 14 16 14 L24 14 Q28 8 36 8 Q44 8 47 14 L52 14 Q58 14 58 20 L58 28 Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <line x1="6" y1="28" x2="58" y2="28" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="18" cy="30" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="46" cy="30" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="workflow">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>05</span> — How I Operate</h2>
+    <div class="beats stagger">
+      <div class="beat reveal" style="--i:0"><span class="n">01</span><h3>Research</h3><p>Dig in once I'm already moving — real signal beats a spreadsheet of guesses.</p></div>
+      <div class="beat reveal" style="--i:1"><span class="n">02</span><h3>Learn</h3><p>Every attempt teaches something a plan never could. Update in motion, not after.</p></div>
+      <div class="beat reveal" style="--i:2"><span class="n">03</span><h3>Focus</h3><p>Cut the noise. Decide what the moment actually calls for.</p></div>
+      <div class="beat reveal" style="--i:3"><span class="n">04</span><h3>Prioritise</h3><p>Rank what moves the needle over what simply feels urgent.</p></div>
+      <div class="beat reveal" style="--i:4"><span class="n">05</span><h3>Plan</h3><p>Architect the approach — now backed by what Research and Learn surfaced, not guesswork.</p></div>
+      <div class="beat reveal" style="--i:5"><span class="n">06</span><h3>Build</h3><p>Execute the plan with precision. No improvising mid-flight.</p></div>
+      <div class="beat reveal" style="--i:6"><span class="n">07</span><h3>Ship</h3><p>Get it live. A plan nobody can use isn't finished yet.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>06</span> — Proof</h2>
+    <div class="proof-grid stagger">
+      <div class="proof-card reveal" style="--i:0">
+        <h3>This Website</h3>
+        <p>Designed, built, and shipped end-to-end — a full design system, dark/light theming, scroll-driven motion, responsive across every device.</p>
+        <span class="proof-meta">You're looking at it</span>
+        <span class="proof-meta">A few hours of thinking, learning, building, validating, and deploying</span>
+      </div>
+      <div class="proof-card reveal" style="--i:1">
+        <h3>Jarvis</h3>
+        <p>A personal AI operating system built from the ground up — a reasoning core that tiers between fast local inference and frontier models, wired into voice, home automation, and real tool use.</p>
+        <span class="proof-meta">In active development</span>
+      </div>
+    </div>
+    <p class="proof-aside reveal">Also shipped a private resume scorer on a lazy Sunday scroll — scores skills and experience on the spot, nothing stored, nothing collected. <strong>Privacy isn't a feature, it's a right.</strong> <a href="https://resume-signal--sarath-works.replit.app/" target="_blank" rel="noopener">Go break it →</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="closing reveal">Let's <span>build</span>.</div>
+  <div class="contact-row">
+    <a href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">linkedin.com/in/sarath-kumar-3b621316b</a>
+    <span class="sep">·</span>
+    <a href="#" id="emailLink">—</a>
+  </div>
+  <div class="viewer-count" id="viewerCount" hidden>
+    <span class="dot"></span>
+    <strong id="viewerCountNum">—</strong> people have visited this page
+  </div>
+  <div class="fine">#GenAI #AgenticAI #ForwardDeployedEngineer #BuildInPublic #AI</div>
+</footer>
+
+<script>
+(function(){
+  // ---- Theme: dark by default always -- light only if the user asks for
+  // it via the toggle (ignores system preference on purpose). ----
+  var root = document.documentElement;
+  var saved = null;
+  try { saved = localStorage.getItem('theme'); } catch(e){}
+  var initial = saved || 'dark';
+  root.setAttribute('data-theme', initial);
+
+  var toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', function(){
+    var cur = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', cur);
+    try { localStorage.setItem('theme', cur); } catch(e){}
+  });
+
+  // ---- Scroll progress bar ----
+  var bar = document.getElementById('progress');
+  function updateProgress(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var height = h.scrollHeight - h.clientHeight;
+    bar.style.width = (height > 0 ? (scrolled / height) * 100 : 0) + '%';
+  }
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  updateProgress();
+
+  // ---- Reveal on scroll ----
+  var els = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Headline letter-cascade ----
+  var heroName = document.getElementById('heroName');
+  if (heroName && !reduceMotion) {
+    var delay = 0;
+    Array.prototype.slice.call(heroName.childNodes).forEach(function(node){
+      if (node.nodeType === Node.TEXT_NODE) {
+        var frag = document.createDocumentFragment();
+        node.textContent.split('').forEach(function(ch){
+          var span = document.createElement('span');
+          span.className = 'letter';
+          span.style.animationDelay = delay + 'ms';
+          span.textContent = ch === ' ' ? ' ' : ch;
+          frag.appendChild(span);
+          delay += 28;
+        });
+        heroName.replaceChild(frag, node);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        var text = node.textContent;
+        node.textContent = '';
+        text.split('').forEach(function(ch){
+          var span = document.createElement('span');
+          span.className = 'letter';
+          span.style.animationDelay = delay + 'ms';
+          span.textContent = ch === ' ' ? ' ' : ch;
+          node.appendChild(span);
+          delay += 28;
+        });
+      }
+    });
+  }
+
+  // ---- Hero node-network canvas (a quiet nod to "every path" thinking) ----
+  var canvas = document.getElementById('heroCanvas');
+  if (canvas && !reduceMotion) {
+    var ctx = canvas.getContext('2d');
+    var hero = document.getElementById('top');
+    var nodes = [];
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function sizeCanvas(){
+      var r = hero.getBoundingClientRect();
+      canvas.width = r.width * dpr;
+      canvas.height = r.height * dpr;
+      canvas.style.width = r.width + 'px';
+      canvas.style.height = r.height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var count = r.width < 640 ? 16 : 30;
+      nodes = [];
+      for (var i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * r.width,
+          y: Math.random() * r.height,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.18
+        });
+      }
+    }
+
+    var cachedAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#C9A55C';
+    document.getElementById('themeToggle').addEventListener('click', function(){
+      cachedAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || cachedAccent;
+    });
+
+    function tick(){
+      var r = hero.getBoundingClientRect();
+      ctx.clearRect(0, 0, r.width, r.height);
+      var col = cachedAccent;
+      nodes.forEach(function(n){
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > r.width) n.vx *= -1;
+        if (n.y < 0 || n.y > r.height) n.vy *= -1;
+      });
+      for (var i = 0; i < nodes.length; i++) {
+        for (var j = i + 1; j < nodes.length; j++) {
+          var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 140) {
+            ctx.strokeStyle = col;
+            ctx.globalAlpha = (1 - dist / 140) * 0.35;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.globalAlpha = 0.8;
+      ctx.fillStyle = col;
+      nodes.forEach(function(n){
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(tick);
+    }
+
+    sizeCanvas();
+    window.addEventListener('resize', sizeCanvas);
+    requestAnimationFrame(tick);
+  }
+
+  // ---- Magnetic buttons ----
+  if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.btn').forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transition = 'transform 0.05s linear';
+        btn.style.transform = 'translate(' + (x * 0.18) + 'px,' + (y * 0.3 - 2) + 'px)';
+      });
+      btn.addEventListener('mouseleave', function(){
+        btn.style.transition = 'transform 0.3s cubic-bezier(.2,.8,.2,1)';
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // ---- Ford quote: horse -> car morph payoff on scroll into view ----
+  var fordCard = document.getElementById('fordQuoteCard');
+  if (fordCard && 'IntersectionObserver' in window) {
+    var morphIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          setTimeout(function(){ fordCard.classList.add('morphed'); }, 500);
+          morphIo.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    morphIo.observe(fordCard);
+  }
+
+  // ---- Email link, built at runtime (not written as plain mailto: in the
+  // HTML source) so basic scrapers that only read static markup don't pick
+  // it up. Not bulletproof, but stops the majority of harvest bots. ----
+  (function () {
+    var user = 'workwithsarathkumar';
+    var domain = 'gmail.com';
+    var address = user + '@' + domain;
+    var link = document.getElementById('emailLink');
+    if (link) {
+      link.href = 'mailto:' + address;
+      link.textContent = address;
+    }
+  })();
+
+  // ---- Viewer count (GoatCounter) ----
+  // Sign up free at https://www.goatcounter.com, create a site, then in
+  // that site's Settings enable "Allow adding visitor counts on your
+  // website" (off by default for privacy). Put your site code below (the
+  // part before ".goatcounter.com") -- until then this stays hidden.
+  var GOATCOUNTER_CODE = 'sarath';
+  if (GOATCOUNTER_CODE) {
+    fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter//.json')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r); })
+      .then(function (data) {
+        var el = document.getElementById('viewerCount');
+        var num = document.getElementById('viewerCountNum');
+        if (el && num && data && data.count) {
+          num.textContent = data.count;
+          el.hidden = false;
+        }
+      })
+      .catch(function () { /* not configured yet or unreachable -- stay hidden */ });
+  }
+})();
+</script>
+
+</body>
+</html>
