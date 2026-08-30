@@ -400,8 +400,6 @@
   .viewer-count .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
   .viewer-count strong{color:var(--text);font-weight:600;}
 </style>
-<script data-goatcounter="https://sarath.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -750,25 +748,22 @@
     }
   })();
 
-  // ---- Viewer count (GoatCounter) ----
-  // Sign up free at https://www.goatcounter.com, create a site, then in
-  // that site's Settings enable "Allow adding visitor counts on your
-  // website" (off by default for privacy). Put your site code below (the
-  // part before ".goatcounter.com") -- until then this stays hidden.
-  var GOATCOUNTER_CODE = 'sarath';
-  if (GOATCOUNTER_CODE) {
-    fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter//.json')
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(r); })
-      .then(function (data) {
-        var el = document.getElementById('viewerCount');
-        var num = document.getElementById('viewerCountNum');
-        if (el && num && data && data.count) {
-          num.textContent = data.count;
-          el.hidden = false;
-        }
-      })
-      .catch(function () { /* not configured yet or unreachable -- stay hidden */ });
-  }
+  // ---- Viewer count (ResumeSignal page-views API) ----
+  fetch('https://resume-signal--sarath-works.replit.app/api/page-views', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: 'personal-website' }),
+  })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r); })
+    .then(function (data) {
+      var el = document.getElementById('viewerCount');
+      var num = document.getElementById('viewerCountNum');
+      if (el && num && data && typeof data.count === 'number') {
+        num.textContent = data.count.toLocaleString();
+        el.hidden = false;
+      }
+    })
+    .catch(function () { /* API unreachable -- stay hidden */ });
 })();
 </script>
 
