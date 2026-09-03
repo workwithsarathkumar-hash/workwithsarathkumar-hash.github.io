@@ -352,6 +352,7 @@
   .proof-card:hover{border-color:var(--accent-border);transform:translateY(-3px);}
   .proof-card h3{margin:0 0 10px;font-family:'Fraunces',serif;font-size:1.35rem;font-weight:500;}
   .proof-card p{margin:0;color:var(--text-soft);}
+  .proof-card img{display:block;width:100%;border-radius:8px;margin-top:16px;border:1px solid var(--border);}
   .proof-meta{
     font-family:'JetBrains Mono',monospace;
     color:var(--accent);
@@ -370,9 +371,10 @@
   .proof-feature-embed{border-radius:8px;overflow:hidden;}
   .proof-feature-embed iframe{display:block;width:100%;border:none;}
   .li-badge-wrap{
-    display:flex;justify-content:center;margin:28px auto 0;max-width:320px;
+    display:flex;justify-content:center;margin:28px auto 0;max-width:420px;
     padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;
   }
+  .li-badge-wrap .badge-base__link{display:none;}
   .proof-aside{
     margin:28px 0 0;
     padding-top:24px;
@@ -401,8 +403,20 @@
   footer .closing span{color:var(--accent);font-style:italic;}
   footer a{color:var(--accent);text-decoration:none;font-weight:600;}
   footer a:hover{text-decoration:underline;}
-  .contact-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0 4px;row-gap:8px;}
-  .contact-row .sep{color:var(--text-faint);margin:0 6px;font-weight:400;}
+  .contact-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;}
+  .contact-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid var(--border-strong);
+    color:var(--text-soft);
+    font-size:0.85rem;
+    font-weight:600;
+    text-decoration:none;
+    transition:border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+  .contact-btn:hover{border-color:var(--accent-border);color:var(--accent);transform:translateY(-2px);text-decoration:none;}
+  .contact-btn svg{width:15px;height:15px;flex-shrink:0;}
   footer .fine{margin-top:30px;font-size:0.76rem;font-family:'JetBrains Mono',monospace;color:var(--text-faint);opacity:0.6;}
   .viewer-count{
     display:inline-flex;align-items:center;gap:8px;
@@ -544,6 +558,8 @@
         <p>Designed, built, and shipped end-to-end — a full design system, dark/light theming, scroll-driven motion, responsive across every device.</p>
         <span class="proof-meta">You're looking at it</span>
         <span class="proof-meta">A few hours of thinking, learning, building, validating, and deploying</span>
+        <img src="site-screenshot.png" alt="Live screenshot of this website's homepage" loading="lazy">
+        <span class="proof-meta">Screenshot captured live via Playwright MCP</span>
       </div>
       <div class="proof-card reveal" style="--i:1">
         <h3>Jarvis</h3>
@@ -568,14 +584,21 @@
 <footer>
   <div class="closing reveal">Let's <span>build</span>.</div>
   <div class="contact-row">
-    <a href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">linkedin.com/in/sarath-kumar-3b621316b</a>
-    <span class="sep">·</span>
-    <a href="https://github.com/workwithsarathkumar-hash" target="_blank" rel="noopener">github.com/workwithsarathkumar-hash</a>
-    <span class="sep">·</span>
-    <a href="#" id="emailLink">—</a>
+    <a class="contact-btn" href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      LinkedIn
+    </a>
+    <a class="contact-btn" href="https://github.com/workwithsarathkumar-hash" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+      GitHub
+    </a>
+    <a class="contact-btn" href="#" id="emailLink">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
+      <span class="label">Email</span>
+    </a>
   </div>
   <div class="li-badge-wrap">
-    <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="sarath-kumar-3b621316b" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/sarath-kumar-3b621316b?trk=profile-badge">Sarath Kumar</a></div>
+    <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="sarath-kumar-3b621316b" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/sarath-kumar-3b621316b?trk=profile-badge">Sarath Kumar</a></div>
   </div>
   <div class="viewer-count" id="viewerCount" hidden>
     <span class="dot"></span>
@@ -775,7 +798,7 @@
     var link = document.getElementById('emailLink');
     if (link) {
       link.href = 'mailto:' + address;
-      link.textContent = address;
+      link.title = address;
     }
   })();
 
