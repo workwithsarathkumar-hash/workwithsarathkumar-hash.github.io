@@ -359,6 +359,20 @@
     margin-top:14px;
     display:block;
   }
+  .proof-feature{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:clamp(24px,4vw,36px);margin-top:16px;
+  }
+  @media (max-width:720px){ .proof-feature{grid-template-columns:1fr;} }
+  .proof-feature-text h3{margin:0 0 10px;font-family:'Fraunces',serif;font-size:1.35rem;font-weight:500;}
+  .proof-feature-text p{margin:0 0 14px;color:var(--text-soft);}
+  .proof-feature-embed{border-radius:8px;overflow:hidden;}
+  .proof-feature-embed iframe{display:block;width:100%;border:none;}
+  .li-badge-wrap{
+    display:flex;justify-content:center;margin:28px auto 0;max-width:320px;
+    padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  }
   .proof-aside{
     margin:28px 0 0;
     padding-top:24px;
@@ -431,7 +445,7 @@
     <h1 class="reveal" id="heroName">Sarath <span class="accent">Kumar</span></h1>
     <p class="title-line reveal">Forward Deployed Engineer (FDE)</p>
     <p class="title-line reveal"><strong>Sr. AI Systems Engineer</strong> <span class="light">— Leading a GenAI Team</span></p>
-    <p class="tagline reveal">I don't wait for the full picture before I move — I build, research, and learn in motion, then shape what nobody thought to ask for yet.</p>
+    <p class="tagline reveal">Research. Execute. Understand. Try again — until it works. That's the loop.</p>
     <div class="cta-row reveal">
       <a class="btn btn-primary" href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">Connect on LinkedIn</a>
       <a class="btn btn-ghost" href="Sarath_Kumar_Resume.pdf" target="_blank" rel="noopener">Download Resume ↓</a>
@@ -537,6 +551,16 @@
         <span class="proof-meta">In active development</span>
       </div>
     </div>
+    <div class="proof-feature reveal">
+      <div class="proof-feature-text">
+        <h3>LinkedIn Publishing Agent</h3>
+        <p>Posted by a script, not by hand — OAuth, the LinkedIn API, and a schedule it manages itself.</p>
+        <span class="proof-meta">Live since launch day</span>
+      </div>
+      <div class="proof-feature-embed">
+        <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7500756914461609984" height="400" width="100%" frameborder="0" allowfullscreen title="LinkedIn post"></iframe>
+      </div>
+    </div>
     <p class="proof-aside reveal">Also shipped a private resume scorer on a lazy Sunday scroll — scores skills and experience on the spot, nothing stored, nothing collected. <strong>Privacy isn't a feature, it's a right.</strong> <a href="https://resume-signal--sarath-works.replit.app/" target="_blank" rel="noopener">Go break it →</a></p>
   </div>
 </section>
@@ -549,6 +573,9 @@
     <a href="https://github.com/workwithsarathkumar-hash" target="_blank" rel="noopener">github.com/workwithsarathkumar-hash</a>
     <span class="sep">·</span>
     <a href="#" id="emailLink">—</a>
+  </div>
+  <div class="li-badge-wrap">
+    <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="sarath-kumar-3b621316b" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/sarath-kumar-3b621316b?trk=profile-badge">Sarath Kumar</a></div>
   </div>
   <div class="viewer-count" id="viewerCount" hidden>
     <span class="dot"></span>
@@ -771,5 +798,6 @@
 })();
 </script>
 
+<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
 </body>
 </html>
