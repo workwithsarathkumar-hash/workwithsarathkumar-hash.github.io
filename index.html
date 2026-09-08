@@ -385,6 +385,71 @@
   .proof-aside a{font-weight:600;white-space:nowrap;}
   .proof-aside strong{color:var(--text);font-style:italic;font-weight:600;}
 
+  .games-intro{color:var(--text-soft);margin:0 0 20px;max-width:640px;}
+  .games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  .game-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:clamp(22px,4vw,32px);
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .game-card:hover{border-color:var(--accent-border);transform:translateY(-3px);}
+  .game-card h3{margin:0 0 6px;font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;}
+  .game-card .game-caption{color:var(--text-faint);font-size:0.82rem;margin:10px 0 0;}
+
+  /* Bubble Wrap Pop */
+  .bubble-sheet{
+    display:grid;grid-template-columns:repeat(8,1fr);gap:6px;width:100%;margin:12px 0 14px;
+  }
+  .bubble{
+    aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--surface-2), var(--border-strong));
+    border:1px solid var(--border-strong);cursor:pointer;
+    transition:transform 0.12s ease, background 0.12s ease;
+  }
+  .bubble:hover{transform:scale(1.08);}
+  .bubble.popped{
+    background:var(--bg);transform:scale(0.72);cursor:default;
+    border-color:var(--border);pointer-events:none;
+  }
+  .reset-btn{
+    background:transparent;color:var(--text-soft);border:1px solid var(--border-strong);
+    border-radius:6px;padding:7px 14px;font-size:0.8rem;cursor:pointer;
+  }
+  .reset-btn:hover{border-color:var(--accent-border);color:var(--accent);}
+
+  /* Color Match (Stroop effect) */
+  .colormatch-word{
+    font-family:'Fraunces',serif;font-weight:700;font-size:2.4rem;
+    margin:14px 0 18px;min-height:1.3em;letter-spacing:0.5px;
+  }
+  .colormatch-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;}
+  .colormatch-swatch{
+    aspect-ratio:1;border-radius:8px;border:1px solid var(--border-strong);cursor:pointer;
+    transition:transform 0.1s ease, border-color 0.15s ease;
+  }
+  .colormatch-swatch:hover{transform:scale(1.06);}
+  .colormatch-swatch.flash-correct{border-color:var(--text);border-width:2px;}
+  .colormatch-swatch.flash-wrong{opacity:0.4;}
+  .colormatch-stats{
+    font-family:'JetBrains Mono',monospace;color:var(--text-faint);font-size:0.78rem;
+    margin-top:14px;display:flex;gap:16px;
+  }
+  .colormatch-stats b{color:var(--accent);font-weight:600;}
+
+  /* Memory Sequence */
+  .memory-status{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:0.85rem;margin:8px 0 14px;min-height:1.2em;}
+  .memory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:160px;margin:0 auto 14px;}
+  .memory-tile{
+    aspect-ratio:1;border-radius:8px;background:var(--surface-2);border:1px solid var(--border-strong);
+    cursor:pointer;transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .memory-tile.lit{background:var(--accent);border-color:var(--accent-strong);transform:scale(0.96);}
+  .memory-tile.wrong{background:var(--border-strong);}
+  .memory-round{font-family:'JetBrains Mono',monospace;color:var(--text-faint);font-size:0.78rem;}
+
   footer{
     text-align:center;
     padding:70px 24px 90px;
@@ -442,6 +507,7 @@
       <a href="#quotes">Quotes</a>
       <a href="#workflow">Method</a>
       <a href="#proof">Proof</a>
+      <a href="#games">Games</a>
     </div>
     <div class="nav-right">
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
@@ -500,7 +566,7 @@
     <div class="manifesto reveal">
       <p>Most people wait for the perfect plan before they move.</p>
       <p class="accent">I move first — and figure out the rest in motion.</p>
-      <p class="muted">Call it manifestation, call it a bias toward action: belief plus motion is how the unclear becomes real. This site and Jarvis — a personal AI operating system built from the ground up — are proof of the same instinct: build first, refine live.</p>
+      <p class="muted">Call it manifestation, call it a bias toward action: belief plus motion is how the unclear becomes real. This site and MAX — a personal AI operating system built from the ground up — are proof of the same instinct: build first, refine live.</p>
       <p class="accent">I don't look for opportunities. I build them.</p>
       <div class="question">What are you still waiting for the right time to start?</div>
     </div>
@@ -562,9 +628,14 @@
         <span class="proof-meta">Screenshot captured live via Playwright MCP</span>
       </div>
       <div class="proof-card reveal" style="--i:1">
-        <h3>Jarvis</h3>
+        <h3>MAX</h3>
         <p>A personal AI operating system built from the ground up — a reasoning core that tiers between fast local inference and frontier models, wired into voice, home automation, and real tool use.</p>
         <span class="proof-meta">In active development</span>
+      </div>
+      <div class="proof-card reveal" style="--i:2">
+        <h3>Mental Health SLM</h3>
+        <p>A fine-tuned small language model prototype for first-line coping support — LoRA + 4-bit quantization on Apple Silicon via MLX, a deterministic crisis-safety gate that hard-excludes risk content from the model entirely, and a synthetic dataset built from real CBT methodology.</p>
+        <span class="proof-meta">Local-first by design — privacy over cloud dependency</span>
       </div>
     </div>
     <div class="proof-feature reveal">
@@ -578,6 +649,41 @@
       </div>
     </div>
     <p class="proof-aside reveal">Also shipped a private resume scorer on a lazy Sunday scroll — scores skills and experience on the spot, nothing stored, nothing collected. <strong>Privacy isn't a feature, it's a right.</strong> <a href="https://resume-signal--sarath-works.replit.app/" target="_blank" rel="noopener">Go break it →</a></p>
+  </div>
+</section>
+
+<section id="games">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>07</span> — Games</h2>
+    <p class="games-intro reveal">Three small, mindful games — designed and coded end-to-end by MAX, my personal AI system. No build tools, no tracking, nothing stored. Just something quiet to play with for a minute.</p>
+    <div class="games-grid stagger">
+      <div class="game-card reveal" style="--i:0">
+        <h3>Bubble Wrap</h3>
+        <div class="bubble-sheet" data-bubble-sheet></div>
+        <button class="reset-btn" type="button" data-bubble-reset>Reset sheet</button>
+        <p class="game-caption">A quick tactile reset for restless hands — eases tension and refocuses attention.</p>
+      </div>
+      <div class="game-card reveal" style="--i:1">
+        <h3>Color Match</h3>
+        <p class="colormatch-word" data-colormatch-word>RED</p>
+        <div class="colormatch-swatches" data-colormatch-swatches></div>
+        <p class="colormatch-stats"><span>Streak: <b data-colormatch-streak>0</b></span><span>Best: <b data-colormatch-best>0</b></span></p>
+        <p class="game-caption">Click the ink color, not the word — trains attention and cognitive control.</p>
+      </div>
+      <div class="game-card reveal" style="--i:2">
+        <h3>Memory Sequence</h3>
+        <p class="memory-status" data-memory-status>Press start</p>
+        <div class="memory-grid" data-memory-grid>
+          <div class="memory-tile" data-tile="0"></div>
+          <div class="memory-tile" data-tile="1"></div>
+          <div class="memory-tile" data-tile="2"></div>
+          <div class="memory-tile" data-tile="3"></div>
+        </div>
+        <button class="reset-btn" type="button" data-memory-start>Start</button>
+        <p class="memory-round" data-memory-round>Round: 0</p>
+        <p class="game-caption">Watch, then repeat the growing pattern — builds working memory and focus.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -818,6 +924,201 @@
       }
     })
     .catch(function () { /* API unreachable -- stay hidden */ });
+
+  // ---- Bubble Wrap: 48-cell grid, click to pop (with a synthesized
+  // bubble-burst sound -- filtered noise burst, not a sampled audio file,
+  // so the page stays dependency-free), reset to refill. ----
+  (function () {
+    var sheet = document.querySelector('[data-bubble-sheet]');
+    var resetBtn = document.querySelector('[data-bubble-reset]');
+    if (!sheet || !resetBtn) return;
+
+    var audioCtx = null;
+    function playPopSound() {
+      if (!audioCtx) {
+        var AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtor) return;
+        audioCtx = new AudioCtor();
+      }
+      var now = audioCtx.currentTime;
+      var duration = 0.09;
+
+      // A short burst of noise, band-passed and pitch-varied per pop, with
+      // a fast exponential decay -- this is how a "pop" is actually
+      // synthesized rather than a plain beep/click.
+      var bufferSize = Math.floor(audioCtx.sampleRate * duration);
+      var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      var data = buffer.getChannelData(0);
+      for (var i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2.2);
+      }
+      var noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+
+      var bandpass = audioCtx.createBiquadFilter();
+      bandpass.type = 'bandpass';
+      bandpass.frequency.value = 900 + Math.random() * 900;
+      bandpass.Q.value = 1.4;
+
+      var gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.9, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      noise.connect(bandpass);
+      bandpass.connect(gain);
+      gain.connect(audioCtx.destination);
+      noise.start(now);
+      noise.stop(now + duration);
+    }
+
+    function fill() {
+      sheet.innerHTML = '';
+      for (var i = 0; i < 48; i++) {
+        var bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.addEventListener('click', function () {
+          this.classList.add('popped');
+          playPopSound();
+        });
+        sheet.appendChild(bubble);
+      }
+    }
+    resetBtn.addEventListener('click', fill);
+    fill();
+  })();
+
+  // ---- Color Match: the classic Stroop interference test -- click the
+  // ink color the word is displayed in, not the word itself. ----
+  (function () {
+    var wordEl = document.querySelector('[data-colormatch-word]');
+    var swatchesEl = document.querySelector('[data-colormatch-swatches]');
+    var streakEl = document.querySelector('[data-colormatch-streak]');
+    var bestEl = document.querySelector('[data-colormatch-best]');
+    if (!wordEl || !swatchesEl || !streakEl || !bestEl) return;
+
+    var COLORS = [
+      { name: 'RED', hex: '#B5544B' },
+      { name: 'BLUE', hex: '#5B7A9D' },
+      { name: 'GREEN', hex: '#6B8F71' },
+      { name: 'AMBER', hex: '#C9A55C' }
+    ];
+
+    var streak = 0, best = 0, inkColor = null, locked = false;
+
+    function shuffle(arr) {
+      var a = arr.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+      }
+      return a;
+    }
+
+    function renderRound() {
+      locked = false;
+      var wordColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+      var mismatches = COLORS.filter(function (c) { return c.name !== wordColor.name; });
+      // 80% mismatch -- the actual Stroop interference -- 20% match for variety
+      inkColor = Math.random() < 0.8
+        ? mismatches[Math.floor(Math.random() * mismatches.length)]
+        : wordColor;
+
+      wordEl.textContent = wordColor.name;
+      wordEl.style.color = inkColor.hex;
+
+      swatchesEl.innerHTML = '';
+      shuffle(COLORS).forEach(function (c) {
+        var sw = document.createElement('div');
+        sw.className = 'colormatch-swatch';
+        sw.style.background = c.hex;
+        sw.addEventListener('click', function () {
+          if (locked) return;
+          locked = true;
+          if (c.name === inkColor.name) {
+            streak++;
+            best = Math.max(best, streak);
+            sw.classList.add('flash-correct');
+          } else {
+            streak = 0;
+            sw.classList.add('flash-wrong');
+          }
+          streakEl.textContent = streak;
+          bestEl.textContent = best;
+          setTimeout(renderRound, 350);
+        });
+        swatchesEl.appendChild(sw);
+      });
+    }
+
+    renderRound();
+  })();
+
+  // ---- Memory Sequence: classic growing-pattern recall, 4 tiles. ----
+  (function () {
+    var statusEl = document.querySelector('[data-memory-status]');
+    var roundEl = document.querySelector('[data-memory-round]');
+    var startBtn = document.querySelector('[data-memory-start]');
+    var tiles = Array.prototype.slice.call(document.querySelectorAll('.memory-tile'));
+    if (!statusEl || !roundEl || !startBtn || tiles.length !== 4) return;
+
+    var sequence = [], userStep = 0, accepting = false;
+
+    function lightTile(i, cls, ms) {
+      return new Promise(function (resolve) {
+        tiles[i].classList.add(cls);
+        setTimeout(function () { tiles[i].classList.remove(cls); resolve(); }, ms);
+      });
+    }
+
+    function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+    function playSequence() {
+      accepting = false;
+      statusEl.textContent = 'Watch…';
+      var chain = Promise.resolve();
+      sequence.forEach(function (tileIndex) {
+        chain = chain.then(function () { return sleep(180); })
+          .then(function () { return lightTile(tileIndex, 'lit', 420); });
+      });
+      chain.then(function () {
+        userStep = 0;
+        accepting = true;
+        statusEl.textContent = 'Your turn…';
+      });
+    }
+
+    function nextRound() {
+      sequence.push(Math.floor(Math.random() * 4));
+      roundEl.textContent = 'Round: ' + sequence.length;
+      playSequence();
+    }
+
+    tiles.forEach(function (tile, i) {
+      tile.addEventListener('click', function () {
+        if (!accepting) return;
+        if (i === sequence[userStep]) {
+          lightTile(i, 'lit', 200);
+          userStep++;
+          if (userStep === sequence.length) {
+            accepting = false;
+            statusEl.textContent = 'Nice — next round';
+            setTimeout(nextRound, 700);
+          }
+        } else {
+          accepting = false;
+          lightTile(i, 'wrong', 400);
+          statusEl.textContent = 'Not quite — reached round ' + sequence.length;
+          sequence = [];
+          roundEl.textContent = 'Round: 0';
+        }
+      });
+    });
+
+    startBtn.addEventListener('click', function () {
+      sequence = [];
+      nextRound();
+    });
+  })();
 })();
 </script>
 
