@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neumorphism v2 — UI Trend Exploration</title>
+<style>
+  :root{
+    --bg:#2b2f36;
+    --text:#c8cdd6;
+    --text-soft:#8b909a;
+    --text-faint:#5c616b;
+    --accent:#7aa2f7;
+    --shadow-dark:rgba(0,0,0,0.55);
+    --shadow-light:rgba(255,255,255,0.045);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    padding:40px 24px 100px;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+  h1{font-size:1.6rem;margin:0 0 6px;color:#fff;}
+  .sub{color:var(--text-soft);margin:0 0 40px;font-size:0.95rem;}
+  h2.section{font-size:0.8rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-faint);margin:44px 0 16px;}
+
+  /* Core neumorphic primitive: raised surface */
+  .neu-raised{
+    background:var(--bg);
+    border-radius:18px;
+    box-shadow: 9px 9px 18px var(--shadow-dark), -9px -9px 18px var(--shadow-light);
+  }
+  /* Inset / pressed surface */
+  .neu-inset{
+    background:var(--bg);
+    border-radius:18px;
+    box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+  }
+
+  /* Nav */
+  .nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 24px;margin-bottom:44px;
+  }
+  .nav .brand{font-weight:700;color:#fff;}
+  .nav .links{display:flex;gap:22px;font-size:0.88rem;color:var(--text-soft);}
+
+  /* Cards */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;}
+  .card{padding:28px;}
+  .card h3{margin:0 0 8px;color:#fff;font-size:1.05rem;}
+  .card p{margin:0;color:var(--text-soft);font-size:0.88rem;line-height:1.5;}
+
+  /* Buttons */
+  .btn-row{display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
+  .neu-btn{
+    padding:14px 26px;border:none;border-radius:14px;
+    background:var(--bg);color:var(--text);font-size:0.9rem;font-weight:600;
+    cursor:pointer;
+    box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+    transition:box-shadow 0.12s ease;
+  }
+  .neu-btn:active{
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+  }
+  .neu-btn.accent{color:var(--accent);}
+
+  /* Toggle switch */
+  .toggle-row{display:flex;align-items:center;gap:16px;}
+  .neu-toggle{
+    width:56px;height:30px;border-radius:20px;position:relative;cursor:pointer;
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+  }
+  .neu-toggle .knob{
+    position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+    background:var(--bg);
+    box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+    transition:left 0.18s ease;
+  }
+  .neu-toggle.on .knob{left:29px;}
+  .neu-toggle.on{box-shadow: inset 4px 4px 8px rgba(122,162,247,0.35), inset -4px -4px 8px var(--shadow-light);}
+
+  /* Input */
+  .neu-input-wrap{padding:4px;}
+  .neu-input{
+    width:100%;padding:14px 16px;border:none;border-radius:14px;
+    background:transparent;color:var(--text);font-size:0.9rem;font-family:inherit;
+  }
+  .neu-input:focus{outline:none;}
+  .neu-input::placeholder{color:var(--text-faint);}
+
+  /* Contrast check callout */
+  .contrast-note{
+    margin-top:14px;font-size:0.8rem;color:var(--text-faint);
+    font-family:'SF Mono',monospace;
+  }
+  .fail{color:#e08585;}
+  .pass{color:#7ec98f;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Neumorphism — v2 UI exploration</h1>
+  <p class="sub">Trend 8 from Figma's Web Design Trends library, applied to real components from this site (nav, cards, buttons) so the pros/cons below are based on something actually built, not just described.</p>
+
+  <h2 class="section">Nav</h2>
+  <div class="nav neu-raised">
+    <div class="brand">Sarath Kumar</div>
+    <div class="links"><span>Showcase</span><span>Proof</span><span>Games</span></div>
+  </div>
+
+  <h2 class="section">Cards (Proof-section equivalent)</h2>
+  <div class="card-grid">
+    <div class="card neu-raised">
+      <h3>MAX</h3>
+      <p>A personal AI operating system built from the ground up — tiered local/cloud reasoning, voice, real tool use.</p>
+    </div>
+    <div class="card neu-raised">
+      <h3>Mental Health SLM</h3>
+      <p>Fine-tuned small language model with a deterministic crisis-safety gate and a synthetic CBT-methodology dataset.</p>
+    </div>
+    <div class="card neu-raised">
+      <h3>This Website</h3>
+      <p>Designed, built, and shipped end-to-end — dark theming, scroll-driven motion, responsive across devices.</p>
+    </div>
+  </div>
+
+  <h2 class="section">Buttons — raised (default) / pressed (:active)</h2>
+  <div class="btn-row">
+    <button class="neu-btn">Reset sheet</button>
+    <button class="neu-btn accent">See What I've Built →</button>
+    <button class="neu-btn">Download Resume ↓</button>
+  </div>
+
+  <h2 class="section">Toggle switch</h2>
+  <div class="toggle-row">
+    <div class="neu-toggle" id="toggle"><div class="knob"></div></div>
+    <span style="font-size:0.85rem;color:var(--text-soft);">Click to toggle — notice the pressed/inset state</span>
+  </div>
+
+  <h2 class="section">Input field (inset)</h2>
+  <div class="neu-inset neu-input-wrap">
+    <input class="neu-input" type="text" placeholder="type a worry… (Worry Release equivalent)">
+  </div>
+
+  <h2 class="section">Measured contrast (live, computed against this exact palette)</h2>
+  <div id="contrastResults" class="contrast-note">Computing…</div>
+</div>
+
+<script>
+  document.getElementById('toggle').addEventListener('click', function () {
+    this.classList.toggle('on');
+  });
+
+  // Real WCAG contrast ratio check against the actual neumorphic background,
+  // not a claim -- computed live from the CSS variables above.
+  function luminance(hex) {
+    var rgb = hex.match(/\w\w/g).map(function (h) {
+      var c = parseInt(h, 16) / 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  }
+  function ratio(hex1, hex2) {
+    var l1 = luminance(hex1), l2 = luminance(hex2);
+    var lighter = Math.max(l1, l2), darker = Math.min(l1, l2);
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+  var bg = '2b2f36', textSoft = '8b909a', textFaint = '5c616b', textMain = 'c8cdd6';
+  var results = [
+    ['body text (#c8cdd6) vs bg', ratio(bg, textMain)],
+    ['soft text (#8b909a) vs bg', ratio(bg, textSoft)],
+    ['faint text (#5c616b) vs bg', ratio(bg, textFaint)]
+  ];
+  var WCAG_AA_NORMAL = 4.5;
+  document.getElementById('contrastResults').innerHTML = results.map(function (r) {
+    var pass = r[1] >= WCAG_AA_NORMAL;
+    return r[0] + ': ' + r[1].toFixed(2) + ':1 -- <span class="' + (pass ? 'pass' : 'fail') + '">' +
+      (pass ? 'PASSES' : 'FAILS') + ' WCAG AA (4.5:1)</span>';
+  }).join('<br>');
+</script>
+</body>
+</html>

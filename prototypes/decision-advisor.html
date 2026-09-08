@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Advisor — Prototype</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0C0E;
+    --surface:#131418;
+    --surface-2:#1A1B20;
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.14);
+    --text:#EFEDE8;
+    --text-soft:#A8A6A0;
+    --text-faint:#6E6C67;
+    --accent:#C9A55C;
+    --accent-strong:#DEBB78;
+    --accent-ink:#191307;
+    --accent-soft:rgba(201,165,92,0.14);
+    --accent-border:rgba(201,165,92,0.32);
+    --good:#7FB88A;
+    --bad:#C97C6A;
+    --shadow:rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Sora',system-ui,-apple-system,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:48px 24px 100px;}
+  a{color:var(--accent);}
+
+  .tag{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-size:0.76rem;
+    display:flex;align-items:center;gap:10px;margin-bottom:18px;
+  }
+  .tag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  h1{
+    font-family:'Fraunces',serif;font-weight:500;
+    font-size:clamp(1.9rem,4.5vw,2.7rem);
+    margin:0 0 14px;letter-spacing:-0.01em;
+  }
+  h1 em{color:var(--accent);font-style:italic;}
+  .sub{color:var(--text-soft);max-width:620px;margin:0 0 40px;font-size:1.02rem;}
+
+  /* ---- category tabs ---- */
+  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+  .tab{
+    font-family:'JetBrains Mono',monospace;font-size:0.82rem;
+    padding:10px 16px;border-radius:8px;
+    border:1px solid var(--border-strong);
+    background:var(--surface);color:var(--text-soft);
+    cursor:pointer;transition:all 0.15s ease;
+  }
+  .tab:hover{color:var(--text);border-color:var(--accent-border);}
+  .tab.active{background:var(--accent-soft);border-color:var(--accent-border);color:var(--accent-strong);}
+
+  /* ---- use case pills ---- */
+  .usecases{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;}
+  .usecase{
+    font-size:0.86rem;padding:8px 14px;border-radius:20px;
+    border:1px solid var(--border);background:var(--surface-2);
+    color:var(--text-soft);cursor:pointer;transition:all 0.15s ease;
+  }
+  .usecase:hover{color:var(--text);}
+  .usecase.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600;}
+
+  /* ---- layout: card + simulation ---- */
+  .stage{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start;}
+  @media (max-width:800px){ .stage{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;padding:clamp(24px,4vw,34px);
+  }
+  .pick-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:6px;flex-wrap:wrap;}
+  .pick-name{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;color:var(--accent-strong);}
+  .swap{display:flex;align-items:center;gap:8px;}
+  .swap label{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;}
+  select{
+    background:var(--surface-2);color:var(--text);
+    border:1px solid var(--border-strong);border-radius:6px;
+    padding:7px 10px;font-family:'Sora',sans-serif;font-size:0.85rem;cursor:pointer;
+  }
+  .badge-primary{
+    font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+    color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;
+    background:var(--accent-soft);border:1px solid var(--accent-border);
+    padding:3px 8px;border-radius:5px;
+  }
+
+  .why{color:var(--text-soft);font-size:0.98rem;margin:14px 0 20px;}
+  .model-row{
+    display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:8px;padding:14px 16px;margin-bottom:22px;
+  }
+  .model-row .k{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap;}
+  .model-row .v{font-size:0.9rem;color:var(--text);}
+  .model-row .mwhy{width:100%;color:var(--text-faint);font-size:0.85rem;margin-top:4px;}
+
+  .pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  @media (max-width:520px){ .pc-grid{grid-template-columns:1fr;} }
+  .pc h4{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;text-transform:uppercase;
+    letter-spacing:0.08em;margin:0 0 10px;
+  }
+  .pc.pros h4{color:var(--good);}
+  .pc.cons h4{color:var(--bad);}
+  .pc ul{margin:0;padding-left:18px;color:var(--text-soft);font-size:0.88rem;}
+  .pc li{margin-bottom:6px;}
+
+  .wrong{
+    border-top:1px solid var(--border);padding-top:16px;
+    font-size:0.88rem;color:var(--text-soft);
+  }
+  .wrong strong{color:var(--text);}
+
+  /* ---- simulation panel ---- */
+  .sim{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;padding:20px;position:sticky;top:24px;
+  }
+  .sim-label{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
+  .sim-label .live{color:var(--accent);display:flex;align-items:center;gap:6px;}
+  .sim-label .live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  svg.diagram{width:100%;height:220px;display:block;}
+  .diagram .node{fill:var(--surface-2);stroke:var(--border-strong);stroke-width:1.4;}
+  .diagram .node-active{stroke:var(--accent);}
+  .diagram text{fill:var(--text-soft);font-family:'JetBrains Mono',monospace;font-size:9px;}
+  .diagram .edge{stroke:var(--border-strong);stroke-width:1.4;fill:none;}
+  .diagram .packet{fill:var(--accent);}
+  .sim-note{margin-top:14px;color:var(--text-faint);font-size:0.78rem;font-family:'JetBrains Mono',monospace;}
+
+  footer.note{
+    margin-top:60px;padding-top:24px;border-top:1px solid var(--border);
+    color:var(--text-faint);font-size:0.82rem;font-family:'JetBrains Mono',monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="tag">Prototype · local only</div>
+  <h1>Pick the right tool. <em>See why.</em></h1>
+  <p class="sub">Select a use case, get a recommendation with reasoning — not just a name. Swap the pick to compare alternatives on the same axes: why, model, trade-offs, and when it's the wrong call.</p>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="usecases" id="usecases"></div>
+
+  <div class="stage">
+    <div class="card" id="card"></div>
+    <div class="sim">
+      <div class="sim-label"><span>Architecture sketch</span><span class="live">simulated</span></div>
+      <svg class="diagram" id="diagram" viewBox="0 0 320 220"></svg>
+      <div class="sim-note" id="simNote"></div>
+    </div>
+  </div>
+
+  <footer class="note">This is a static local prototype — data below is hardcoded for the demo. The live version would pull this from a Postgres table (category → use case → pick → why/model/pros/cons/alternatives) so new categories don't require touching markup.</footer>
+</div>
+
+<script>
+var DATA = {
+  "agents": {
+    label: "Agent Orchestration",
+    useCases: {
+      "sequential": {
+        label: "Sequential agentic flow",
+        prompt: "A fixed sequence of LLM steps — summarize, then extract, then classify.",
+        primary: "langchain",
+        diagram: "chain",
+        picks: {
+          langchain: {
+            name: "LangChain",
+            badge: "primary",
+            why: "The steps are linear and known ahead of time. LangChain's Runnable/chain abstraction is built exactly for \"step A output feeds step B input,\" and its integration ecosystem (loaders, parsers, vector stores) is the widest available.",
+            model: "Claude Sonnet or GPT-4o-class model per step",
+            modelWhy: "A sequential flow only needs strong instruction-following per step, not long-horizon planning — a fast, current-generation model is enough; save the frontier reasoning model for the step that actually needs judgment.",
+            pros: ["Fastest to wire up for a truly linear flow", "Largest ecosystem of pre-built integrations", "Well-documented for standard chain patterns"],
+            cons: ["Abstraction leaks the moment you need a branch or a retry loop", "Chain debugging can be opaque past 3-4 steps", "Historically higher version churn than the alternatives"],
+            wrong: "The moment a step needs to conditionally branch, retry, or loop based on intermediate output, this stops being sequential — move to LangGraph instead of forcing it."
+          },
+          langgraph: {
+            name: "LangGraph",
+            why: "If you already suspect branching, retries, or human-in-the-loop steps will show up later, modeling the flow as an explicit state graph up front avoids a rewrite — at the cost of more boilerplate for what is, today, a straight line.",
+            model: "Claude Sonnet or GPT-4o-class model per node",
+            modelWhy: "Same reasoning as LangChain here — the model choice doesn't change with orchestration style, only the control flow around it does.",
+            pros: ["Scales cleanly to branches, loops, and retries later", "Explicit state makes debugging a specific node easier", "Backed by the same ecosystem as LangChain"],
+            cons: ["Overkill for a flow that will genuinely stay linear", "More upfront design (state schema, edges) than a plain chain", "Smaller pool of ready-made recipes than LangChain proper"],
+            wrong: "If the flow is small, genuinely linear, and unlikely to grow branches, this is premature structure — a plain chain ships faster."
+          },
+          crewai: {
+            name: "CrewAI",
+            why: "CrewAI is role-based multi-agent collaboration (a \"crew\" of agents with distinct roles negotiating a task) — it can express a sequential flow as a crew of one-step-each agents, but that's not the problem it's designed to solve.",
+            model: "Claude Sonnet or GPT-4o-class model per role",
+            modelWhy: "Same per-step reasoning need as the others; CrewAI doesn't change what the step needs from the model.",
+            pros: ["Nice abstraction if steps map naturally to distinct \"roles\"", "Handles agent-to-agent handoff conventions for you"],
+            cons: ["Role/crew framing adds conceptual overhead for a plain pipeline", "Less control over exact execution order than an explicit chain or graph"],
+            wrong: "Use this when the use case is genuinely multi-agent, not when you're modeling a linear pipeline as agents for its own sake."
+          }
+        }
+      },
+      "branching": {
+        label: "Multi-agent flow with branching/loops",
+        prompt: "Output of one step decides which of several paths run next, and a step may retry.",
+        primary: "langgraph",
+        diagram: "branch",
+        picks: {
+          langgraph: {
+            name: "LangGraph",
+            badge: "primary",
+            why: "This is exactly LangGraph's design target: a state graph where edges can be conditional, nodes can loop back, and the state is explicit and inspectable at every step.",
+            model: "Claude Sonnet for planning/routing nodes, a smaller/faster model for leaf-level extraction nodes",
+            modelWhy: "Routing decisions benefit from stronger reasoning; simple extraction leaves don't need the same model tier — mixing tiers keeps cost down without weakening the decision points.",
+            pros: ["Conditional edges and loops are first-class, not bolted on", "State is explicit, which makes mid-flow debugging tractable", "Human-in-the-loop checkpoints are straightforward to add"],
+            cons: ["More setup than a chain for the same simple case", "You own the state schema design — get it wrong and refactors are painful"],
+            wrong: "If, after modeling it, the graph has exactly one path with no real branches, you've over-built — collapse it back to a chain."
+          },
+          crewai: {
+            name: "CrewAI",
+            why: "When the branching is really \"which specialist should handle this next\" rather than raw control flow, CrewAI's role-based delegation can read more naturally than an explicit graph.",
+            model: "Claude Sonnet as the manager/router role, lighter models for specialist roles",
+            modelWhy: "The delegation/routing role carries the reasoning load; specialists can run on cheaper models.",
+            pros: ["Role framing matches human mental models of delegation well", "Good for demos and rapid prototyping of multi-agent ideas"],
+            cons: ["Less precise control over exact execution/retry semantics than LangGraph", "Harder to unit-test individual transitions"],
+            wrong: "If you need precise, auditable control over retries and state transitions (e.g. for a production pipeline), LangGraph's explicitness wins."
+          },
+          autogen: {
+            name: "AutoGen",
+            why: "Microsoft's AutoGen is strong when the branching is driven by open-ended agent-to-agent conversation (agents debating, critiquing, or delegating dynamically) rather than a fixed set of conditional edges.",
+            model: "Claude Sonnet or GPT-4o-class for each conversational agent",
+            modelWhy: "Conversational back-and-forth needs solid instruction-following and consistency across turns; a frontier-tier model keeps the conversation coherent.",
+            pros: ["Natural fit for agent-to-agent dialogue patterns", "Good built-in support for human-in-the-loop review"],
+            cons: ["Less deterministic than an explicit graph — harder to guarantee a specific path was taken", "Conversation-driven flows can loop longer than expected without hard guards"],
+            wrong: "If you need a guaranteed, auditable execution path (compliance, financial decisions), the open-ended conversation model is a liability, not a feature."
+          }
+        }
+      }
+    }
+  },
+  "api": {
+    label: "API Style",
+    useCases: {
+      "public": {
+        label: "Public API for third-party integrators",
+        prompt: "External developers will consume this; predictability and caching matter more than flexibility.",
+        primary: "rest",
+        diagram: "client-server",
+        picks: {
+          rest: {
+            name: "REST",
+            badge: "primary",
+            why: "Third-party integrators already know REST — predictable resource URLs, standard HTTP verbs, and HTTP caching semantics work out of the box. Lowest cognitive load for an external consumer you don't control.",
+            model: "n/a",
+            modelWhy: "",
+            pros: ["Universally understood, minimal onboarding for integrators", "HTTP caching, status codes, and tooling (Postman, curl) just work", "Easy to version via URL/media-type"],
+            cons: ["Over- or under-fetching is common when clients need shapes you didn't anticipate", "N+1 request patterns for deeply nested resources"],
+            wrong: "If integrators need highly variable, client-defined response shapes (a BI tool querying arbitrary fields), REST forces you to either over-fetch or multiply endpoints — GraphQL fits better."
+          },
+          graphql: {
+            name: "GraphQL",
+            why: "Gives external clients the ability to request exactly the fields they need in one round trip — valuable when integrators have very different data needs from each other.",
+            model: "n/a",
+            modelWhy: "",
+            pros: ["One endpoint, client-shaped queries", "No over-fetching; fewer round trips for nested data"],
+            cons: ["Harder to cache at the HTTP layer than REST", "Query complexity/cost control is your problem to build (rate limiting by query cost, not just request count)", "Steeper learning curve for integrators used to REST"],
+            wrong: "If your third-party consumers are unsophisticated or low-volume, the operational overhead of query cost limits and schema governance outweighs the flexibility gained."
+          },
+          soap: {
+            name: "SOAP",
+            why: "Still the expected contract in some enterprise/regulated integrations (banking, healthcare, government) where strict WSDL contracts and built-in transactional/security standards (WS-Security) are a procurement requirement, not a preference.",
+            model: "n/a",
+            modelWhy: "",
+            pros: ["Strict, machine-readable contract (WSDL) reduces integration ambiguity", "Built-in standards for security/transactions some enterprise buyers require"],
+            cons: ["Verbose (XML envelopes) compared to REST/GraphQL", "Smaller pool of developers fluent in it today", "Tooling and iteration speed lag modern alternatives"],
+            wrong: "Don't reach for this unless a specific enterprise counterparty's procurement or compliance requirements actually mandate it — it's rarely the right default in 2026."
+          }
+        }
+      },
+      "internal": {
+        label: "Internal microservice, flexible client queries",
+        prompt: "Multiple internal frontends (web, mobile) need different slices of the same data.",
+        primary: "graphql",
+        diagram: "hub",
+        picks: {
+          graphql: {
+            name: "GraphQL",
+            badge: "primary",
+            why: "Different internal clients (web dashboard vs. mobile app) commonly need different subsets of the same underlying data — a single GraphQL schema lets each fetch its own shape without you maintaining parallel REST endpoints per client.",
+            model: "n/a",
+            modelWhy: "",
+            pros: ["One schema serves many client shapes", "Reduces endpoint sprawl as clients multiply", "Strong internal tooling ecosystem (codegen, introspection)"],
+            cons: ["Someone has to own schema evolution and deprecate fields responsibly", "N+1 resolver issues need a dataloader pattern to avoid perf cliffs"],
+            wrong: "If there's really only one internal consumer with a stable shape, a plain REST/RPC endpoint is less machinery to maintain."
+          },
+          rest: {
+            name: "REST",
+            why: "Simpler operationally when the internal clients' data needs are similar enough that a couple of well-designed endpoints cover everyone.",
+            model: "n/a",
+            modelWhy: "",
+            pros: ["Simpler infra, easier to reason about and cache", "No schema-governance overhead"],
+            cons: ["Endpoint count grows as client needs diverge", "Mobile clients often end up over-fetching to reuse the web endpoint"],
+            wrong: "Once you're maintaining 3+ near-duplicate endpoints just to serve slightly different client shapes, that's the signal to move to GraphQL."
+          }
+        }
+      }
+    }
+  },
+  "data": {
+    label: "Database Choice",
+    useCases: {
+      "relational": {
+        label: "Structured data with relationships",
+        prompt: "Users, orders, line items — data with clear relationships and integrity constraints.",
+        primary: "postgres",
+        diagram: "table",
+        picks: {
+          postgres: {
+            name: "PostgreSQL",
+            badge: "primary",
+            why: "Relational integrity (foreign keys, transactions, constraints) is exactly what protects \"an order can't reference a user that doesn't exist\" style bugs — and Postgres adds JSONB, full-text search, and pgvector when you need them, without a second database.",
+            model: "n/a",
+            modelWhy: "",
+            pros: ["ACID transactions and real foreign-key integrity", "JSONB gives document-style flexibility where needed", "pgvector covers basic embedding search without a separate vector DB"],
+            cons: ["Horizontal write-scaling is harder than some NoSQL options", "Schema migrations need discipline as the app grows"],
+            wrong: "If the data genuinely has no fixed schema and relationships don't matter (event logs, arbitrary user-generated JSON blobs at huge scale), a document store removes friction Postgres would otherwise add."
+          },
+          mongodb: {
+            name: "MongoDB",
+            why: "Best fit when the data is naturally document-shaped and schema varies per record, and you want to iterate on shape without migrations.",
+            model: "n/a",
+            modelWhy: "",
+            pros: ["Flexible schema, fast to iterate", "Scales horizontally with less operational effort than sharding Postgres"],
+            cons: ["Weaker guarantees for cross-document relationships and transactions than a relational DB", "Easy to end up re-implementing joins in application code"],
+            wrong: "If the app has real relational integrity requirements (financial records, anything with foreign-key-like constraints), forcing it into documents just moves the integrity problem into your application code."
+          }
+        }
+      },
+      "semantic": {
+        label: "Semantic search / RAG embeddings",
+        prompt: "Retrieve the most relevant chunks by meaning, not exact keyword match.",
+        primary: "pgvector",
+        diagram: "vector",
+        picks: {
+          pgvector: {
+            name: "Postgres + pgvector",
+            badge: "primary",
+            why: "If the rest of the app already lives in Postgres, pgvector adds approximate-nearest-neighbor search as an extension — one database, one backup story, one connection pool, instead of syncing data into a second system.",
+            model: "text-embedding-3-large / Voyage-class embedding model",
+            modelWhy: "Embedding quality drives retrieval quality more than the vector store does — pick the embedding model for domain fit first, the store second.",
+            pros: ["No second database to operate and keep in sync", "Good enough recall/latency for most app-scale RAG (low millions of vectors)", "Filters combine naturally with normal SQL WHERE clauses"],
+            cons: ["Falls behind purpose-built vector DBs at very large scale or very high QPS", "Index tuning (HNSW/IVFFlat) is on you"],
+            wrong: "At tens of millions+ vectors with strict latency SLAs, a dedicated vector DB's specialized indexing will outperform pgvector — that's the point to switch, not before."
+          },
+          pinecone: {
+            name: "Pinecone (dedicated vector DB)",
+            why: "Purpose-built for vector search at scale — managed, sharded, tuned indexing without you operating it.",
+            model: "text-embedding-3-large / Voyage-class embedding model",
+            modelWhy: "Same as above — the embedding model is the bigger lever on quality; the vector store's job is fast, accurate nearest-neighbor retrieval.",
+            pros: ["Scales to very large vector counts with managed infra", "Purpose-built indexing tends to beat general-purpose extensions at scale"],
+            cons: ["Another system to keep in sync with your source of truth", "Free tier is limited; becomes a real line item at scale"],
+            wrong: "If your corpus is small-to-medium and already lives in Postgres, this is an extra moving part solving a scale problem you don't have yet."
+          }
+        }
+      }
+    }
+  }
+};
+
+var DIAGRAMS = {
+  chain: function(svg){
+    var nodes = [[30,110],[120,110],[210,110],[290,110]];
+    var labels = ["in","step 1","step 2","out"];
+    drawNodes(svg, nodes, labels);
+    for (var i=0;i<nodes.length-1;i++) drawEdge(svg, nodes[i], nodes[i+1]);
+    animatePacket(svg, [nodes[0], nodes[1], nodes[2], nodes[3]]);
+  },
+  branch: function(svg){
+    var start=[30,110], a=[150,50], b=[150,170], end=[290,110];
+    drawNodes(svg, [start,a,b,end], ["in","path A","path B","out"]);
+    drawEdge(svg, start, a); drawEdge(svg, start, b);
+    drawEdge(svg, a, end); drawEdge(svg, b, end);
+    animatePacket(svg, [start, a, end]);
+  },
+  "client-server": function(svg){
+    var c=[40,110], s=[280,110];
+    drawNodes(svg, [c,s], ["client","REST API"]);
+    drawEdge(svg, c, s);
+    animatePacket(svg, [c, s, c]);
+  },
+  hub: function(svg){
+    var hub=[160,110], a=[280,40], b=[280,110], c=[280,180];
+    drawNodes(svg, [hub,a,b,c], ["GraphQL","web","mobile","admin"]);
+    drawEdge(svg, hub, a); drawEdge(svg, hub, b); drawEdge(svg, hub, c);
+    animatePacket(svg, [a, hub, b, hub, c]);
+  },
+  table: function(svg){
+    var users=[60,60], orders=[220,60], items=[220,170];
+    drawNodes(svg, [users,orders,items], ["users","orders","line_items"]);
+    drawEdge(svg, users, orders); drawEdge(svg, orders, items);
+    animatePacket(svg, [users, orders, items]);
+  },
+  vector: function(svg){
+    var query=[30,110];
+    var cluster=[[180,60],[220,40],[240,90],[190,120],[230,150],[260,110]];
+    var qn=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    qn.setAttribute("cx",query[0]);qn.setAttribute("cy",query[1]);qn.setAttribute("r",10);
+    qn.setAttribute("class","node node-active");
+    svg.appendChild(qn);
+    label(svg, query, "query");
+    cluster.forEach(function(p){
+      var n=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      n.setAttribute("cx",p[0]);n.setAttribute("cy",p[1]);n.setAttribute("r",6);
+      n.setAttribute("class","node");
+      svg.appendChild(n);
+    });
+    animatePacket(svg, [query, cluster[3]]);
+  }
+};
+
+function ns(){ return "http://www.w3.org/2000/svg"; }
+function drawNodes(svg, nodes, labels){
+  nodes.forEach(function(p, i){
+    var n=document.createElementNS(ns(),"circle");
+    n.setAttribute("cx",p[0]);n.setAttribute("cy",p[1]);n.setAttribute("r",16);
+    n.setAttribute("class","node" + (i===0?" node-active":""));
+    svg.appendChild(n);
+    label(svg, p, labels[i]);
+  });
+}
+function label(svg, p, text){
+  var t=document.createElementNS(ns(),"text");
+  t.setAttribute("x",p[0]);t.setAttribute("y",p[1]+30);
+  t.setAttribute("text-anchor","middle");
+  t.textContent = text;
+  svg.appendChild(t);
+}
+function drawEdge(svg, a, b){
+  var l=document.createElementNS(ns(),"line");
+  l.setAttribute("x1",a[0]);l.setAttribute("y1",a[1]);
+  l.setAttribute("x2",b[0]);l.setAttribute("y2",b[1]);
+  l.setAttribute("class","edge");
+  svg.appendChild(l);
+}
+function animatePacket(svg, path){
+  var p=document.createElementNS(ns(),"circle");
+  p.setAttribute("r",4);
+  p.setAttribute("class","packet");
+  var mpath = "M" + path.map(function(pt){return pt[0]+","+pt[1];}).join(" L ");
+  var anim=document.createElementNS(ns(),"animateMotion");
+  anim.setAttribute("dur","2.4s");
+  anim.setAttribute("repeatCount","indefinite");
+  anim.setAttribute("path", mpath);
+  p.appendChild(anim);
+  svg.appendChild(p);
+}
+
+var state = { cat: "agents", uc: "sequential", pick: null };
+
+function renderTabs(){
+  var el = document.getElementById("tabs");
+  el.innerHTML = "";
+  Object.keys(DATA).forEach(function(catId){
+    var b = document.createElement("button");
+    b.className = "tab" + (catId === state.cat ? " active" : "");
+    b.textContent = DATA[catId].label;
+    b.onclick = function(){
+      state.cat = catId;
+      state.uc = Object.keys(DATA[catId].useCases)[0];
+      state.pick = null;
+      renderAll();
+    };
+    el.appendChild(b);
+  });
+}
+
+function renderUseCases(){
+  var el = document.getElementById("usecases");
+  el.innerHTML = "";
+  var cat = DATA[state.cat];
+  Object.keys(cat.useCases).forEach(function(ucId){
+    var b = document.createElement("button");
+    b.className = "usecase" + (ucId === state.uc ? " active" : "");
+    b.textContent = cat.useCases[ucId].label;
+    b.onclick = function(){
+      state.uc = ucId;
+      state.pick = null;
+      renderAll();
+    };
+    el.appendChild(b);
+  });
+}
+
+function renderCard(){
+  var uc = DATA[state.cat].useCases[state.uc];
+  var pickId = state.pick || uc.primary;
+  var pick = uc.picks[pickId];
+  var isPrimary = pickId === uc.primary;
+
+  var html = '<p style="color:var(--text-faint);font-size:0.86rem;margin:0 0 18px;">' + uc.prompt + '</p>';
+  html += '<div class="pick-row"><span class="pick-name">' + pick.name + '</span>' + (isPrimary ? '<span class="badge-primary">Recommended</span>' : '') + '</div>';
+  html += '<div class="swap"><label>Compare</label><select id="pickSelect"></select></div>';
+  html += '<p class="why">' + pick.why + '</p>';
+  if (pick.model) {
+    html += '<div class="model-row"><span class="k">Model</span><span class="v">' + pick.model + '</span><span class="mwhy">' + pick.modelWhy + '</span></div>';
+  }
+  html += '<div class="pc-grid">';
+  html += '<div class="pc pros"><h4>Pros</h4><ul>' + pick.pros.map(function(p){return '<li>'+p+'</li>';}).join('') + '</ul></div>';
+  html += '<div class="pc cons"><h4>Cons</h4><ul>' + pick.cons.map(function(p){return '<li>'+p+'</li>';}).join('') + '</ul></div>';
+  html += '</div>';
+  html += '<div class="wrong"><strong>When this is the wrong call:</strong> ' + pick.wrong + '</div>';
+
+  document.getElementById("card").innerHTML = html;
+
+  var sel = document.getElementById("pickSelect");
+  Object.keys(uc.picks).forEach(function(id){
+    var opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = uc.picks[id].name + (id === uc.primary ? " (recommended)" : "");
+    if (id === pickId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.onchange = function(){
+    state.pick = sel.value;
+    renderCard();
+  };
+}
+
+function renderDiagram(){
+  var uc = DATA[state.cat].useCases[state.uc];
+  var svg = document.getElementById("diagram");
+  svg.innerHTML = "";
+  var fn = DIAGRAMS[uc.diagram];
+  if (fn) fn(svg);
+  document.getElementById("simNote").textContent = "// " + uc.diagram + " pattern — illustrative, not a live trace";
+}
+
+function renderAll(){
+  renderTabs();
+  renderUseCases();
+  renderCard();
+  renderDiagram();
+}
+
+renderAll();
+</script>
+
+</body>
+</html>
