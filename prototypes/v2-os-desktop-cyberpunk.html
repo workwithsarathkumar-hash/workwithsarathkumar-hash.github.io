@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEO_SARATH // v2 Concept (Cyberpunk)</title>
+<style>
+  :root{
+    --bg:#08060f;
+    --magenta:#ff2e9a;
+    --cyan:#20f5ff;
+    --panel:rgba(15,10,30,0.82);
+    --border:rgba(32,245,255,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:
+      linear-gradient(rgba(32,245,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(32,245,255,0.05) 1px, transparent 1px),
+      radial-gradient(ellipse at 50% 100%, rgba(255,46,154,0.15), transparent 60%),
+      var(--bg);
+    background-size:40px 40px, 40px 40px, 100% 100%, 100%;
+    color:var(--cyan);font-family:'SF Mono','Courier New',monospace;
+    overflow:hidden;user-select:none;
+  }
+
+  .glitch{position:relative;display:inline-block;}
+  .glitch::before,.glitch::after{
+    content:attr(data-text);position:absolute;top:0;left:0;width:100%;overflow:hidden;
+  }
+  .glitch::before{color:var(--magenta);animation:glitchTop 3.5s infinite linear;clip-path:polygon(0 0,100% 0,100% 45%,0 45%);}
+  .glitch::after{color:var(--cyan);animation:glitchBottom 3.5s infinite linear;clip-path:polygon(0 55%,100% 55%,100% 100%,0 100%);}
+  @keyframes glitchTop{0%,92%,100%{transform:translate(0,0);}93%{transform:translate(-2px,-1px);}95%{transform:translate(2px,1px);}}
+  @keyframes glitchBottom{0%,92%,100%{transform:translate(0,0);}94%{transform:translate(2px,1px);}96%{transform:translate(-2px,-1px);}}
+
+  /* ---- Boot ---- */
+  #boot{
+    position:fixed;inset:0;background:#000;z-index:999;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity 0.5s ease;
+  }
+  #boot .big{font-size:2rem;font-weight:700;letter-spacing:3px;color:var(--cyan);text-shadow:0 0 12px var(--cyan);}
+  #boot .status{margin-top:14px;font-size:0.78rem;color:var(--magenta);letter-spacing:2px;}
+  #boot.hidden{opacity:0;pointer-events:none;}
+
+  /* ---- HUD top bar ---- */
+  #hud{
+    position:fixed;top:0;left:0;right:0;height:30px;
+    border-bottom:1px solid var(--border);background:rgba(8,6,15,0.85);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px;font-size:0.72rem;letter-spacing:1px;z-index:100;
+  }
+  #hud .status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--magenta);margin-right:6px;box-shadow:0 0 6px var(--magenta);animation:pulse 1.6s infinite;}
+  @keyframes pulse{50%{opacity:0.4;}}
+  #clock{color:var(--magenta);}
+
+  /* ---- Icons ---- */
+  #desktop-icons{position:fixed;top:44px;left:18px;display:flex;flex-direction:column;gap:22px;z-index:5;}
+  .icon{width:82px;text-align:center;cursor:pointer;font-size:0.68rem;color:var(--cyan);}
+  .icon .glyph{display:block;font-size:1.6rem;margin-bottom:3px;filter:drop-shadow(0 0 6px var(--cyan));}
+  .icon:hover{color:var(--magenta);}
+  .icon:hover .glyph{filter:drop-shadow(0 0 8px var(--magenta));}
+
+  /* ---- Windows ---- */
+  .window{
+    position:absolute;min-width:360px;max-width:520px;
+    background:var(--panel);border:1px solid var(--border);
+    clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+    box-shadow:0 0 30px rgba(32,245,255,0.18), 0 0 60px rgba(255,46,154,0.08);
+    display:none;
+  }
+  .window.open{display:block;}
+  .titlebar{
+    height:30px;display:flex;align-items:center;gap:10px;padding:0 12px;
+    border-bottom:1px solid var(--border);cursor:grab;font-size:0.74rem;letter-spacing:1.5px;color:var(--cyan);
+  }
+  .titlebar:active{cursor:grabbing;}
+  .titlebar .x{cursor:pointer;color:var(--magenta);}
+  .titlebar .wtitle{flex:1;}
+  .wcontent{padding:18px 20px;font-size:0.8rem;line-height:1.6;color:#c9d6ff;max-height:56vh;overflow-y:auto;}
+  .wcontent h3{margin:0 0 6px;color:var(--magenta);text-shadow:0 0 6px rgba(255,46,154,0.4);}
+  .wcontent p{margin:0 0 10px;}
+  .wcontent a{color:var(--cyan);}
+  .proof-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(32,245,255,0.15);}
+  .proof-item:last-child{border:none;}
+  .proof-item h4{margin:0 0 3px;color:var(--cyan);font-size:0.8rem;}
+  .proof-item span{font-size:0.68rem;color:var(--magenta);}
+
+  /* ---- Dock ---- */
+  #dock{
+    position:fixed;bottom:0;left:0;right:0;height:36px;
+    border-top:1px solid var(--border);background:rgba(8,6,15,0.9);
+    display:flex;align-items:center;gap:18px;padding:0 16px;z-index:50;font-size:0.72rem;
+  }
+  #dock .dicon{cursor:pointer;color:var(--cyan);}
+  #dock .dicon:hover{color:var(--magenta);}
+
+  /* ---- Command bar ---- */
+  #cmdbar-wrap{position:fixed;top:38px;left:18px;right:18px;z-index:60;max-width:520px;}
+  #cmdbar-line{
+    display:flex;align-items:center;gap:6px;border:1px solid var(--border);padding:9px 12px;
+    background:var(--panel);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  }
+  #cmdbar-line .prompt{color:var(--magenta);}
+  #cmdbar{flex:1;background:transparent;border:none;outline:none;color:var(--cyan);font-family:inherit;font-size:0.82rem;}
+  #cmd-response{margin-top:6px;padding:8px 12px;border:1px solid var(--border);background:var(--panel);font-size:0.75rem;color:#a8b8e0;display:none;}
+  #cmd-response.show{display:block;}
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="big glitch" data-text="SYSTEM ONLINE">SYSTEM ONLINE</div>
+  <div class="status">NEO_SARATH // v2 concept booting…</div>
+</div>
+
+<div id="hud">
+  <span><span class="status-dot"></span>NEO_SARATH v2.0 — FDE.SYSTEMS.ONLINE</span>
+  <span id="clock"></span>
+</div>
+
+<div id="cmdbar-wrap">
+  <div id="cmdbar-line"><span class="prompt">&gt;</span><input id="cmdbar" type="text" placeholder="ENTER COMMAND — TRY 'HELP'" autocomplete="off"></div>
+  <div id="cmd-response"></div>
+</div>
+
+<div id="desktop-icons">
+  <div class="icon" data-open="about"><span class="glyph">◈</span>ABOUT</div>
+  <div class="icon" data-open="proof"><span class="glyph">◆</span>PROOF</div>
+  <div class="icon" data-open="games"><span class="glyph">▲</span>GAMES</div>
+  <div class="icon" data-action="resume"><span class="glyph">■</span>RESUME</div>
+  <div class="icon" data-open="contact"><span class="glyph">●</span>CONTACT</div>
+</div>
+
+<div class="window" id="win-about" style="top:130px;left:200px;width:420px;">
+  <div class="titlebar"><span class="wtitle">[ ABOUT.NEO ]</span><span class="x" data-close="about">✕</span></div>
+  <div class="wcontent">
+    <h3>IDENTITY</h3>
+    <p>Sarath Kumar — Forward Deployed Engineer, 7+ years shipping production systems embedded with enterprise client teams. Leads the Generative AI team at Mphasis.</p>
+    <h3>MANIFESTO</h3>
+    <p>"I move first — and figure out the rest in motion."<br>"I don't look for opportunities. I build them."</p>
+  </div>
+</div>
+
+<div class="window" id="win-proof" style="top:110px;left:280px;width:440px;">
+  <div class="titlebar"><span class="wtitle">[ PROOF.NEO ]</span><span class="x" data-close="proof">✕</span></div>
+  <div class="wcontent">
+    <div class="proof-item"><h4>THIS_WEBSITE</h4><p style="margin:0;">Designed, built, shipped end-to-end.</p><span>◉ you're looking at it</span></div>
+    <div class="proof-item"><h4>MAX</h4><p style="margin:0;">Personal AI OS — tiered local/cloud reasoning, voice, real tool use.</p><span>◉ active</span></div>
+    <div class="proof-item"><h4>MENTAL_HEALTH_SLM</h4><p style="margin:0;">Fine-tuned SLM, deterministic crisis-safety gate.</p><span>◉ local-first</span></div>
+    <div class="proof-item"><h4>LINKEDIN_AGENT</h4><p style="margin:0;">Posted by a script, not by hand.</p><span>◉ live since launch</span></div>
+    <div class="proof-item"><h4>RESUME_SIGNAL</h4><p style="margin:0;">Privacy-first resume scorer.</p><span><a href="https://resume-signal--sarath-works.replit.app/" target="_blank">BREAK_IT →</a></span></div>
+  </div>
+</div>
+
+<div class="window" id="win-games" style="top:150px;left:240px;width:400px;">
+  <div class="titlebar"><span class="wtitle">[ GAMES.NEO ]</span><span class="x" data-close="games">✕</span></div>
+  <div class="wcontent">
+    <div class="proof-item"><h4>BUBBLE_WRAP</h4><p style="margin:0;">Tactile reset, eases tension.</p></div>
+    <div class="proof-item"><h4>COLOR_MATCH</h4><p style="margin:0;">Stroop test — attention & cognitive control.</p></div>
+    <div class="proof-item"><h4>MEMORY_SEQUENCE</h4><p style="margin:0;">Working memory & focus.</p></div>
+    <p><a href="../index.html#games" target="_blank">PLAY_LIVE →</a></p>
+  </div>
+</div>
+
+<div class="window" id="win-contact" style="top:170px;left:320px;width:360px;">
+  <div class="titlebar"><span class="wtitle">[ CONTACT.NEO ]</span><span class="x" data-close="contact">✕</span></div>
+  <div class="wcontent">
+    <p>LINKEDIN → <a href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank">/in/sarath-kumar-3b621316b</a></p>
+    <p>GITHUB → <a href="https://github.com/workwithsarathkumar-hash" target="_blank">workwithsarathkumar-hash</a></p>
+    <p>EMAIL → <a href="#" id="emailLink">resolving…</a></p>
+  </div>
+</div>
+
+<div id="dock">
+  <span class="dicon" data-open="about">ABOUT</span>
+  <span class="dicon" data-open="proof">PROOF</span>
+  <span class="dicon" data-open="games">GAMES</span>
+  <span class="dicon" data-action="resume">RESUME</span>
+  <span class="dicon" data-open="contact">CONTACT</span>
+</div>
+
+<script>
+  setTimeout(function () { document.getElementById('boot').classList.add('hidden'); }, 1600);
+
+  function tick() {
+    var now = new Date();
+    document.getElementById('clock').textContent = now.toTimeString().slice(0, 8);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  (function () {
+    var user = 'workwithsarathkumar', domain = 'gmail.com';
+    var link = document.getElementById('emailLink');
+    if (link) { link.href = 'mailto:' + user + '@' + domain; link.textContent = user + '@' + domain; }
+  })();
+
+  var zTop = 10;
+  function openWin(name) { var w = document.getElementById('win-' + name); if (w) { w.classList.add('open'); focusWin(w); } }
+  function closeWin(name) { var w = document.getElementById('win-' + name); if (w) w.classList.remove('open'); }
+  function focusWin(w) { zTop++; w.style.zIndex = zTop; }
+
+  document.querySelectorAll('[data-open]').forEach(function (el) {
+    el.addEventListener('click', function () { openWin(this.getAttribute('data-open')); });
+  });
+  document.querySelectorAll('[data-close]').forEach(function (el) {
+    el.addEventListener('click', function (e) { e.stopPropagation(); closeWin(this.getAttribute('data-close')); });
+  });
+  document.querySelectorAll('[data-action="resume"]').forEach(function (el) {
+    el.addEventListener('click', function () { window.open('../Sarath_Kumar_Resume_max.pdf', '_blank'); });
+  });
+
+  document.querySelectorAll('.window').forEach(function (win) {
+    win.addEventListener('mousedown', function () { focusWin(win); });
+    var bar = win.querySelector('.titlebar');
+    var dragging = false, offX = 0, offY = 0;
+    bar.addEventListener('mousedown', function (e) {
+      if (e.target.classList.contains('x')) return;
+      dragging = true;
+      var rect = win.getBoundingClientRect();
+      offX = e.clientX - rect.left; offY = e.clientY - rect.top;
+      focusWin(win);
+    });
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      win.style.left = (e.clientX - offX) + 'px';
+      win.style.top = Math.max(32, e.clientY - offY) + 'px';
+    });
+    document.addEventListener('mouseup', function () { dragging = false; });
+  });
+
+  var cmdInput = document.getElementById('cmdbar');
+  var cmdResponse = document.getElementById('cmd-response');
+  function respond(text) { cmdResponse.textContent = text; cmdResponse.classList.add('show'); }
+  cmdInput.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var raw = cmdInput.value.trim().toLowerCase();
+    cmdInput.value = '';
+    if (!raw) return;
+    if (raw === 'help') {
+      respond("COMMANDS: open about | open proof | open games | show resume | contact | clear");
+    } else if (raw.includes('about')) { openWin('about'); respond('>> LOADING ABOUT.NEO'); }
+    else if (raw.includes('proof') || raw.includes('project')) { openWin('proof'); respond('>> LOADING PROOF.NEO'); }
+    else if (raw.includes('game')) { openWin('games'); respond('>> LOADING GAMES.NEO'); }
+    else if (raw.includes('resume')) { window.open('../Sarath_Kumar_Resume_max.pdf', '_blank'); respond('>> OPENING RESUME.PDF'); }
+    else if (raw.includes('contact') || raw.includes('email')) { openWin('contact'); respond('>> LOADING CONTACT.NEO'); }
+    else if (raw === 'clear') { cmdResponse.classList.remove('show'); }
+    else { respond("ERROR: UNKNOWN COMMAND \"" + raw.toUpperCase() + "\" — TRY 'HELP'"); }
+  });
+</script>
+</body>
+</html>

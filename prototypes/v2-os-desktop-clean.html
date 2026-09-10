@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SarathOS — v2 Concept (Clean)</title>
+<style>
+  :root{
+    --menubar-bg: rgba(255,255,255,0.55);
+    --window-bg: rgba(255,255,255,0.72);
+    --text: #1c1c1e;
+    --text-soft: #58585c;
+    --accent: #0a7cff;
+    --border: rgba(0,0,0,0.08);
+    --dock-bg: rgba(255,255,255,0.5);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    font-family:-apple-system,'SF Pro Display','Helvetica Neue',Arial,sans-serif;
+    background:
+      radial-gradient(circle at 20% 20%, #d9e8ff 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffe3f0 0%, transparent 40%),
+      radial-gradient(circle at 50% 90%, #e6fff2 0%, transparent 50%),
+      linear-gradient(160deg, #f4f6fb 0%, #eef1f7 100%);
+    overflow:hidden;
+    color:var(--text);
+    user-select:none;
+  }
+
+  /* ---- Boot sequence ---- */
+  #boot{
+    position:fixed;inset:0;background:#000;color:#fff;z-index:999;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity 0.5s ease;
+  }
+  #boot .mark{font-size:2.4rem;font-weight:600;letter-spacing:1px;opacity:0;animation:fadeIn 0.8s ease forwards 0.2s;}
+  #boot .sub{margin-top:10px;font-size:0.85rem;color:#999;opacity:0;animation:fadeIn 0.8s ease forwards 0.9s;}
+  #boot.hidden{opacity:0;pointer-events:none;}
+  @keyframes fadeIn{to{opacity:1;}}
+
+  /* ---- Menu bar ---- */
+  #menubar{
+    position:fixed;top:0;left:0;right:0;height:26px;
+    background:var(--menubar-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px;font-size:0.78rem;font-weight:500;z-index:100;
+  }
+  #menubar .left{display:flex;gap:18px;align-items:center;}
+  #menubar .brand{font-weight:700;}
+  #menubar .menu-item{color:var(--text-soft);cursor:default;}
+  #clock{color:var(--text-soft);}
+
+  /* ---- Desktop icons ---- */
+  #desktop-icons{
+    position:fixed;top:46px;left:20px;display:flex;flex-direction:column;gap:22px;z-index:5;
+  }
+  .icon{
+    width:76px;text-align:center;cursor:pointer;padding:6px;border-radius:8px;
+  }
+  .icon:hover{background:rgba(255,255,255,0.4);}
+  .icon .glyph{font-size:2rem;display:block;margin-bottom:4px;}
+  .icon .label{font-size:0.72rem;color:var(--text);text-shadow:0 1px 2px rgba(255,255,255,0.8);}
+
+  /* ---- Windows ---- */
+  .window{
+    position:absolute;min-width:340px;max-width:520px;
+    background:var(--window-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+    border-radius:12px;border:1px solid var(--border);
+    box-shadow:0 20px 50px rgba(0,0,0,0.18);
+    display:none;overflow:hidden;
+  }
+  .window.open{display:block;}
+  .titlebar{
+    height:34px;display:flex;align-items:center;gap:8px;padding:0 12px;
+    background:rgba(255,255,255,0.5);border-bottom:1px solid var(--border);cursor:grab;
+  }
+  .titlebar:active{cursor:grabbing;}
+  .dot{width:12px;height:12px;border-radius:50%;}
+  .dot.red{background:#ff5f57;cursor:pointer;}
+  .dot.yellow{background:#febc2e;}
+  .dot.green{background:#28c840;}
+  .titlebar .wtitle{flex:1;text-align:center;font-size:0.8rem;font-weight:600;margin-right:52px;}
+  .wcontent{padding:20px 22px;font-size:0.88rem;line-height:1.55;color:var(--text);max-height:60vh;overflow-y:auto;}
+  .wcontent h3{margin:0 0 6px;font-size:1rem;}
+  .wcontent p{margin:0 0 12px;color:var(--text-soft);}
+  .wcontent a{color:var(--accent);text-decoration:none;font-weight:600;}
+  .proof-item{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .proof-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .proof-item h4{margin:0 0 4px;font-size:0.88rem;}
+  .proof-item span{font-size:0.72rem;color:var(--accent);font-weight:600;}
+
+  /* ---- Dock ---- */
+  #dock{
+    position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
+    display:flex;gap:14px;padding:10px 16px;
+    background:var(--dock-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-radius:20px;border:1px solid var(--border);
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);z-index:50;
+  }
+  #dock .dicon{font-size:1.7rem;cursor:pointer;transition:transform 0.15s ease;}
+  #dock .dicon:hover{transform:translateY(-6px) scale(1.1);}
+
+  /* ---- Command bar ---- */
+  #cmdbar-wrap{
+    position:fixed;top:50px;left:50%;transform:translateX(-50%);
+    width:min(480px,90vw);z-index:60;
+  }
+  #cmdbar{
+    width:100%;padding:11px 16px;border-radius:12px;border:1px solid var(--border);
+    background:var(--window-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.15);
+    font-size:0.88rem;color:var(--text);outline:none;
+  }
+  #cmdbar::placeholder{color:var(--text-soft);}
+  #cmd-response{
+    margin-top:8px;padding:10px 14px;border-radius:10px;
+    background:var(--window-bg);backdrop-filter:blur(20px);
+    font-size:0.8rem;color:var(--text-soft);display:none;border:1px solid var(--border);
+  }
+  #cmd-response.show{display:block;}
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="mark">SarathOS</div>
+  <div class="sub">v2 concept — welcome</div>
+</div>
+
+<div id="menubar">
+  <div class="left">
+    <span class="brand">🍎 SarathOS</span>
+    <span class="menu-item">About</span>
+    <span class="menu-item">Proof</span>
+    <span class="menu-item">Games</span>
+    <span class="menu-item">Resume</span>
+    <span class="menu-item">Contact</span>
+  </div>
+  <span id="clock"></span>
+</div>
+
+<div id="cmdbar-wrap">
+  <input id="cmdbar" type="text" placeholder="Type a command… try 'help'" autocomplete="off">
+  <div id="cmd-response"></div>
+</div>
+
+<div id="desktop-icons">
+  <div class="icon" data-open="about"><span class="glyph">👤</span><span class="label">About</span></div>
+  <div class="icon" data-open="proof"><span class="glyph">🧩</span><span class="label">Proof</span></div>
+  <div class="icon" data-open="games"><span class="glyph">🎮</span><span class="label">Games</span></div>
+  <div class="icon" data-action="resume"><span class="glyph">📄</span><span class="label">Resume</span></div>
+  <div class="icon" data-open="contact"><span class="glyph">✉️</span><span class="label">Contact</span></div>
+</div>
+
+<!-- Windows -->
+<div class="window" id="win-about" style="top:120px;left:180px;width:420px;">
+  <div class="titlebar"><div class="dot red" data-close="about"></div><div class="dot yellow"></div><div class="dot green"></div><div class="wtitle">About.app</div></div>
+  <div class="wcontent">
+    <h3>Sarath Kumar</h3>
+    <p>Forward Deployed Engineer, 7+ years shipping production systems embedded with enterprise client teams. Leads the Generative AI team at Mphasis.</p>
+    <p style="color:var(--text);font-style:italic;">"I move first — and figure out the rest in motion."</p>
+    <p style="color:var(--text);font-style:italic;">"I don't look for opportunities. I build them."</p>
+  </div>
+</div>
+
+<div class="window" id="win-proof" style="top:100px;left:260px;width:440px;">
+  <div class="titlebar"><div class="dot red" data-close="proof"></div><div class="dot yellow"></div><div class="dot green"></div><div class="wtitle">Proof.app</div></div>
+  <div class="wcontent">
+    <div class="proof-item"><h4>This Website</h4><p style="margin:0;">Designed, built, and shipped end-to-end.</p><span>You're looking at it</span></div>
+    <div class="proof-item"><h4>MAX</h4><p style="margin:0;">A personal AI operating system, tiered local/cloud reasoning, voice, real tool use.</p><span>In active development</span></div>
+    <div class="proof-item"><h4>Mental Health SLM</h4><p style="margin:0;">Fine-tuned SLM with a deterministic crisis-safety gate.</p><span>Local-first by design</span></div>
+    <div class="proof-item"><h4>LinkedIn Publishing Agent</h4><p style="margin:0;">Posted by a script, not by hand.</p><span>Live since launch day</span></div>
+    <div class="proof-item"><h4>ResumeSignal</h4><p style="margin:0;">Privacy-first resume scorer — nothing stored.</p><span><a href="https://resume-signal--sarath-works.replit.app/" target="_blank">Go break it →</a></span></div>
+  </div>
+</div>
+
+<div class="window" id="win-games" style="top:140px;left:220px;width:400px;">
+  <div class="titlebar"><div class="dot red" data-close="games"></div><div class="dot yellow"></div><div class="dot green"></div><div class="wtitle">Games.app</div></div>
+  <div class="wcontent">
+    <div class="proof-item"><h4>🫧 Bubble Wrap</h4><p style="margin:0;">Tactile reset, eases tension.</p></div>
+    <div class="proof-item"><h4>🎨 Color Match</h4><p style="margin:0;">Stroop test — trains attention & cognitive control.</p></div>
+    <div class="proof-item"><h4>🧠 Memory Sequence</h4><p style="margin:0;">Builds working memory & focus.</p></div>
+    <p><a href="../index.html#games" target="_blank">Play them on the live site →</a></p>
+  </div>
+</div>
+
+<div class="window" id="win-contact" style="top:160px;left:300px;width:360px;">
+  <div class="titlebar"><div class="dot red" data-close="contact"></div><div class="dot yellow"></div><div class="dot green"></div><div class="wtitle">Contact.app</div></div>
+  <div class="wcontent">
+    <p style="margin-bottom:10px;">→ <a href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank">LinkedIn</a></p>
+    <p style="margin-bottom:10px;">→ <a href="https://github.com/workwithsarathkumar-hash" target="_blank">GitHub</a></p>
+    <p>→ <a href="#" id="emailLink">Email</a></p>
+  </div>
+</div>
+
+<div id="dock">
+  <div class="dicon" data-open="about" title="About">👤</div>
+  <div class="dicon" data-open="proof" title="Proof">🧩</div>
+  <div class="dicon" data-open="games" title="Games">🎮</div>
+  <div class="dicon" data-action="resume" title="Resume">📄</div>
+  <div class="dicon" data-open="contact" title="Contact">✉️</div>
+</div>
+
+<script>
+  // ---- Boot sequence ----
+  setTimeout(function () {
+    document.getElementById('boot').classList.add('hidden');
+  }, 1400);
+
+  // ---- Live clock ----
+  function tick() {
+    var now = new Date();
+    var opts = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+    document.getElementById('clock').textContent = now.toLocaleString('en-US', opts);
+  }
+  tick();
+  setInterval(tick, 1000 * 15);
+
+  // ---- Email obfuscation (same trick as the live site) ----
+  (function () {
+    var user = 'workwithsarathkumar', domain = 'gmail.com';
+    var link = document.getElementById('emailLink');
+    if (link) { link.href = 'mailto:' + user + '@' + domain; link.textContent = user + '@' + domain; }
+  })();
+
+  // ---- Window manager ----
+  var zTop = 10;
+  function openWin(name) {
+    var w = document.getElementById('win-' + name);
+    if (!w) return;
+    w.classList.add('open');
+    focusWin(w);
+  }
+  function closeWin(name) {
+    var w = document.getElementById('win-' + name);
+    if (w) w.classList.remove('open');
+  }
+  function focusWin(w) {
+    zTop++;
+    w.style.zIndex = zTop;
+  }
+
+  document.querySelectorAll('[data-open]').forEach(function (el) {
+    el.addEventListener('click', function () { openWin(this.getAttribute('data-open')); });
+  });
+  document.querySelectorAll('[data-close]').forEach(function (el) {
+    el.addEventListener('click', function (e) { e.stopPropagation(); closeWin(this.getAttribute('data-close')); });
+  });
+  document.querySelectorAll('[data-action="resume"]').forEach(function (el) {
+    el.addEventListener('click', function () { window.open('../Sarath_Kumar_Resume_max.pdf', '_blank'); });
+  });
+
+  // Drag + focus
+  document.querySelectorAll('.window').forEach(function (win) {
+    win.addEventListener('mousedown', function () { focusWin(win); });
+    var bar = win.querySelector('.titlebar');
+    var dragging = false, offX = 0, offY = 0;
+    bar.addEventListener('mousedown', function (e) {
+      if (e.target.classList.contains('dot')) return;
+      dragging = true;
+      var rect = win.getBoundingClientRect();
+      offX = e.clientX - rect.left;
+      offY = e.clientY - rect.top;
+      focusWin(win);
+    });
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      win.style.left = (e.clientX - offX) + 'px';
+      win.style.top = Math.max(30, e.clientY - offY) + 'px';
+    });
+    document.addEventListener('mouseup', function () { dragging = false; });
+  });
+
+  // ---- Command bar ----
+  var cmdInput = document.getElementById('cmdbar');
+  var cmdResponse = document.getElementById('cmd-response');
+  function respond(text) {
+    cmdResponse.textContent = text;
+    cmdResponse.classList.add('show');
+  }
+  cmdInput.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var raw = cmdInput.value.trim().toLowerCase();
+    cmdInput.value = '';
+    if (!raw) return;
+
+    if (raw === 'help') {
+      respond("Try: open about / open proof / open games / show resume / contact / clear");
+    } else if (raw.includes('about')) {
+      openWin('about'); respond('Opening About.app…');
+    } else if (raw.includes('proof') || raw.includes('project')) {
+      openWin('proof'); respond('Opening Proof.app…');
+    } else if (raw.includes('game')) {
+      openWin('games'); respond('Opening Games.app…');
+    } else if (raw.includes('resume')) {
+      window.open('../Sarath_Kumar_Resume_max.pdf', '_blank');
+      respond('Opening resume…');
+    } else if (raw.includes('contact') || raw.includes('email')) {
+      openWin('contact'); respond('Opening Contact.app…');
+    } else if (raw === 'clear') {
+      cmdResponse.classList.remove('show');
+    } else {
+      respond("Command not found: \"" + raw + "\" — try 'help'");
+    }
+  });
+</script>
+</body>
+</html>

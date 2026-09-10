@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SARATH-OS // v2 Concept (Retro Terminal)</title>
+<style>
+  :root{
+    --bg:#0a0f0a;
+    --green:#39ff6a;
+    --green-dim:#1e8f3e;
+    --amber:#ffb000;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:var(--bg);color:var(--green);
+    font-family:'SF Mono','Courier New',monospace;
+    overflow:hidden;user-select:none;
+    position:relative;
+  }
+  /* CRT scanlines + flicker */
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:200;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 3px);
+  }
+  body::after{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:201;
+    background:rgba(57,255,106,0.02);
+    animation:flicker 6s infinite;
+  }
+  @keyframes flicker{0%,96%,100%{opacity:1;}97%{opacity:0.85;}98%{opacity:1;}}
+
+  /* ---- Boot ---- */
+  #boot{
+    position:fixed;inset:0;background:#000;color:var(--green);z-index:999;
+    padding:30px;font-size:0.85rem;line-height:1.7;white-space:pre-wrap;
+    transition:opacity 0.4s ease;
+  }
+  #boot.hidden{opacity:0;pointer-events:none;}
+  #boot .cursor{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink 1s step-end infinite;vertical-align:middle;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---- Top bar ---- */
+  #topbar{
+    position:fixed;top:0;left:0;right:0;height:24px;
+    border-bottom:1px solid var(--green-dim);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 12px;font-size:0.72rem;z-index:100;background:#000;
+  }
+  #clock{color:var(--green-dim);}
+
+  /* ---- Desktop icons ---- */
+  #desktop-icons{position:fixed;top:112px;left:16px;display:flex;flex-direction:column;gap:20px;z-index:5;}
+  .icon{width:80px;text-align:center;cursor:pointer;font-size:0.7rem;}
+  .icon .glyph{display:block;font-size:1.6rem;margin-bottom:2px;}
+  .icon:hover{color:var(--amber);}
+
+  /* ---- Windows ---- */
+  .window{
+    position:absolute;min-width:360px;max-width:520px;
+    background:#000;border:2px solid var(--green-dim);
+    box-shadow:0 0 24px rgba(57,255,106,0.15);
+    display:none;
+  }
+  .window.open{display:block;}
+  .titlebar{
+    height:26px;display:flex;align-items:center;gap:10px;padding:0 10px;
+    border-bottom:1px solid var(--green-dim);cursor:grab;font-size:0.75rem;letter-spacing:1px;
+  }
+  .titlebar:active{cursor:grabbing;}
+  .titlebar .x{cursor:pointer;color:var(--amber);}
+  .titlebar .wtitle{flex:1;}
+  .wcontent{padding:16px 18px;font-size:0.8rem;line-height:1.6;max-height:56vh;overflow-y:auto;}
+  .wcontent h3{margin:0 0 6px;color:var(--amber);}
+  .wcontent p{margin:0 0 10px;color:var(--green);}
+  .wcontent a{color:var(--amber);}
+  .proof-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(--green-dim);}
+  .proof-item:last-child{border:none;}
+  .proof-item h4{margin:0 0 3px;color:var(--amber);font-size:0.8rem;}
+  .proof-item span{font-size:0.68rem;color:var(--green-dim);}
+
+  /* ---- Dock (bottom taskbar, retro style) ---- */
+  #dock{
+    position:fixed;bottom:0;left:0;right:0;height:34px;
+    border-top:1px solid var(--green-dim);background:#000;
+    display:flex;align-items:center;gap:16px;padding:0 14px;z-index:50;font-size:0.72rem;
+  }
+  #dock .dicon{cursor:pointer;}
+  #dock .dicon:hover{color:var(--amber);}
+
+  /* ---- Command bar ---- */
+  #cmdbar-wrap{position:fixed;top:34px;left:16px;right:16px;z-index:60;max-width:520px;}
+  #cmdbar-line{display:flex;align-items:center;gap:6px;border:1px solid var(--green-dim);padding:8px 10px;background:#000;}
+  #cmdbar-line .prompt{color:var(--amber);}
+  #cmdbar{
+    flex:1;background:transparent;border:none;outline:none;color:var(--green);
+    font-family:inherit;font-size:0.82rem;
+  }
+  #cmd-response{margin-top:4px;padding:8px 10px;border:1px dashed var(--green-dim);font-size:0.75rem;color:var(--green-dim);display:none;}
+  #cmd-response.show{display:block;}
+</style>
+</head>
+<body>
+
+<div id="boot"></div>
+
+<div id="topbar">
+  <span>SARATH-OS v2.0 :: uid=fde(sarath) groups=(builder,ai-systems)</span>
+  <span id="clock"></span>
+</div>
+
+<div id="cmdbar-wrap">
+  <div id="cmdbar-line"><span class="prompt">sarath@os:~$</span><input id="cmdbar" type="text" placeholder="type 'help'" autocomplete="off"></div>
+  <div id="cmd-response"></div>
+</div>
+
+<div id="desktop-icons">
+  <div class="icon" data-open="about"><span class="glyph">[A]</span>about.sh</div>
+  <div class="icon" data-open="proof"><span class="glyph">[P]</span>proof.log</div>
+  <div class="icon" data-open="games"><span class="glyph">[G]</span>games.bin</div>
+  <div class="icon" data-action="resume"><span class="glyph">[R]</span>resume.pdf</div>
+  <div class="icon" data-open="contact"><span class="glyph">[C]</span>contact.cfg</div>
+</div>
+
+<div class="window" id="win-about" style="top:130px;left:200px;width:420px;">
+  <div class="titlebar"><span class="wtitle">[ ABOUT.SH ]</span><span class="x" data-close="about">[X]</span></div>
+  <div class="wcontent">
+    <h3>&gt; whoami</h3>
+    <p>Sarath Kumar — Forward Deployed Engineer, 7+ years shipping production systems embedded with enterprise client teams. Leads the Generative AI team at Mphasis.</p>
+    <h3>&gt; cat manifesto.txt</h3>
+    <p>"I move first — and figure out the rest in motion."<br>"I don't look for opportunities. I build them."</p>
+  </div>
+</div>
+
+<div class="window" id="win-proof" style="top:110px;left:280px;width:440px;">
+  <div class="titlebar"><span class="wtitle">[ PROOF.LOG ]</span><span class="x" data-close="proof">[X]</span></div>
+  <div class="wcontent">
+    <div class="proof-item"><h4>&gt; this_website</h4><p style="margin:0;">Designed, built, shipped end-to-end.</p><span>status: you're looking at it</span></div>
+    <div class="proof-item"><h4>&gt; max</h4><p style="margin:0;">Personal AI OS — tiered local/cloud reasoning, voice, real tool use.</p><span>status: active</span></div>
+    <div class="proof-item"><h4>&gt; mental_health_slm</h4><p style="margin:0;">Fine-tuned SLM, deterministic crisis-safety gate.</p><span>status: local-first</span></div>
+    <div class="proof-item"><h4>&gt; linkedin_agent</h4><p style="margin:0;">Posted by a script, not by hand.</p><span>status: live since launch</span></div>
+    <div class="proof-item"><h4>&gt; resume_signal</h4><p style="margin:0;">Privacy-first resume scorer.</p><span><a href="https://resume-signal--sarath-works.replit.app/" target="_blank">./break_it.sh →</a></span></div>
+  </div>
+</div>
+
+<div class="window" id="win-games" style="top:150px;left:240px;width:400px;">
+  <div class="titlebar"><span class="wtitle">[ GAMES.BIN ]</span><span class="x" data-close="games">[X]</span></div>
+  <div class="wcontent">
+    <div class="proof-item"><h4>&gt; bubble_wrap</h4><p style="margin:0;">Tactile reset, eases tension.</p></div>
+    <div class="proof-item"><h4>&gt; color_match</h4><p style="margin:0;">Stroop test — attention & cognitive control.</p></div>
+    <div class="proof-item"><h4>&gt; memory_sequence</h4><p style="margin:0;">Working memory & focus.</p></div>
+    <p><a href="../index.html#games" target="_blank">./play_live.sh →</a></p>
+  </div>
+</div>
+
+<div class="window" id="win-contact" style="top:170px;left:320px;width:360px;">
+  <div class="titlebar"><span class="wtitle">[ CONTACT.CFG ]</span><span class="x" data-close="contact">[X]</span></div>
+  <div class="wcontent">
+    <p>LINKEDIN=<a href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank">/in/sarath-kumar-3b621316b</a></p>
+    <p>GITHUB=<a href="https://github.com/workwithsarathkumar-hash" target="_blank">workwithsarathkumar-hash</a></p>
+    <p>EMAIL=<a href="#" id="emailLink">resolving…</a></p>
+  </div>
+</div>
+
+<div id="dock">
+  <span class="dicon" data-open="about">about.sh</span>
+  <span class="dicon" data-open="proof">proof.log</span>
+  <span class="dicon" data-open="games">games.bin</span>
+  <span class="dicon" data-action="resume">resume.pdf</span>
+  <span class="dicon" data-open="contact">contact.cfg</span>
+</div>
+
+<script>
+  // ---- Boot sequence: typed BIOS/POST log ----
+  var bootLines = [
+    "SARATH-OS v2.0 [BUILD 20260908]",
+    "Copyright (C) FDE Systems. All rights reserved.",
+    "",
+    "Initializing kernel............................ OK",
+    "Mounting /home/sarath.......................... OK",
+    "Loading manifesto.dll.......................... OK",
+    "Checking AI subsystems (MAX)................... ONLINE",
+    "Verifying proof-of-work......................... VERIFIED",
+    "Establishing uplink to LinkedIn................ CONNECTED",
+    "",
+    "Boot complete. Type HELP for commands."
+  ];
+  var bootEl = document.getElementById('boot');
+  var li = 0;
+  function typeLine() {
+    if (li >= bootLines.length) {
+      bootEl.innerHTML += '<span class="cursor"></span>';
+      setTimeout(function () { bootEl.classList.add('hidden'); }, 500);
+      return;
+    }
+    bootEl.innerHTML += (li > 0 ? '\n' : '') + bootLines[li];
+    li++;
+    setTimeout(typeLine, bootLines[li - 1] === '' ? 60 : 110);
+  }
+  typeLine();
+
+  // ---- Clock ----
+  function tick() {
+    var now = new Date();
+    document.getElementById('clock').textContent = now.toTimeString().slice(0, 8);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ---- Email ----
+  (function () {
+    var user = 'workwithsarathkumar', domain = 'gmail.com';
+    var link = document.getElementById('emailLink');
+    if (link) { link.href = 'mailto:' + user + '@' + domain; link.textContent = user + '@' + domain; }
+  })();
+
+  // ---- Window manager ----
+  var zTop = 10;
+  function openWin(name) { var w = document.getElementById('win-' + name); if (w) { w.classList.add('open'); focusWin(w); } }
+  function closeWin(name) { var w = document.getElementById('win-' + name); if (w) w.classList.remove('open'); }
+  function focusWin(w) { zTop++; w.style.zIndex = zTop; }
+
+  document.querySelectorAll('[data-open]').forEach(function (el) {
+    el.addEventListener('click', function () { openWin(this.getAttribute('data-open')); });
+  });
+  document.querySelectorAll('[data-close]').forEach(function (el) {
+    el.addEventListener('click', function (e) { e.stopPropagation(); closeWin(this.getAttribute('data-close')); });
+  });
+  document.querySelectorAll('[data-action="resume"]').forEach(function (el) {
+    el.addEventListener('click', function () { window.open('../Sarath_Kumar_Resume_max.pdf', '_blank'); });
+  });
+
+  document.querySelectorAll('.window').forEach(function (win) {
+    win.addEventListener('mousedown', function () { focusWin(win); });
+    var bar = win.querySelector('.titlebar');
+    var dragging = false, offX = 0, offY = 0;
+    bar.addEventListener('mousedown', function (e) {
+      if (e.target.classList.contains('x')) return;
+      dragging = true;
+      var rect = win.getBoundingClientRect();
+      offX = e.clientX - rect.left; offY = e.clientY - rect.top;
+      focusWin(win);
+    });
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      win.style.left = (e.clientX - offX) + 'px';
+      win.style.top = Math.max(28, e.clientY - offY) + 'px';
+    });
+    document.addEventListener('mouseup', function () { dragging = false; });
+  });
+
+  // ---- Command bar ----
+  var cmdInput = document.getElementById('cmdbar');
+  var cmdResponse = document.getElementById('cmd-response');
+  function respond(text) { cmdResponse.textContent = text; cmdResponse.classList.add('show'); }
+  cmdInput.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var raw = cmdInput.value.trim().toLowerCase();
+    cmdInput.value = '';
+    if (!raw) return;
+    if (raw === 'help') {
+      respond("commands: open about | open proof | open games | show resume | contact | clear");
+    } else if (raw.includes('about')) { openWin('about'); respond('$ exec about.sh'); }
+    else if (raw.includes('proof') || raw.includes('project')) { openWin('proof'); respond('$ cat proof.log'); }
+    else if (raw.includes('game')) { openWin('games'); respond('$ exec games.bin'); }
+    else if (raw.includes('resume')) { window.open('../Sarath_Kumar_Resume_max.pdf', '_blank'); respond('$ open resume.pdf'); }
+    else if (raw.includes('contact') || raw.includes('email')) { openWin('contact'); respond('$ cat contact.cfg'); }
+    else if (raw === 'clear') { cmdResponse.classList.remove('show'); }
+    else { respond("bash: " + raw + ": command not found -- try 'help'"); }
+  });
+</script>
+</body>
+</html>
