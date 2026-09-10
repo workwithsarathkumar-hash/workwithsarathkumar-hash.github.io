@@ -749,7 +749,7 @@
 <div class="share-overlay" data-share-overlay>
   <div class="share-modal">
     <h3>Share your score</h3>
-    <p class="hint">Save the image, copy the text, and paste them into a LinkedIn post.</p>
+    <p class="hint">On mobile, hit Share — the caption is copied for you, so just paste it once LinkedIn opens. On desktop, copy the text and save the image.</p>
     <img class="share-card-preview" data-share-preview alt="Your score card">
     <textarea class="share-text" data-share-text rows="7"></textarea>
     <div class="share-actions">
@@ -1067,35 +1067,39 @@
   // is deliberately copy-text + save-image rather than a one-click share.
   var shareCurrent = { blob: null, filename: 'score.png' };
 
+  // 4:3 (1200x900) -- the safest single ratio across LinkedIn, Instagram
+  // feed, X and WhatsApp; none of them crop it badly the way a wide 1.91:1
+  // card gets letterboxed on mobile-first feeds.
   function drawShareCard(cfg) {
+    var W = 1200, H = 900;
     var c = document.createElement('canvas');
-    c.width = 1200; c.height = 630;
+    c.width = W; c.height = H;
     var x = c.getContext('2d');
 
-    x.fillStyle = '#0B0C0E'; x.fillRect(0, 0, 1200, 630);
+    x.fillStyle = '#0B0C0E'; x.fillRect(0, 0, W, H);
     x.strokeStyle = 'rgba(201,165,92,0.45)'; x.lineWidth = 2;
-    x.strokeRect(24, 24, 1152, 582);
+    x.strokeRect(28, 28, W - 56, H - 56);
 
     x.textAlign = 'center';
     x.fillStyle = '#C9A55C';
-    x.font = "500 30px 'JetBrains Mono', monospace";
-    x.fillText(cfg.game.toUpperCase(), 600, 150);
+    x.font = "500 34px 'JetBrains Mono', monospace";
+    x.fillText(cfg.game.toUpperCase(), W / 2, 215);
 
     x.fillStyle = '#EFEDE8';
-    x.font = "500 190px 'Fraunces', Georgia, serif";
-    x.fillText(String(cfg.score), 600, 330);
+    x.font = "500 240px 'Fraunces', Georgia, serif";
+    x.fillText(String(cfg.score), W / 2, 500);
 
     x.fillStyle = '#A8A6A0';
-    x.font = "400 30px 'Sora', sans-serif";
-    x.fillText(cfg.label, 600, 388);
+    x.font = "400 36px 'Sora', sans-serif";
+    x.fillText(cfg.label, W / 2, 575);
 
     x.fillStyle = '#6E6C67';
-    x.font = "400 24px 'Sora', sans-serif";
-    x.fillText('Think you can beat it?', 600, 480);
+    x.font = "400 28px 'Sora', sans-serif";
+    x.fillText('Think you can beat it?', W / 2, 720);
 
     x.fillStyle = '#C9A55C';
-    x.font = "500 26px 'JetBrains Mono', monospace";
-    x.fillText('workwithsarathkumar-hash.github.io', 600, 528);
+    x.font = "500 30px 'JetBrains Mono', monospace";
+    x.fillText('workwithsarathkumar-hash.github.io', W / 2, 775);
     return c;
   }
 
@@ -1154,10 +1158,23 @@
 
     document.querySelector('[data-share-native]').addEventListener('click', function () {
       if (!shareCurrent.blob || !navigator.share) return;
+      var btn = this;
       var file = new File([shareCurrent.blob], shareCurrent.filename, { type: 'image/png' });
       var payload = { text: textEl.value };
       if (navigator.canShare && navigator.canShare({ files: [file] })) payload.files = [file];
-      navigator.share(payload).catch(function () { /* user dismissed */ });
+
+      // LinkedIn (and most apps) take the image but silently drop `text` when
+      // a file is attached, so put the caption on the clipboard first -- by
+      // the time the share sheet lands, it's ready to paste into the post.
+      var copied = navigator.clipboard && navigator.clipboard.writeText
+        ? navigator.clipboard.writeText(textEl.value).catch(function () {})
+        : Promise.resolve();
+
+      copied.then(function () {
+        btn.textContent = 'Text copied ✓';
+        setTimeout(function () { btn.textContent = 'Share…'; }, 2500);
+        return navigator.share(payload);
+      }).catch(function () { /* user dismissed the sheet */ });
     });
   })();
 
@@ -1306,6 +1323,10 @@
           if (userStep === sequence.length) {
             accepting = false;
             statusEl.textContent = 'Nice — next round';
+            // Surface sharing as soon as a round is actually cleared, rather
+            // than making people lose first to discover the button exists.
+            if (sequence.length > bestRound) bestRound = sequence.length;
+            if (shareBtn) shareBtn.classList.add('show');
             setTimeout(nextRound, 700);
           }
         } else {
