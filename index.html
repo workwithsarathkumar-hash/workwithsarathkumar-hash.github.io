@@ -341,7 +341,10 @@
   .beat h3{margin:0 0 8px;font-size:1.08rem;color:var(--text);font-weight:600;}
   .beat p{margin:0;color:var(--text-faint);font-size:0.9rem;}
 
-  .proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  /* minmax(400px) rather than 280px: with four cards in a 920px wrap this
+     settles into a balanced 2x2 instead of leaving the fourth card stranded
+     alone on a second row. Still collapses to one column on mobile. */
+  .proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:16px;}
   .proof-card{
     background:var(--surface);
     border:1px solid var(--border);
@@ -370,6 +373,19 @@
   .proof-feature-text p{margin:0 0 14px;color:var(--text-soft);}
   .proof-feature-embed{border-radius:8px;overflow:hidden;}
   .proof-feature-embed iframe{display:block;width:100%;border:none;}
+  .cmd-example{
+    background:var(--bg);border:1px solid var(--border);border-radius:8px;
+    padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+    line-height:1.75;overflow-x:auto;
+  }
+  .cmd-example .said{color:var(--text);display:block;}
+  .cmd-example .said::before{content:'“';color:var(--accent);}
+  .cmd-example .said::after{content:'”';color:var(--accent);}
+  .cmd-example .out{color:var(--text-faint);display:block;padding-left:14px;}
+  .cmd-example .out::before{content:'↳ ';color:var(--accent);}
+  .cmd-example .gate{color:var(--accent-strong);display:block;padding-left:14px;}
+  .cmd-example .gate::before{content:'↳ ';color:var(--accent);}
+  .cmd-example .sep{display:block;height:10px;}
   .li-badge-wrap{
     display:flex;justify-content:center;margin:28px auto 0;max-width:420px;
     padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;
@@ -636,6 +652,31 @@
         <h3>Mental Health SLM</h3>
         <p>A fine-tuned small language model prototype for first-line coping support — LoRA + 4-bit quantization on Apple Silicon via MLX, a deterministic crisis-safety gate that hard-excludes risk content from the model entirely, and a synthetic dataset built from real CBT methodology.</p>
         <span class="proof-meta">Local-first by design — privacy over cloud dependency</span>
+      </div>
+      <div class="proof-card reveal" style="--i:3">
+        <h3>Site Ops Agent</h3>
+        <p>This site runs itself — a launchd service serving it locally, an on-demand tunnel for previewing from anywhere, and a maintenance mode that swaps in a holding page and restores the original byte-for-byte when it's done.</p>
+        <span class="proof-meta">Hardened: dotfiles blocked — .git never leaves the box</span>
+        <span class="proof-meta">Restore verified by SHA-256, not by eyeballing it</span>
+      </div>
+    </div>
+    <div class="proof-feature reveal">
+      <div class="proof-feature-text">
+        <h3>Orchestrated by MAX</h3>
+        <p>None of these run in isolation. MAX drives them by voice through one shared tool layer — and anything with consequences hits a safety gate that parks the action until it hears a yes.</p>
+        <span class="proof-meta">Same gate guards shell access, file deletion, and the front door lock</span>
+      </div>
+      <div class="proof-feature-embed">
+        <div class="cmd-example">
+          <span class="said">MAX, what's my site status?</span>
+          <span class="out">preview: running · tunnel: stopped · live: HTTP 200</span>
+          <span class="sep"></span>
+          <span class="said">MAX, open a public preview</span>
+          <span class="out">https://pipe-kai-breakfast.trycloudflare.com</span>
+          <span class="sep"></span>
+          <span class="said">MAX, take the site down</span>
+          <span class="gate">"I'm about to take the live public website down and put up the maintenance page. Should I proceed?"</span>
+        </div>
       </div>
     </div>
     <div class="proof-feature reveal">
