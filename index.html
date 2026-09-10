@@ -453,6 +453,46 @@
   .memory-tile.wrong{background:var(--border-strong);}
   .memory-round{font-family:'JetBrains Mono',monospace;color:var(--text-faint);font-size:0.78rem;}
 
+  /* ---- Score sharing ---- */
+  .share-btn{
+    margin-top:12px;background:var(--accent);color:var(--accent-ink);border:none;
+    border-radius:999px;padding:8px 18px;font-size:0.8rem;font-weight:600;
+    font-family:inherit;cursor:pointer;display:none;
+  }
+  .share-btn.show{display:inline-block;}
+  .share-btn:hover{background:var(--accent-strong);}
+  .share-overlay{
+    position:fixed;inset:0;z-index:200;display:none;
+    align-items:center;justify-content:center;padding:20px;
+    background:rgba(0,0,0,0.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  }
+  .share-overlay.show{display:flex;}
+  .share-modal{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:22px;width:min(520px,100%);max-height:90vh;overflow-y:auto;
+  }
+  .share-modal h3{margin:0 0 4px;font-family:'Fraunces',serif;font-weight:500;font-size:1.2rem;}
+  .share-modal .hint{margin:0 0 16px;color:var(--text-faint);font-size:0.8rem;}
+  .share-card-preview{width:100%;border-radius:8px;border:1px solid var(--border);display:block;}
+  .share-text{
+    width:100%;margin-top:16px;background:var(--bg);color:var(--text);
+    border:1px solid var(--border-strong);border-radius:8px;padding:12px 14px;
+    font-family:inherit;font-size:0.82rem;line-height:1.6;resize:vertical;min-height:150px;
+  }
+  .share-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+  .share-actions button{
+    flex:1 1 auto;border-radius:999px;padding:10px 16px;font-size:0.82rem;font-weight:600;
+    font-family:inherit;cursor:pointer;border:1px solid var(--border-strong);
+    background:transparent;color:var(--text-soft);
+  }
+  .share-actions button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+  .share-actions button:hover{border-color:var(--accent-border);color:var(--accent);}
+  .share-actions button.primary:hover{background:var(--accent-strong);color:var(--accent-ink);}
+  .share-close{
+    margin-top:12px;width:100%;background:none;border:none;color:var(--text-faint);
+    font-family:inherit;font-size:0.78rem;cursor:pointer;
+  }
+
   footer{
     text-align:center;
     padding:70px 24px 90px;
@@ -685,6 +725,7 @@
         <p class="colormatch-word" data-colormatch-word>RED</p>
         <div class="colormatch-swatches" data-colormatch-swatches></div>
         <p class="colormatch-stats"><span>Streak: <b data-colormatch-streak>0</b></span><span>Best: <b data-colormatch-best>0</b></span></p>
+        <button class="share-btn" type="button" data-share="colormatch">Share score</button>
         <p class="game-caption">Click the ink color, not the word — trains attention and cognitive control.</p>
       </div>
       <div class="game-card reveal" style="--i:2">
@@ -698,11 +739,27 @@
         </div>
         <button class="reset-btn" type="button" data-memory-start>Start</button>
         <p class="memory-round" data-memory-round>Round: 0</p>
+        <button class="share-btn" type="button" data-share="memory">Share score</button>
         <p class="game-caption">Watch, then repeat the growing pattern — builds working memory and focus.</p>
       </div>
     </div>
   </div>
 </section>
+
+<div class="share-overlay" data-share-overlay>
+  <div class="share-modal">
+    <h3>Share your score</h3>
+    <p class="hint">Save the image, copy the text, and paste them into a LinkedIn post.</p>
+    <img class="share-card-preview" data-share-preview alt="Your score card">
+    <textarea class="share-text" data-share-text rows="7"></textarea>
+    <div class="share-actions">
+      <button type="button" class="primary" data-share-copy>Copy text</button>
+      <button type="button" data-share-download>Save image</button>
+      <button type="button" data-share-native hidden>Share…</button>
+    </div>
+    <button type="button" class="share-close" data-share-close>Close</button>
+  </div>
+</div>
 
 <footer>
   <div class="closing reveal">Let's <span>build</span>.</div>
@@ -1004,6 +1061,106 @@
     fill();
   })();
 
+  // ---- Score sharing: renders a branded card on canvas (so the site URL is
+  // baked into the image itself, not just the caption) and hands over a
+  // ready-to-paste post. LinkedIn has no post API for visitors, so the flow
+  // is deliberately copy-text + save-image rather than a one-click share.
+  var shareCurrent = { blob: null, filename: 'score.png' };
+
+  function drawShareCard(cfg) {
+    var c = document.createElement('canvas');
+    c.width = 1200; c.height = 630;
+    var x = c.getContext('2d');
+
+    x.fillStyle = '#0B0C0E'; x.fillRect(0, 0, 1200, 630);
+    x.strokeStyle = 'rgba(201,165,92,0.45)'; x.lineWidth = 2;
+    x.strokeRect(24, 24, 1152, 582);
+
+    x.textAlign = 'center';
+    x.fillStyle = '#C9A55C';
+    x.font = "500 30px 'JetBrains Mono', monospace";
+    x.fillText(cfg.game.toUpperCase(), 600, 150);
+
+    x.fillStyle = '#EFEDE8';
+    x.font = "500 190px 'Fraunces', Georgia, serif";
+    x.fillText(String(cfg.score), 600, 330);
+
+    x.fillStyle = '#A8A6A0';
+    x.font = "400 30px 'Sora', sans-serif";
+    x.fillText(cfg.label, 600, 388);
+
+    x.fillStyle = '#6E6C67';
+    x.font = "400 24px 'Sora', sans-serif";
+    x.fillText('Think you can beat it?', 600, 480);
+
+    x.fillStyle = '#C9A55C';
+    x.font = "500 26px 'JetBrains Mono', monospace";
+    x.fillText('workwithsarathkumar-hash.github.io', 600, 528);
+    return c;
+  }
+
+  function openShare(cfg) {
+    var overlay = document.querySelector('[data-share-overlay]');
+    var preview = document.querySelector('[data-share-preview]');
+    var textEl = document.querySelector('[data-share-text]');
+    if (!overlay) return;
+
+    // Wait for webfonts so the card doesn't render in fallback faces.
+    var ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    ready.then(function () {
+      var canvas = drawShareCard(cfg);
+      preview.src = canvas.toDataURL('image/png');
+      shareCurrent.filename = cfg.game.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + cfg.score + '.png';
+      canvas.toBlob(function (blob) { shareCurrent.blob = blob; }, 'image/png');
+    });
+
+    textEl.value = cfg.post;
+    overlay.classList.add('show');
+
+    var nativeBtn = document.querySelector('[data-share-native]');
+    nativeBtn.hidden = !(navigator.share && navigator.canShare);
+  }
+
+  (function () {
+    var overlay = document.querySelector('[data-share-overlay]');
+    if (!overlay) return;
+    var textEl = document.querySelector('[data-share-text]');
+
+    document.querySelector('[data-share-close]').addEventListener('click', function () {
+      overlay.classList.remove('show');
+    });
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) overlay.classList.remove('show');
+    });
+
+    document.querySelector('[data-share-copy]').addEventListener('click', function () {
+      var btn = this;
+      var done = function () { btn.textContent = 'Copied ✓'; setTimeout(function () { btn.textContent = 'Copy text'; }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textEl.value).then(done, function () { textEl.select(); });
+      } else {
+        textEl.select(); document.execCommand('copy'); done();
+      }
+    });
+
+    document.querySelector('[data-share-download]').addEventListener('click', function () {
+      if (!shareCurrent.blob) return;
+      var url = URL.createObjectURL(shareCurrent.blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = shareCurrent.filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    });
+
+    document.querySelector('[data-share-native]').addEventListener('click', function () {
+      if (!shareCurrent.blob || !navigator.share) return;
+      var file = new File([shareCurrent.blob], shareCurrent.filename, { type: 'image/png' });
+      var payload = { text: textEl.value };
+      if (navigator.canShare && navigator.canShare({ files: [file] })) payload.files = [file];
+      navigator.share(payload).catch(function () { /* user dismissed */ });
+    });
+  })();
+
   // ---- Color Match: the classic Stroop interference test -- click the
   // ink color the word is displayed in, not the word itself. ----
   (function () {
@@ -1011,6 +1168,20 @@
     var swatchesEl = document.querySelector('[data-colormatch-swatches]');
     var streakEl = document.querySelector('[data-colormatch-streak]');
     var bestEl = document.querySelector('[data-colormatch-best]');
+    var shareBtn = document.querySelector('[data-share="colormatch"]');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', function () {
+        openShare({
+          game: 'Color Match',
+          score: best,
+          label: best === 1 ? 'best streak' : 'best streak',
+          post: 'I hit a streak of ' + best + ' on Color Match 🎨\n\n'
+            + 'Click the ink colour, not the word — the classic Stroop test. '
+            + 'Way harder than it looks once your brain starts arguing with itself.\n\n'
+            + 'Think you can beat it? → https://workwithsarathkumar-hash.github.io/#games'
+        });
+      });
+    }
     if (!wordEl || !swatchesEl || !streakEl || !bestEl) return;
 
     var COLORS = [
@@ -1061,6 +1232,7 @@
           }
           streakEl.textContent = streak;
           bestEl.textContent = best;
+          if (best > 0) shareBtn.classList.add('show');
           setTimeout(renderRound, 350);
         });
         swatchesEl.appendChild(sw);
@@ -1074,6 +1246,21 @@
   (function () {
     var statusEl = document.querySelector('[data-memory-status]');
     var roundEl = document.querySelector('[data-memory-round]');
+    var shareBtn = document.querySelector('[data-share="memory"]');
+    var bestRound = 0;
+    if (shareBtn) {
+      shareBtn.addEventListener('click', function () {
+        openShare({
+          game: 'Memory Sequence',
+          score: bestRound,
+          label: bestRound === 1 ? 'round reached' : 'rounds reached',
+          post: 'I made it to round ' + bestRound + ' on Memory Sequence 🧠\n\n'
+            + 'Watch the pattern, repeat it back, watch it grow by one. '
+            + 'Simple until it very much isn\'t.\n\n'
+            + 'Think you can beat it? → https://workwithsarathkumar-hash.github.io/#games'
+        });
+      });
+    }
     var startBtn = document.querySelector('[data-memory-start]');
     var tiles = Array.prototype.slice.call(document.querySelectorAll('.memory-tile'));
     if (!statusEl || !roundEl || !startBtn || tiles.length !== 4) return;
@@ -1125,6 +1312,8 @@
           accepting = false;
           lightTile(i, 'wrong', 400);
           statusEl.textContent = 'Not quite — reached round ' + sequence.length;
+          if (sequence.length > bestRound) bestRound = sequence.length;
+          if (bestRound > 0 && shareBtn) shareBtn.classList.add('show');
           sequence = [];
           roundEl.textContent = 'Round: 0';
         }
