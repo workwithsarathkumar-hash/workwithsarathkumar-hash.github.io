@@ -218,19 +218,6 @@
   }
   .section-label span{color:var(--accent);}
 
-  .video-section .wrap{display:flex;flex-direction:column;align-items:center;text-align:center;}
-  .video-frame{
-    position:relative;
-    width:min(320px,78vw);
-    border-radius:10px;
-    overflow:hidden;
-    border:1px solid var(--border);
-    box-shadow:0 30px 70px var(--shadow);
-    background:var(--surface);
-  }
-  .video-frame video{display:block;width:100%;aspect-ratio:1080/1350;background:#000;}
-  .video-caption{margin-top:16px;color:var(--text-faint);font-size:0.85rem;font-family:'JetBrains Mono',monospace;}
-
   .bio{
     background:var(--surface);
     border:1px solid var(--border);
@@ -517,7 +504,6 @@
   <div class="nav-inner">
     <a class="brand" href="#top">Sarath Kumar</a>
     <div class="nav-links">
-      <a href="#showcase">Showcase</a>
       <a href="#background">Background</a>
       <a href="#manifesto">Manifesto</a>
       <a href="#quotes">Quotes</a>
@@ -550,19 +536,9 @@
   </div>
 </header>
 
-<section class="video-section" id="showcase">
-  <div class="wrap">
-    <h2 class="section-label reveal"><span>01</span> — Showcase</h2>
-    <div class="video-frame reveal">
-      <video id="showcaseVideo" src="fde-showcase.mp4" poster="poster.jpg" playsinline controls preload="metadata"></video>
-    </div>
-    <p class="video-caption reveal">46s · how I operate as a Forward Deployed Engineer</p>
-  </div>
-</section>
-
 <section id="background">
   <div class="wrap">
-    <h2 class="section-label reveal"><span>02</span> — Background</h2>
+    <h2 class="section-label reveal"><span>01</span> — Background</h2>
     <div class="bio reveal">
       <p class="bio-lead">Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.</p>
       <p class="bio-body">Currently working as an AI Systems and Forward Deployed Engineer at Mphasis, leading the Generative AI team — building enterprise-scale document intelligence in the financial domain, where OCR/ICR and LLM pipelines turn unstructured data into production-grade decisions. Before that: cloud contact-center modernization and conversational AI for banking, insurance, and retail clients at Accenture and Virtusa. Kore.ai, Amazon Connect, Google CCAI, AWS, Python — the stack has changed, the discipline hasn't.</p>
@@ -578,7 +554,7 @@
 
 <section id="manifesto">
   <div class="wrap">
-    <h2 class="section-label reveal"><span>03</span> — Manifesto</h2>
+    <h2 class="section-label reveal"><span>02</span> — Manifesto</h2>
     <div class="manifesto reveal">
       <p>Most people wait for the perfect plan before they move.</p>
       <p class="accent">I move first — and figure out the rest in motion.</p>
@@ -591,7 +567,7 @@
 
 <section id="quotes">
   <div class="wrap">
-    <h2 class="section-label reveal"><span>04</span> — Words I Build By</h2>
+    <h2 class="section-label reveal"><span>03</span> — Words I Build By</h2>
     <div class="quotes stagger">
       <div class="quote-card reveal" style="--i:0" id="fordQuoteCard">
         <blockquote>
@@ -618,7 +594,7 @@
 
 <section id="workflow">
   <div class="wrap">
-    <h2 class="section-label reveal"><span>05</span> — How I Operate</h2>
+    <h2 class="section-label reveal"><span>04</span> — How I Operate</h2>
     <div class="beats stagger">
       <div class="beat reveal" style="--i:0"><span class="n">01</span><h3>Research</h3><p>Dig in once I'm already moving — real signal beats a spreadsheet of guesses.</p></div>
       <div class="beat reveal" style="--i:1"><span class="n">02</span><h3>Learn</h3><p>Every attempt teaches something a plan never could. Update in motion, not after.</p></div>
@@ -633,7 +609,7 @@
 
 <section id="proof">
   <div class="wrap">
-    <h2 class="section-label reveal"><span>06</span> — Proof</h2>
+    <h2 class="section-label reveal"><span>05</span> — Proof</h2>
     <div class="proof-grid stagger">
       <div class="proof-card reveal" style="--i:0">
         <h3>This Website</h3>
@@ -695,7 +671,7 @@
 
 <section id="games">
   <div class="wrap">
-    <h2 class="section-label reveal"><span>07</span> — Games</h2>
+    <h2 class="section-label reveal"><span>06</span> — Games</h2>
     <p class="games-intro reveal">Three small, mindful games — designed and coded end-to-end by MAX, my personal AI system. No build tools, no tracking, nothing stored. Just something quiet to play with for a minute.</p>
     <div class="games-grid stagger">
       <div class="game-card reveal" style="--i:0">
