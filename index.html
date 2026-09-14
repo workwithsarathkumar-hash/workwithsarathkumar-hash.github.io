@@ -535,6 +535,51 @@
   }
   .viewer-count .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
   .viewer-count strong{color:var(--text);font-weight:600;}
+
+  /* ---------- Section 07: A Review From 2050 ---------- */
+  .review-intro{color:var(--text-soft);margin:0 0 20px;max-width:640px;}
+  .review-prompt{
+    background:var(--bg);border:1px solid var(--border);border-radius:8px;
+    padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+    line-height:1.75;margin-bottom:28px;color:var(--text-faint);
+  }
+  .review-prompt .said{color:var(--text);display:block;}
+  .review-prompt .said::before{content:'“';color:var(--accent);}
+  .review-prompt .said::after{content:'”';color:var(--accent);}
+  .review-prompt .who{display:block;padding-top:8px;color:var(--text-faint);}
+  .review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:16px;}
+  .review-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:clamp(24px,4vw,34px);transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .review-card:hover{border-color:var(--accent-border);transform:translateY(-3px);}
+  .review-card h3{margin:0 0 10px;font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;}
+  .review-card p{margin:0;color:var(--text-soft);font-size:0.94rem;}
+  .review-verdict{
+    margin:24px 0 0;padding:24px clamp(24px,4vw,34px);
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  }
+  .review-verdict p{
+    margin:0;font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(1.05rem,2vw,1.25rem);color:var(--text);letter-spacing:-0.01em;
+  }
+  .review-verdict span{display:block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);font-style:normal;}
+  .review-note{margin:24px 0 0;padding-top:20px;border-top:1px solid var(--border);color:var(--text-faint);font-size:0.85rem;}
+  .review-form{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+  .review-form textarea{
+    width:100%;min-height:96px;resize:vertical;
+    background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;
+    padding:14px 16px;font-family:'Sora',system-ui,sans-serif;font-size:0.92rem;line-height:1.5;
+  }
+  .review-form textarea:focus{outline:none;border-color:var(--accent-border);}
+  .review-form-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .review-form input[type="text"]{
+    flex:1;min-width:180px;
+    background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;
+    padding:10px 14px;font-family:'Sora',system-ui,sans-serif;font-size:0.9rem;
+  }
+  .review-form input[type="text"]:focus{outline:none;border-color:var(--accent-border);}
+  .review-form-hint{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);margin:0;}
 </style>
 </head>
 <body>
@@ -550,6 +595,7 @@
       <a href="#workflow">Method</a>
       <a href="#proof">Proof</a>
       <a href="#games">Games</a>
+      <a href="#review2050">2050</a>
     </div>
     <div class="nav-right">
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
@@ -760,6 +806,52 @@
     <button type="button" class="share-close" data-share-close>Close</button>
   </div>
 </div>
+
+<section id="review2050">
+  <div class="wrap">
+    <h2 class="section-label reveal"><span>07</span> — A Review From 2050</h2>
+    <p class="review-intro reveal">I asked MAX — my own AI system — to step forward to 2050 and look back at what I've built. No edits. This is what came back.</p>
+    <div class="review-prompt reveal">
+      <span class="said">Hmm.. think like you are from future like from 2050, and review our projects like max, juno and our website and other agents and give me the honest review</span>
+      <span class="who">— me, to MAX</span>
+    </div>
+    <div class="review-grid stagger">
+      <div class="review-card reveal" style="--i:0">
+        <h3>MAX</h3>
+        <p>Real discipline for a solo build — a tiered model architecture and a hard rule that MAX never reasons about money itself, only Juno does. But its entire authority runs through one Mac, one webcam, one USB bus. No redundancy. The day that Mac dies, MAX doesn't degrade — it disappears.</p>
+      </div>
+      <div class="review-card reveal" style="--i:1">
+        <h3>Juno</h3>
+        <p>Ahead of her time on privacy — raw bank SMS parsed locally, only category totals ever reach the cloud model, years before that became the industry scandal it became. But her standing profile keeps drifting from the live ledger, patched consult by consult instead of fixed structurally.</p>
+      </div>
+      <div class="review-card reveal" style="--i:2">
+        <h3>The Agent Bench</h3>
+        <p>Seven specialists, frozen prompts, a shared ethos, and a test suite that pins honesty over agreement — rare taste for a personal project. The gap: no agent owns whether the whole system has gotten too big for one person to actually supervise.</p>
+      </div>
+      <div class="review-card reveal" style="--i:3">
+        <h3>This Website</h3>
+        <p>The one piece that actually shipped end-to-end with real proof instead of claims. Held against it: the canonical GitHub identity sat broken behind a workaround for a long stretch before anyone circled back to fix it.</p>
+      </div>
+    </div>
+    <div class="review-verdict reveal">
+      <p>Strong at building the right thing. Only fair, so far, at maintaining it once it stops being new.</p>
+      <span>The honest throughline across MAX, Juno, the agent bench, and this site — 2026, reviewed from 2050</span>
+    </div>
+    <div class="review-note reveal">
+      <p>Think I — or MAX — missed something, or got it right? Leave your own take below. It opens as a public issue on the repo behind this site.</p>
+      <form class="review-form" data-review-form>
+        <div class="review-form-row">
+          <input type="text" placeholder="Your name (optional)" data-review-name>
+        </div>
+        <textarea placeholder="Your honest review of MAX, Juno, this site, or the whole thing…" data-review-text required></textarea>
+        <div class="review-form-row">
+          <button type="submit" class="btn-ghost">Post your feedback →</button>
+          <p class="review-form-hint">Opens a GitHub issue — no account needed to write it, just to submit it.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
 
 <footer>
   <div class="closing reveal">Let's <span>build</span>.</div>
@@ -1344,6 +1436,31 @@
     startBtn.addEventListener('click', function () {
       sequence = [];
       nextRound();
+    });
+  })();
+
+  // Visitor feedback on the "A Review From 2050" section -- no backend to
+  // run, so it hands off to a prefilled GitHub issue on the repo behind this
+  // site rather than inventing a form service.
+  (function () {
+    var form = document.querySelector('[data-review-form]');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var nameEl = document.querySelector('[data-review-name]');
+      var textEl = document.querySelector('[data-review-text]');
+      var text = (textEl.value || '').trim();
+      if (!text) { textEl.focus(); return; }
+      var name = (nameEl.value || '').trim();
+      var title = 'Site feedback from ' + (name || 'a visitor');
+      var body = text + (name ? '\n\n— ' + name : '\n\n— submitted anonymously');
+      var url = 'https://github.com/workwithsarathkumar-hash/workwithsarathkumar-hash.github.io/issues/new'
+        + '?title=' + encodeURIComponent(title)
+        + '&body=' + encodeURIComponent(body)
+        + '&labels=' + encodeURIComponent('site-feedback');
+      window.open(url, '_blank', 'noopener');
+      textEl.value = '';
+      if (nameEl) nameEl.value = '';
     });
   })();
 })();
