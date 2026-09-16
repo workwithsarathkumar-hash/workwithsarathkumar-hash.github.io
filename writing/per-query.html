@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Per Query — Sarath Kumar</title>
+<meta name="description" content="What AI's growth actually costs the grid and the water table, the viral claims that get the number wrong, and where the real leverage for fixing it sits.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230B0C0E'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Georgia,serif' font-style='italic' fill='%23C9A55C' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0C0E;
+    --surface:#131418;
+    --surface-2:#1A1B20;
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.14);
+    --text:#EFEDE8;
+    --text-soft:#A8A6A0;
+    --text-faint:#6E6C67;
+    --accent:#C9A55C;
+    --accent-strong:#DEBB78;
+    --accent-ink:#191307;
+    --accent-soft:rgba(201,165,92,0.14);
+    --accent-border:rgba(201,165,92,0.32);
+    --shadow:rgba(0,0,0,0.5);
+  }
+  :root[data-theme="light"]{
+    --bg:#FAF9F6;
+    --surface:#FFFFFF;
+    --surface-2:#F2F0EA;
+    --border:rgba(20,18,12,0.09);
+    --border-strong:rgba(20,18,12,0.15);
+    --text:#1B1A17;
+    --text-soft:#5C5A54;
+    --text-faint:#96938B;
+    --accent:#9C7A32;
+    --accent-strong:#82652A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:rgba(156,122,50,0.1);
+    --accent-border:rgba(156,122,50,0.3);
+    --shadow:rgba(20,18,12,0.1);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#FAF9F6; --surface:#FFFFFF; --surface-2:#F2F0EA;
+      --border:rgba(20,18,12,0.09); --border-strong:rgba(20,18,12,0.15);
+      --text:#1B1A17; --text-soft:#5C5A54; --text-faint:#96938B;
+      --accent:#9C7A32; --accent-strong:#82652A; --accent-ink:#FFFFFF;
+      --accent-soft:rgba(156,122,50,0.1); --accent-border:rgba(156,122,50,0.3);
+      --shadow:rgba(20,18,12,0.1);
+    }
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'Sora',system-ui,-apple-system,sans-serif;line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  img,svg{max-width:100%;}
+  a{color:var(--accent);}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-0.01em;text-wrap:balance;}
+  code,.mono{font-family:'JetBrains Mono',monospace;}
+
+  nav{padding:20px 0;border-bottom:1px solid var(--border);}
+  nav .row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  nav a.back{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text-faint);text-decoration:none;}
+  nav a.back:hover{color:var(--accent);}
+  .theme-toggle{
+    background:none;border:1px solid var(--border-strong);border-radius:999px;
+    width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+    color:var(--text-soft);cursor:pointer;
+  }
+
+  .hero{padding:64px 0 44px;border-bottom:1px solid var(--border);}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;margin:0 0 18px;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  h1{font-size:clamp(2.1rem,6vw,3rem);margin:0 0 18px;}
+  .hero p.lede{font-size:1.15rem;color:var(--text-soft);max-width:600px;margin:0;}
+
+  section{padding:52px 0;border-bottom:1px solid var(--border);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.5rem;margin:0 0 8px;}
+  .section-note{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-faint);margin:0 0 26px;}
+  p{color:var(--text-soft);margin:0 0 16px;max-width:640px;}
+  strong{color:var(--text);font-weight:600;}
+
+  figure{margin:28px 0;}
+  figure svg{display:block;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 4px;}
+  figcaption{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-faint);margin-top:10px;text-align:center;}
+
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:14px;margin:24px 0;}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;}
+  .stat .n{font-family:'JetBrains Mono',monospace;font-size:1.6rem;color:var(--accent);display:block;font-variant-numeric:tabular-nums;}
+  .stat .l{font-size:0.82rem;color:var(--text-faint);display:block;margin-top:6px;}
+
+  table{width:100%;border-collapse:collapse;margin:24px 0;}
+  th{
+    text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--text-faint);padding:0 16px 10px;border-bottom:1px solid var(--border-strong);
+  }
+  td{padding:16px;border-bottom:1px solid var(--border);vertical-align:top;font-size:0.94rem;color:var(--text-soft);}
+  td:first-child{color:var(--text);font-weight:500;width:38%;}
+  tr:last-child td{border-bottom:none;}
+  .tbl-wrap{overflow-x:auto;}
+
+  .measures{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:14px;margin:24px 0;}
+  .measure{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;}
+  .measure h3{font-size:1rem;margin:0 0 8px;}
+  .measure p{margin:0;font-size:0.9rem;color:var(--text-soft);}
+  .measure .impact{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--accent);display:block;margin-top:10px;}
+
+  .callout{border-left:3px solid var(--accent);padding:4px 0 4px 20px;margin:26px 0;}
+  .callout p{margin:0;font-size:0.95rem;}
+
+  .watcher{
+    font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--accent);
+    background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:8px;
+    padding:14px 18px;margin:22px 0;line-height:1.6;
+  }
+
+  .verdict{
+    margin:0;padding:24px clamp(24px,4vw,34px);background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  }
+  .verdict p{
+    margin:0;font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(1.05rem,2vw,1.25rem);color:var(--text);letter-spacing:-0.01em;
+  }
+  .verdict span{display:block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);font-style:normal;}
+
+  .sources{list-style:none;margin:0 0 28px;padding:0;font-size:0.85rem;}
+  .sources li{margin-bottom:6px;}
+  .sources a{color:var(--text-soft);}
+  .sources a:hover{color:var(--accent);}
+
+  footer{padding:36px 0 60px;}
+  footer p{font-size:0.82rem;color:var(--text-faint);margin:0 0 8px;max-width:640px;}
+  footer a.home{font-family:'JetBrains Mono',monospace;font-size:0.82rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="row">
+    <a class="back" href="../index.html">← sarathkumar</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">◐</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="eyebrow">Personal research — AI &amp; the environment</p>
+  <h1>Per Query</h1>
+  <p class="lede">AI usage jumped fast enough that the infrastructure under it is now the story. What's actually true about the cost, what's an exaggerated meme, and what's actually being done about it.</p>
+</header>
+
+<section id="jump">
+  <h2>The sudden jump</h2>
+  <p class="section-note">grounded against the IEA's 2026 energy-and-AI analysis</p>
+  <p>Global data centre electricity consumption is on track to roughly <strong>double from 485 TWh in 2025 to about 945 TWh by 2030</strong> — around 3% of all global electricity demand by then. That alone would be a big number. What makes it an AI story specifically: the servers doing AI work inside those data centres are growing far faster than the data centres themselves.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Global data centre electricity consumption is projected to roughly double, from 485 terawatt-hours in 2025 to 945 terawatt-hours in 2030, per the IEA's base case.">
+      <g font-family="JetBrains Mono, monospace" font-size="12">
+        <line x1="60" y1="210" x2="600" y2="210" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+        <!-- 2025 bar -->
+        <rect x="140" y="210" width="90" height="0" fill="none"/>
+        <rect x="140" y="119" width="90" height="91" rx="4" fill="currentColor" opacity="0.35"/>
+        <text x="185" y="105" text-anchor="middle" fill="currentColor">485 TWh</text>
+        <text x="185" y="230" text-anchor="middle" opacity="0.7">2025</text>
+        <!-- 2030 bar -->
+        <rect x="380" y="34" width="90" height="176" rx="4" fill="#C9A55C"/>
+        <text x="425" y="20" text-anchor="middle" fill="#C9A55C" font-weight="600">945 TWh</text>
+        <text x="425" y="230" text-anchor="middle" opacity="0.7">2030 (IEA base case)</text>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Global data centre electricity use, actual vs. IEA's 2030 projection. Roughly double in five years.</figcaption>
+  </figure>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">15%/yr</span><span class="l">data centre electricity growth, 2024-2030 — over 4× the growth rate of every other sector combined</span></div>
+    <div class="stat"><span class="n">30%/yr</span><span class="l">growth specifically in AI-accelerated servers — the segment inside data centres actually doing AI workloads</span></div>
+    <div class="stat"><span class="n">~3×</span><span class="l">AI-focused electricity use is set to roughly triple by 2030, even as total data centre use "only" doubles</span></div>
+  </div>
+  <p>That gap between 15% and 30% is the actual headline: data centres in general are growing fast, but the AI-specific slice inside them is growing about twice as fast as that. It's not "computing got bigger" — it's "AI got bigger inside computing."</p>
+</section>
+
+<section id="forecast">
+  <h2>Forecasting where this goes</h2>
+  <p class="section-note">a 2026 snapshot, to make the scale concrete</p>
+  <p>In 2026 alone, the IEA projects roughly <strong>260 TWh</strong> of data-centre electricity demand in the US and around <strong>150 TWh</strong> in Europe. For a sense of scale: that US figure alone is in the same ballpark as the annual electricity consumption of a mid-sized country. The IEA's longer view has global data-centre demand reaching <strong>1,200 TWh by 2035</strong> — meaning the growth doesn't level off at 2030, it keeps compounding.</p>
+  <p>The honest uncertainty here: these are all forecasts built on today's adoption curve and today's hardware efficiency. They can come in lower if efficiency gains outpace demand, or higher if AI adoption keeps accelerating past what's already priced in. Nobody serious is claiming false precision on the exact number — the direction and rough magnitude are what's solid.</p>
+</section>
+
+<section id="myths">
+  <h2>Myths vs. what's actually true</h2>
+  <p class="section-note">the claims that go viral, checked against the actual research behind them</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>The claim</th><th>What's actually true</th></tr>
+    <tr>
+      <td>"One ChatGPT query wastes a whole bottle of water"</td>
+      <td>This is a misread of a real 2023 peer-reviewed estimate (Ren et al.), which said ~500mL <em>per 10 to 50 medium-length responses</em> — not per query. A single request is closer to single-digit millilitres, roughly 1% of a bottle. The researcher behind the original figure now puts a GPT-4-class prompt near 15mL full-lifecycle, about 5mL on-site. Your one prompt is a rounding error. The data centre serving millions of them is not.</td>
+    </tr>
+    <tr>
+      <td>"More efficient chips and models will fix this on their own"</td>
+      <td>Efficiency gains are real — better cooling design alone can cut cooling energy by up to 50%. But historically, efficiency gains in computing have been consistently outpaced by growth in how much of it people do (the same pattern economists call the Jevons paradox). Data centre electricity use is still climbing ~15% a year despite constant hardware efficiency improvements — efficiency has never been the whole answer by itself.</td>
+    </tr>
+    <tr>
+      <td>"Nobody's tracking or regulating any of this"</td>
+      <td>Partly true, changing fast. The EU AI Act now legally requires general-purpose AI providers to document known or estimated energy consumption in kWh, with fines up to €15 million or 3% of global turnover for non-compliance. It's a real, enforceable floor — but it has a real gap too: it doesn't yet account for grid carbon intensity, so a provider running on coal-heavy power and one running on hydro can report the same kWh figure and look identical on paper.</td>
+    </tr>
+  </table>
+  </div>
+</section>
+
+<section id="measures">
+  <h2>What's actually being done</h2>
+  <p>None of these fully solve the growth problem on their own — see the efficiency-paradox point above — but each is a real, currently-deployed lever, not a hypothetical:</p>
+  <div class="measures">
+    <div class="measure">
+      <h3>Nuclear and small modular reactors</h3>
+      <p>Hyperscalers are increasingly buying firm, carbon-free power directly. Adoption of nuclear as a data-centre power source has jumped from 11% of surveyed operators three years ago to 33% today.</p>
+      <span class="impact">Firm power, not intermittent — solves the "AI runs 24/7, solar doesn't" mismatch</span>
+    </div>
+    <div class="measure">
+      <h3>Advanced liquid/direct cooling</h3>
+      <p>Cooling is often as large a factor in a data centre's footprint as the compute itself. Newer direct-to-chip and immersion cooling designs are cutting that specific slice significantly.</p>
+      <span class="impact">Up to 50% reduction in cooling energy specifically</span>
+    </div>
+    <div class="measure">
+      <h3>Right-sized models</h3>
+      <p>Not every task needs a frontier-scale model. Smaller, distilled, or task-specific models trade some raw capability for a real, direct cut in the energy cost of serving each request.</p>
+      <span class="impact">Cuts the "per query" number directly, not just the grid mix behind it</span>
+    </div>
+    <div class="measure">
+      <h3>Mandatory disclosure</h3>
+      <p>The EU AI Act's kWh-reporting requirement is the first real legal forcing-function for providers to know and publish their own number, rather than it being optional PR.</p>
+      <span class="impact">Turns "trust us" into an auditable, penalized-if-wrong figure</span>
+    </div>
+  </div>
+  <div class="watcher">// none of these are silver bullets on their own -- they're the current honest toolkit. the growth curve in section one assumes most of these levers are already being pulled, and it's still roughly doubling by 2030.</div>
+</section>
+
+<section id="responsible">
+  <h2>What "responsible AI" actually means here</h2>
+  <p>Outside of climate circles, "responsible AI" usually gets used to mean bias, safety, or misuse. The environmental half of that word gets talked about far less — but it's now a real, binding compliance category, not just an ethics talking point. The EU AI Act's general-purpose-model providers now have a legal deadline (<strong>August 2027</strong> for models that existed before August 2025) to document their energy consumption, with real financial penalties behind it.</p>
+  <div class="callout">
+    <p>The gap worth watching: <strong>disclosure isn't the same as accountability.</strong> A published kWh figure tells you the size of the bill, not whether it was paid with coal or hydro. The European Commission has already opened consultation on tightening this — expect the "known or estimated kWh" requirement to get more specific, not less, over the next few years.</p>
+  </div>
+  <p>For anyone actually building with AI day to day — which, working on this stack, is most of what I do — the practical version of "responsible" is less about individual guilt over asking a question, and more about the choices that actually move the number: picking a right-sized model instead of the biggest one by default, and caring which provider's disclosed number you're contributing to.</p>
+</section>
+
+<section id="verdict">
+  <div class="verdict">
+    <p>The individual query was never the problem. The infrastructure being built to serve billions of them, as fast as possible, is — and that's exactly the part that's measurable, regulatable, and still being decided right now.</p>
+    <span>The honest throughline — researched 2026-09-16, figures from the IEA and the EU AI Act, re-verify before citing further out</span>
+  </div>
+</section>
+
+<footer>
+  <p>Personal research, not a citable academic source — sources below, so every figure can be re-checked as the numbers move. Growth forecasts especially should be treated as directional, not exact, past their stated year.</p>
+  <ul class="sources">
+    <li><a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai" target="_blank" rel="noopener">IEA — Energy demand from AI (Energy and AI report)</a></li>
+    <li><a href="https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions" target="_blank" rel="noopener">IEA — Data centre electricity use surged in 2025</a></li>
+    <li><a href="https://waterfreechat.com/blog/chatgpt-water-usage-per-query" target="_blank" rel="noopener">WaterFreeChat — ChatGPT water usage per query, the data behind the viral claim</a></li>
+    <li><a href="https://www.whitecase.com/insight-alert/energy-efficiency-requirements-under-eu-ai-act" target="_blank" rel="noopener">White &amp; Case — Energy efficiency requirements under the EU AI Act</a></li>
+    <li><a href="https://www.hanwhadatacenters.com/blog/hyperscale-data-center-energy-solutions-what-to-know-in-2026/" target="_blank" rel="noopener">Hanwha — Hyperscale data centre energy solutions, 2026</a></li>
+  </ul>
+  <a class="home" href="../index.html">← back to sarathkumar.dev</a>
+</footer>
+
+</div>
+<script>
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch(e) {}
+    if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var next;
+      if (!current) next = prefersDark ? 'light' : 'dark';
+      else next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch(e) {}
+    });
+  })();
+</script>
+</body>
+</html>
