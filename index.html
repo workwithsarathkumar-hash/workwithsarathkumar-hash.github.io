@@ -175,18 +175,6 @@
   .quote-card.morphed .icon-horse{opacity:0;transform:translateX(-6px) scale(0.94);}
   .quote-card.morphed .icon-car{opacity:1;transform:translateX(0) scale(1);}
 
-  /* Method (beats) */
-  .beats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;}
-  @media (max-width:460px){ .beats{grid-template-columns:1fr;} }
-  .beat{
-    background:var(--surface);border:1px solid var(--border);border-radius:8px;
-    padding:24px 20px;transition:border-color 0.2s ease, transform 0.2s ease;
-  }
-  .beat:hover{border-color:var(--accent-border);transform:translateY(-3px);}
-  .beat .n{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:0.78rem;margin-bottom:12px;display:block;}
-  .beat h3{margin:0 0 8px;font-size:1.08rem;color:var(--text);font-weight:600;}
-  .beat p{margin:0;color:var(--text-faint);font-size:0.9rem;}
-
   /* Proof — editorial blocks, wrapped around a scroll-linked cylinder */
   #proof{position:relative;overflow:hidden;}
   .proof-glow{
@@ -389,7 +377,6 @@
       <a href="#background">Background</a>
       <a href="#manifesto">Manifesto</a>
       <a href="#quotes">Quotes</a>
-      <a href="#workflow">Method</a>
       <a href="#proof">Proof</a>
       <a href="#games">Games</a>
       <a href="#review2050">2050</a>
@@ -468,25 +455,10 @@
   </div>
 </section>
 
-<section id="workflow">
-  <div class="wrap">
-    <p class="section-label reveal"><span>04</span> — How I Operate</p>
-    <div class="beats stagger">
-      <div class="beat reveal" style="--i:0"><span class="n">01</span><h3>Research</h3><p>Dig in once I'm already moving — real signal beats a spreadsheet of guesses.</p></div>
-      <div class="beat reveal" style="--i:1"><span class="n">02</span><h3>Learn</h3><p>Every attempt teaches something a plan never could. Update in motion, not after.</p></div>
-      <div class="beat reveal" style="--i:2"><span class="n">03</span><h3>Focus</h3><p>Cut the noise. Decide what the moment actually calls for.</p></div>
-      <div class="beat reveal" style="--i:3"><span class="n">04</span><h3>Prioritise</h3><p>Rank what moves the needle over what simply feels urgent.</p></div>
-      <div class="beat reveal" style="--i:4"><span class="n">05</span><h3>Plan</h3><p>Architect the approach — now backed by what Research and Learn surfaced, not guesswork.</p></div>
-      <div class="beat reveal" style="--i:5"><span class="n">06</span><h3>Build</h3><p>Execute the plan with precision. No improvising mid-flight.</p></div>
-      <div class="beat reveal" style="--i:6"><span class="n">07</span><h3>Ship</h3><p>Get it live. A plan nobody can use isn't finished yet.</p></div>
-    </div>
-  </div>
-</section>
-
 <section id="proof">
   <div class="proof-glow" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="section-label reveal"><span>05</span> — Proof</p>
+    <p class="section-label reveal"><span>04</span> — Proof</p>
 
     <div class="proof-block reveal">
       <div class="pb-cyl">
@@ -568,7 +540,7 @@
 
 <section id="games">
   <div class="wrap">
-    <p class="section-label reveal"><span>06</span> — Games</p>
+    <p class="section-label reveal"><span>05</span> — Games</p>
     <p class="games-intro reveal">Three small, mindful games — designed and coded end-to-end by MAX, my personal AI system. No build tools, no tracking, nothing stored. Just something quiet to play with for a minute.</p>
     <div class="games-grid stagger">
       <div class="game-card reveal" style="--i:0">
@@ -620,7 +592,7 @@
 
 <section id="review2050">
   <div class="wrap">
-    <p class="section-label reveal"><span>07</span> — A Review From 2050</p>
+    <p class="section-label reveal"><span>06</span> — A Review From 2050</p>
     <p class="review-intro reveal">I asked MAX — my own AI system — to step forward to 2050 and look back at what I've built. No edits. This is what came back.</p>
     <div class="review-prompt reveal">
       <span class="said">Hmm.. think like you are from future like from 2050, and review our projects like max, juno and our website and other agents and give me the honest review</span>
