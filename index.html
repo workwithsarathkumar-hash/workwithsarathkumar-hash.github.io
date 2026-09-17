@@ -358,8 +358,82 @@
     font-family:'Fraunces',serif;font-weight:340;font-size:clamp(2.4rem,8vw,5.2rem);line-height:1.05;letter-spacing:-0.02em;margin-bottom:34px;
   }
   .closing h2 em{color:var(--accent);font-style:italic;}
-  .contact-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:40px;}
-  .contact-row .btn svg{width:15px;height:15px;flex-shrink:0;}
+
+  /* ---------- Holographic ID card ---------- */
+  /* A deliberately single-look component: dark backdrop + iridescent foil
+     regardless of site theme, same as a real holographic card looks the
+     same whether the room is bright or dim. */
+  .id-card-stage{
+    position:relative;padding:80px 24px 64px;margin-top:20px;
+    display:flex;justify-content:center;overflow:hidden;
+    background:#08080c;
+  }
+  .id-card-glow{
+    position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(31,140,102,0.26) 0%, transparent 45%),
+      radial-gradient(circle at 35% 55%, rgba(10,50,38,0.28) 0%, transparent 45%),
+      radial-gradient(circle at 65% 55%, rgba(201,165,92,0.15) 0%, transparent 45%);
+    filter:blur(30px);
+  }
+  .id-card{
+    position:relative;z-index:1;width:min(300px,80vw);aspect-ratio:5/7.4;
+    border-radius:20px;background:#020302;
+    border:1px solid rgba(201,165,92,0.22);
+    box-shadow:0 30px 70px -20px rgba(0,0,0,0.8), 0 1px 0 rgba(201,165,92,0.16) inset;
+    transform-style:preserve-3d;will-change:transform;
+    transition:transform 0.35s cubic-bezier(.22,.8,.32,1);
+  }
+  .id-card-holo{
+    position:absolute;inset:0;border-radius:inherit;overflow:hidden;
+    background:linear-gradient(115deg,
+      #010201 0%, #071b14 16%, #123d2c 32%, #1c6b4c 48%,
+      #081c14 64%, #010201 80%, #7d602c 92%, #010201 100%);
+    background-size:260% 260%;background-position:50% 50%;
+    mix-blend-mode:screen;opacity:0.42;
+    transition:background-position 0.25s ease;
+    animation:holo-drift 4.5s ease-in-out infinite alternate;
+  }
+  @keyframes holo-drift{
+    0%{background-position:8% 18%;}
+    100%{background-position:92% 82%;}
+  }
+  .id-card-gloss{
+    position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;
+    background:linear-gradient(105deg,
+      transparent 32%, rgba(255,255,255,0.24) 47%, rgba(255,255,255,0.05) 55%, transparent 68%);
+    background-size:220% 220%;background-position:30% 30%;
+    mix-blend-mode:screen;
+    transition:background-position 0.25s ease;
+  }
+  .id-card-inner{
+    position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;
+    text-align:center;padding:34px 24px 26px;
+  }
+  .id-card-mark{
+    width:44px;height:44px;border-radius:12px;margin-bottom:16px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:1.4rem;
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#fff;
+  }
+  .id-card-inner h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.15rem;color:#fff;margin-bottom:4px;}
+  .id-card-role{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.6);margin-bottom:24px;}
+  .id-card-links{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:auto;}
+  .id-card-links a{
+    display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:10px;
+    background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+    color:rgba(255,255,255,0.85);font-size:0.86rem;font-weight:500;text-align:left;
+    transition:background 0.2s ease, border-color 0.2s ease;
+  }
+  .id-card-links a:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.28);}
+  .id-card-links a svg{width:16px;height:16px;flex-shrink:0;}
+  .id-card-notch{
+    position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);
+    width:22px;height:22px;border-radius:50%;background:#08080c;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .id-card-holo{animation:none;background-position:50% 50%;}
+  }
   .li-badge-wrap{
     display:flex;justify-content:center;margin:0 auto 28px;max-width:420px;
     padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;
@@ -646,19 +720,36 @@
 <section class="closing">
   <div class="wrap">
     <h2 class="reveal">Let's <em>build</em>.</h2>
-    <div class="contact-row reveal">
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
-        LinkedIn
-      </a>
-      <a class="btn btn-ghost" href="https://github.com/workwithsarathkumar-hash" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-        GitHub
-      </a>
-      <a class="btn btn-ghost" href="#" id="emailLink">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
-        Email
-      </a>
+  </div>
+  <div class="id-card-stage reveal">
+    <div class="id-card-glow" aria-hidden="true"></div>
+    <div class="id-card" id="idCard">
+      <div class="id-card-holo" aria-hidden="true"></div>
+      <div class="id-card-gloss" aria-hidden="true"></div>
+      <div class="id-card-inner">
+        <div class="id-card-mark">S</div>
+        <h3>Sarath Kumar</h3>
+        <p class="id-card-role">Forward Deployed Engineer</p>
+        <div class="id-card-links">
+          <a href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+            <span>LinkedIn</span>
+          </a>
+          <a href="https://github.com/workwithsarathkumar-hash" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+            <span>GitHub</span>
+          </a>
+          <a href="Sarath_Kumar_Resume.pdf" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            <span>Resume</span>
+          </a>
+          <a href="mailto:workwithsarathkumar@gmail.com" id="emailLink">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
+            <span>Email</span>
+          </a>
+        </div>
+      </div>
+      <div class="id-card-notch" aria-hidden="true"></div>
     </div>
   </div>
 </section>
@@ -1143,18 +1234,31 @@
     });
   })();
 
-  // ---- Email link, built at runtime (not written as plain mailto: in the
-  // HTML source) so basic scrapers that only read static markup don't pick
-  // it up. Not bulletproof, but stops the majority of harvest bots. ----
+  // ---- Holographic ID card: tilts toward the cursor, and the foil
+  // gradient's position shifts with it -- the two together are what make it
+  // read as "material that reacts to viewing angle" rather than a plain
+  // hover effect. ----
   (function () {
-    var user = 'workwithsarathkumar';
-    var domain = 'gmail.com';
-    var address = user + '@' + domain;
-    var link = document.getElementById('emailLink');
-    if (link) {
-      link.href = 'mailto:' + address;
-      link.title = address;
-    }
+    var card = document.getElementById('idCard');
+    if (!card || reduceMotion) return;
+    var holo = card.querySelector('.id-card-holo');
+    var gloss = card.querySelector('.id-card-gloss');
+    var MAX_TILT = 18;
+    card.addEventListener('mousemove', function (e) {
+      var rect = card.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width;
+      var py = (e.clientY - rect.top) / rect.height;
+      var rx = (0.5 - py) * MAX_TILT;
+      var ry = (px - 0.5) * MAX_TILT;
+      card.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+      holo.style.backgroundPosition = (px * 100).toFixed(1) + '% ' + (py * 100).toFixed(1) + '%';
+      if (gloss) gloss.style.backgroundPosition = (px * 100).toFixed(1) + '% ' + (py * 100).toFixed(1) + '%';
+    });
+    card.addEventListener('mouseleave', function () {
+      card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+      holo.style.backgroundPosition = '';
+      if (gloss) gloss.style.backgroundPosition = '';
+    });
   })();
 
   // ---- Viewer count (ResumeSignal page-views API) ----
