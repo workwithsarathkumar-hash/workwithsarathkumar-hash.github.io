@@ -359,13 +359,20 @@
   }
   .closing h2 em{color:var(--accent);font-style:italic;}
   .contact-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:40px;}
-  footer{padding:0 0 60px;text-align:center;}
-  footer p{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);}
-  footer .banner{
-    display:inline-block;margin-bottom:20px;font-family:'JetBrains Mono',monospace;font-size:0.74rem;
-    color:var(--accent);border:1px solid var(--accent-border);background:var(--accent-soft);
-    padding:6px 14px;border-radius:999px;
+  .contact-row .btn svg{width:15px;height:15px;flex-shrink:0;}
+  .li-badge-wrap{
+    display:flex;justify-content:center;margin:0 auto 28px;max-width:420px;
+    padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;
   }
+  .li-badge-wrap .badge-base__link{display:none;}
+  footer{padding:0 0 60px;text-align:center;}
+  footer p{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);margin-top:6px;}
+  .viewer-count{
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--text-faint);
+  }
+  .viewer-count .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .viewer-count strong{color:var(--text);font-weight:600;}
 </style>
 </head>
 <body>
@@ -640,16 +647,32 @@
   <div class="wrap">
     <h2 class="reveal">Let's <em>build</em>.</h2>
     <div class="contact-row reveal">
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="btn btn-ghost" href="https://github.com/workwithsarathkumar-hash" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn btn-ghost" href="Sarath_Kumar_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/sarath-kumar-3b621316b" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        LinkedIn
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/workwithsarathkumar-hash" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.42.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        GitHub
+      </a>
+      <a class="btn btn-ghost" href="#" id="emailLink">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
+        Email
+      </a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <span class="banner">🟢 green preview — not the live site</span>
+    <div class="li-badge-wrap">
+      <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="sarath-kumar-3b621316b" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/sarath-kumar-3b621316b?trk=profile-badge">Sarath Kumar</a></div>
+    </div>
+    <div class="viewer-count" id="viewerCount" hidden>
+      <span class="dot"></span>
+      <strong id="viewerCountNum">—</strong> people have visited this page
+    </div>
+    <p>#GenAI #AgenticAI #ForwardDeployedEngineer #BuildInPublic #AI</p>
     <p>Personal site. Views, opinions, and projects here are my own and do not represent or speak for my employer.</p>
   </div>
 </footer>
@@ -1119,7 +1142,39 @@
       if (nameEl) nameEl.value = '';
     });
   })();
+
+  // ---- Email link, built at runtime (not written as plain mailto: in the
+  // HTML source) so basic scrapers that only read static markup don't pick
+  // it up. Not bulletproof, but stops the majority of harvest bots. ----
+  (function () {
+    var user = 'workwithsarathkumar';
+    var domain = 'gmail.com';
+    var address = user + '@' + domain;
+    var link = document.getElementById('emailLink');
+    if (link) {
+      link.href = 'mailto:' + address;
+      link.title = address;
+    }
+  })();
+
+  // ---- Viewer count (ResumeSignal page-views API) ----
+  fetch('https://resume-signal--sarath-works.replit.app/api/page-views', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: 'personal-website' }),
+  })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r); })
+    .then(function (data) {
+      var el = document.getElementById('viewerCount');
+      var num = document.getElementById('viewerCountNum');
+      if (el && num && data && typeof data.count === 'number') {
+        num.textContent = data.count.toLocaleString();
+        el.hidden = false;
+      }
+    })
+    .catch(function () { /* API unreachable -- stay hidden */ });
 })();
 </script>
+<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
 </body>
 </html>
