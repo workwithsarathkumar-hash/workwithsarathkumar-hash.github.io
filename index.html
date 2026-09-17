@@ -434,11 +434,6 @@
   @media (prefers-reduced-motion: reduce){
     .id-card-holo{animation:none;background-position:50% 50%;}
   }
-  .li-badge-wrap{
-    display:flex;justify-content:center;margin:0 auto 28px;max-width:420px;
-    padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;
-  }
-  .li-badge-wrap .badge-base__link{display:none;}
   footer{padding:0 0 60px;text-align:center;}
   footer p{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);margin-top:6px;}
   .viewer-count{
@@ -756,9 +751,6 @@
 
 <footer>
   <div class="wrap">
-    <div class="li-badge-wrap">
-      <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="sarath-kumar-3b621316b" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/sarath-kumar-3b621316b?trk=profile-badge">Sarath Kumar</a></div>
-    </div>
     <div class="viewer-count" id="viewerCount" hidden>
       <span class="dot"></span>
       <strong id="viewerCountNum">—</strong> people have visited this page
@@ -1279,6 +1271,5 @@
     .catch(function () { /* API unreachable -- stay hidden */ });
 })();
 </script>
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
 </body>
 </html>
