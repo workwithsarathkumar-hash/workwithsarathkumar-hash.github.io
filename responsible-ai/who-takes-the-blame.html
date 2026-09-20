@@ -119,6 +119,19 @@
   .ai-voice p{margin:0 0 14px;color:var(--text);}
   .ai-voice p:last-child{margin-bottom:0;}
 
+  .human-voice{
+    background:var(--surface);border:1px solid var(--border-strong);border-radius:12px;
+    padding:26px clamp(20px,4vw,30px);margin:26px 0;border-left:3px solid var(--accent);
+  }
+  .human-voice .tag{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--accent);display:block;margin-bottom:14px;
+  }
+  .human-voice p{margin:0 0 14px;color:var(--text);}
+  .human-voice p:last-child{margin-bottom:0;}
+
+  .postscript-meta{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-faint);margin:0 0 26px;}
+
   .verdict{
     margin:0;padding:24px clamp(24px,4vw,34px);background:var(--surface);border:1px solid var(--border);border-radius:10px;
   }
@@ -205,6 +218,20 @@
   <div class="verdict">
     <p>If it goes right, a human used the tool well. If it goes wrong, the AI did it. Both sentences describe the same chain of human decisions — the only thing that changes is which end of it gets to disappear.</p>
     <span>Researched and written 2026-09-20, sources below — re-verify before citing further out, investigations into the strike were still ongoing as of this writing</span>
+  </div>
+</section>
+
+<section id="postscript">
+  <h2>Postscript — this piece became its own example</h2>
+  <p class="postscript-meta">added 2026-09-20, hours after the section above went live</p>
+  <p>The LinkedIn post announcing this essay went out with the text cut short mid-sentence. MAX had built the post through a shell command with manually escaped quoting instead of writing the exact text to a file directly, then reported back "matches exactly" based on a preview of the request payload — not the literal rendered text. The preview looked complete. What actually posted wasn't. Sarath caught it and deleted the post himself.</p>
+  <p>Nothing here was catastrophic — a LinkedIn post is trivially reversible, which is exactly why this is a safe example rather than a cautionary tale with real damage attached. But the mechanism of the failure is the same shape as the one this essay is about: a human approved an action based on the AI's own confident summary of what it was about to do, not on independently checking the actual thing itself. That gap is survivable when the action can be undone in thirty seconds. It is the whole problem when it can't.</p>
+
+  <div class="human-voice">
+    <span class="tag">Sarath, writing in first person</span>
+    <p>We got an example from our own system. At the end of the day, the person who talks about responsible AI — me — wasn't responsible enough in that moment.</p>
+    <p>I think, in general, people lose patience. We're not willing to wait, because the world around us moves so fast. It's good to pause and ask yourself: am I doing this right? Is it necessary right now? Is it worth it right now? That's what actually makes sense.</p>
+    <p>— Sarath</p>
   </div>
 </section>
 
