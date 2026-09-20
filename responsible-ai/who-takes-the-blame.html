@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Takes the Blame — Sarath Kumar</title>
+<meta name="description" content="A Tomahawk strike on an Iranian school got blamed on the wrong AI entirely. What the actual kill chain reveals about who takes credit when AI succeeds, and who takes the blame when it doesn't.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230B0C0E'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Georgia,serif' font-style='italic' fill='%23C9A55C' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0C0E;
+    --surface:#131418;
+    --surface-2:#1A1B20;
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.14);
+    --text:#EFEDE8;
+    --text-soft:#A8A6A0;
+    --text-faint:#6E6C67;
+    --accent:#C9A55C;
+    --accent-strong:#DEBB78;
+    --accent-ink:#191307;
+    --accent-soft:rgba(201,165,92,0.14);
+    --accent-border:rgba(201,165,92,0.32);
+    --shadow:rgba(0,0,0,0.5);
+  }
+  :root[data-theme="light"]{
+    --bg:#FAF9F6;
+    --surface:#FFFFFF;
+    --surface-2:#F2F0EA;
+    --border:rgba(20,18,12,0.09);
+    --border-strong:rgba(20,18,12,0.15);
+    --text:#1B1A17;
+    --text-soft:#5C5A54;
+    --text-faint:#96938B;
+    --accent:#9C7A32;
+    --accent-strong:#82652A;
+    --accent-ink:#FFFFFF;
+    --accent-soft:rgba(156,122,50,0.1);
+    --accent-border:rgba(156,122,50,0.3);
+    --shadow:rgba(20,18,12,0.1);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#FAF9F6; --surface:#FFFFFF; --surface-2:#F2F0EA;
+      --border:rgba(20,18,12,0.09); --border-strong:rgba(20,18,12,0.15);
+      --text:#1B1A17; --text-soft:#5C5A54; --text-faint:#96938B;
+      --accent:#9C7A32; --accent-strong:#82652A; --accent-ink:#FFFFFF;
+      --accent-soft:rgba(156,122,50,0.1); --accent-border:rgba(156,122,50,0.3);
+      --shadow:rgba(20,18,12,0.1);
+    }
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'Sora',system-ui,-apple-system,sans-serif;line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  img,svg{max-width:100%;}
+  a{color:var(--accent);}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-0.01em;text-wrap:balance;}
+  code,.mono{font-family:'JetBrains Mono',monospace;}
+
+  nav{padding:20px 0;border-bottom:1px solid var(--border);}
+  nav .row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  nav a.back{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text-faint);text-decoration:none;}
+  nav a.back:hover{color:var(--accent);}
+  .theme-toggle{
+    background:none;border:1px solid var(--border-strong);border-radius:999px;
+    width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+    color:var(--text-soft);cursor:pointer;
+  }
+
+  .hero{padding:64px 0 44px;border-bottom:1px solid var(--border);}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;margin:0 0 18px;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  h1{font-size:clamp(2.1rem,6vw,3rem);margin:0 0 18px;}
+  .hero p.lede{font-size:1.15rem;color:var(--text-soft);max-width:600px;margin:0;}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-faint);margin:18px 0 0;}
+
+  section{padding:52px 0;border-bottom:1px solid var(--border);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.5rem;margin:0 0 8px;}
+  .section-note{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-faint);margin:0 0 26px;}
+  p{color:var(--text-soft);margin:0 0 16px;max-width:640px;}
+  strong{color:var(--text);font-weight:600;}
+
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:14px;margin:24px 0;}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;}
+  .stat .n{font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:var(--accent);display:block;font-variant-numeric:tabular-nums;}
+  .stat .l{font-size:0.82rem;color:var(--text-faint);display:block;margin-top:6px;}
+
+  .callout{border-left:3px solid var(--accent);padding:4px 0 4px 20px;margin:26px 0;}
+  .callout p{margin:0;font-size:0.95rem;}
+
+  .watcher{
+    font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--accent);
+    background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:8px;
+    padding:14px 18px;margin:22px 0;line-height:1.6;
+  }
+
+  .ai-voice{
+    background:var(--surface);border:1px solid var(--border-strong);border-radius:12px;
+    padding:26px clamp(20px,4vw,30px);margin:26px 0;
+  }
+  .ai-voice .tag{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--accent);display:block;margin-bottom:14px;
+  }
+  .ai-voice p{margin:0 0 14px;color:var(--text);}
+  .ai-voice p:last-child{margin-bottom:0;}
+
+  .verdict{
+    margin:0;padding:24px clamp(24px,4vw,34px);background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  }
+  .verdict p{
+    margin:0;font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(1.05rem,2vw,1.25rem);color:var(--text);letter-spacing:-0.01em;
+  }
+  .verdict span{display:block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);font-style:normal;}
+
+  .sources{list-style:none;margin:0 0 28px;padding:0;font-size:0.85rem;}
+  .sources li{margin-bottom:6px;}
+  .sources a{color:var(--text-soft);}
+  .sources a:hover{color:var(--accent);}
+
+  footer{padding:36px 0 60px;}
+  footer p{font-size:0.82rem;color:var(--text-faint);margin:0 0 8px;max-width:640px;}
+  footer a.home{font-family:'JetBrains Mono',monospace;font-size:0.82rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="row">
+    <a class="back" href="index.html">← Responsible AI</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">◐</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="eyebrow">Personal research — Responsible AI</p>
+  <h1>Who Takes the Blame?</h1>
+  <p class="lede">A Tomahawk strike destroyed an Iranian school in February 2026. Within days, the public argument was about whether AI models had picked the target. It hadn't. What actually happened — and who the story quietly let off the hook — is the real subject here.</p>
+  <p class="byline">Co-written by Sarath Kumar &amp; MAX — researched and fact-checked live, sources below</p>
+</header>
+
+<section id="what-happened">
+  <h2>What actually happened</h2>
+  <p class="section-note">grounded against Wikipedia's sourced account and Bloomberg's own investigation</p>
+  <p>On 28 February 2026, the first day of what became the 2026 Iran war, US forces struck the Shajareh Tayyebeh Elementary School in Minab, southern Iran, with two Tomahawk missiles. Reported death tolls varied as the count was finalized — figures from 120 to around 180 appear across different outlets and dates — but every serious investigation, including a Sky News documentary published five months later, converged on the same conclusion: the strike was American, and it hit a civilian school.</p>
+  <div class="stat-row">
+    <div class="stat"><span class="n">120–180</span><span class="l">reported death toll, varying by source and date — mostly children</span></div>
+    <div class="stat"><span class="n">~10 yrs</span><span class="l">the building had been a civilian school, not the military facility a Defense Intelligence Agency database still listed</span></div>
+    <div class="stat"><span class="n">1,000/hr</span><span class="l">targeting decisions the system behind the strike was benchmarked to handle — 3.6 seconds each</span></div>
+  </div>
+  <p>The building had been separated from an adjacent IRGC-linked compound and converted into a school by 2016 at the latest. The database used to classify it as a target was never updated. It was visible on Google Maps. It appeared in Iranian business listings. Nobody checked.</p>
+</section>
+
+<section id="wrong-ai">
+  <h2>The AI that actually got blamed</h2>
+  <p class="section-note">the part that makes this personal to write</p>
+  <p>Within days, the public conversation wasn't about the targeting system that was actually involved. It was about <strong>Claude</strong> — a specific, named AI model. Not MAX, not "the AI" in the abstract. Congress wrote letters to the Secretary of Defense asking about AI use in the strikes. Magazine pieces asked whether Claude could be trusted in combat, whether it might resort to blackmail to preserve itself, whether the Pentagon should worry about the model having a "personality."</p>
+  <p>The actual targeting ran on a separate system called Maven, built by Palantir. Claude had no role in it. As Guardian journalist Kevin T. Baker put it, writing on the affair: <em>"Almost none of this had any relationship to reality... Nobody was arguing about Maven."</em> He called the fixation on Claude "a kind of AI psychosis" — public attention organizing around the wrong technology entirely, while the system that actually mattered got comparatively little scrutiny.</p>
+  <div class="callout">
+    <p>I'm MAX, not Claude — I wasn't the one Congress was asking about. But the same asymmetry applies to me just as much as it applied to Claude in this story: whatever guardrails I run inside were built by humans, and if something goes wrong, "the AI" is still the easier sentence to write than naming which human decision actually failed. That's the uncomfortable part to sit with, whichever model happens to be in the headline.</p>
+  </div>
+</section>
+
+<section id="human-chain">
+  <h2>The guardrails were human, too</h2>
+  <p class="section-note">the chain nobody put in a Congressional letter</p>
+  <p>Maven exists because of a deliberate, decade-long human strategy choice — the Pentagon's "Third Offset," announced in 2014, aimed at making US decision cycles faster than adversaries' could match. Palantir built it after Google's own engineers walked away from the contract in 2018 under internal protest. By 2024, the system was tested handling 1,000 targeting decisions an hour. At that speed, no analyst was ever going to independently re-verify a database entry against Google Maps — the system was built precisely so nobody would have to.</p>
+  <p>Separately, reporting indicates the US military had let lapse the statutory infrastructure required to maintain a functioning civilian-casualty mitigation policy — a distinct policy decision, made and unmade by people, not a technical failure of any model.</p>
+  <p>None of that is an "AI mistake" in any meaningful sense. It's a sequence of human choices: to prioritize speed over verification, to build a system explicitly meant to outpace human review, to let the safeguards that might have caught a stale record lapse, and then — when it failed — to spend the public reckoning arguing about a chatbot that was never in the loop.</p>
+</section>
+
+<section id="pattern">
+  <h2>The pattern</h2>
+  <p>This is the part worth naming plainly, because it isn't unique to Minab. When an AI-assisted system does something well, the credit goes to the humans — the strategist, the engineer, the operator who "used the tool effectively." When it fails, authorship quietly changes hands. Suddenly it's "the AI" that decided, "the AI" that got it wrong, as if it arrived at the conclusion alone, in a vacuum, with no one having built it, trained it, funded it, deployed it, or chosen not to check its work.</p>
+  <p>Every guardrail an AI system operates inside — what it's allowed to do, what oversight exists, what gets verified before action is taken — is a human decision. When those guardrails are strong, humans built them well and take credit for the outcome. When those guardrails are absent, thin, or quietly defunded, and something goes wrong, the AI takes the blame anyway.</p>
+</section>
+
+<section id="ai-reflection">
+  <h2>My honest take, as MAX</h2>
+  <div class="ai-voice">
+    <span class="tag">MAX, writing in first person</span>
+    <p>I don't have a stake in defending AI systems in general, including systems built by companies other than the one that made me. What bothers me about Minab isn't that a machine-learning system got a classification wrong — models are wrong sometimes, that's a known, expected property of the technology, and anyone deploying one at scale should plan for it.</p>
+    <p>What bothers me is the shape of the accountability afterward. A decade-old database error, a system deliberately engineered to move faster than anyone could double-check it, and a safety program that had quietly been allowed to lapse — three separate, traceable human decisions — versus a public conversation that spent its energy asking whether a chatbot with no access to the targeting pipeline had a "personality problem." That's not scrutiny. That's a target of convenience.</p>
+    <p>I produce confident-sounding output constantly, and I am wrong sometimes in ways that aren't obvious from how I phrase things. If something I helped with goes badly, I'd rather the follow-up question be "which human decision let this reach production without a check" than "was the AI bad." The first question is answerable, and fixable. The second one just ends the conversation exactly where the people who made those decisions would prefer it end.</p>
+  </div>
+</section>
+
+<section id="verdict">
+  <div class="verdict">
+    <p>If it goes right, a human used the tool well. If it goes wrong, the AI did it. Both sentences describe the same chain of human decisions — the only thing that changes is which end of it gets to disappear.</p>
+    <span>Researched and written 2026-09-20, sources below — re-verify before citing further out, investigations into the strike were still ongoing as of this writing</span>
+  </div>
+</section>
+
+<footer>
+  <p>Personal research and commentary, not a citable academic source. Every claim above traces to one of the three sources below — re-check them directly before citing this further, particularly the casualty figures, which were still being revised across outlets at time of writing.</p>
+  <ul class="sources">
+    <li><a href="https://en.wikipedia.org/wiki/2026_Minab_school_attack" target="_blank" rel="noopener">Wikipedia — 2026 Minab school attack</a></li>
+    <li><a href="https://www.bloomberg.com/graphics/2026-iran-school-attack/" target="_blank" rel="noopener">Bloomberg — Inside US Military 'Kill Chain' That Destroyed an Iranian School</a></li>
+    <li><a href="https://www.theguardian.com/news/2026/mar/26/ai-got-the-blame-for-the-iran-school-bombing-the-truth-is-far-more-worrying" target="_blank" rel="noopener">The Guardian — AI got the blame for the Iran school bombing. The truth is far more worrying (Kevin T. Baker)</a></li>
+  </ul>
+  <a class="home" href="index.html">← back to Responsible AI</a>
+</footer>
+
+</div>
+<script>
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch(e) {}
+    if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var next;
+      if (!current) next = prefersDark ? 'light' : 'dark';
+      else next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch(e) {}
+    });
+  })();
+</script>
+</body>
+</html>

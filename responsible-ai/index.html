@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsible AI — Sarath Kumar</title>
+<meta name="description" content="Two honest, sourced looks at what 'responsible AI' actually means: what its growth costs the planet, and who actually gets blamed when it fails.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230B0C0E'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Georgia,serif' font-style='italic' fill='%23C9A55C' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0C0E; --surface:#131418; --surface-2:#1A1B20;
+    --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.14);
+    --text:#EFEDE8; --text-soft:#A8A6A0; --text-faint:#6E6C67;
+    --accent:#C9A55C; --accent-strong:#DEBB78; --accent-ink:#191307;
+    --accent-soft:rgba(201,165,92,0.14); --accent-border:rgba(201,165,92,0.32);
+    --shadow:rgba(0,0,0,0.5);
+  }
+  :root[data-theme="light"]{
+    --bg:#FAF9F6; --surface:#FFFFFF; --surface-2:#F2F0EA;
+    --border:rgba(20,18,12,0.09); --border-strong:rgba(20,18,12,0.15);
+    --text:#1B1A17; --text-soft:#5C5A54; --text-faint:#96938B;
+    --accent:#9C7A32; --accent-strong:#82652A; --accent-ink:#FFFFFF;
+    --accent-soft:rgba(156,122,50,0.1); --accent-border:rgba(156,122,50,0.3);
+    --shadow:rgba(20,18,12,0.1);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#FAF9F6; --surface:#FFFFFF; --surface-2:#F2F0EA;
+      --border:rgba(20,18,12,0.09); --border-strong:rgba(20,18,12,0.15);
+      --text:#1B1A17; --text-soft:#5C5A54; --text-faint:#96938B;
+      --accent:#9C7A32; --accent-strong:#82652A; --accent-ink:#FFFFFF;
+      --accent-soft:rgba(156,122,50,0.1); --accent-border:rgba(156,122,50,0.3);
+      --shadow:rgba(20,18,12,0.1);
+    }
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Sora',system-ui,-apple-system,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent);}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-0.01em;text-wrap:balance;}
+
+  nav{padding:20px 0;border-bottom:1px solid var(--border);}
+  nav .row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  nav a.back{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text-faint);text-decoration:none;}
+  nav a.back:hover{color:var(--accent);}
+  .theme-toggle{background:none;border:1px solid var(--border-strong);border-radius:999px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--text-soft);cursor:pointer;}
+
+  .hero{padding:64px 0 44px;border-bottom:1px solid var(--border);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;margin:0 0 18px;}
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  h1{font-size:clamp(2.1rem,6vw,3rem);margin:0 0 18px;}
+  .hero p.lede{font-size:1.15rem;color:var(--text-soft);max-width:600px;margin:0;}
+
+  .entries{padding:52px 0;}
+  .entry{
+    display:block;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:28px clamp(22px,4vw,32px);margin-bottom:18px;text-decoration:none;transition:border-color .15s ease;
+  }
+  .entry:hover{border-color:var(--accent-border);}
+  .entry .kicker{font-family:'JetBrains Mono',monospace;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:10px;}
+  .entry h2{font-size:1.35rem;margin:0 0 10px;color:var(--text);}
+  .entry p{font-size:0.96rem;color:var(--text-soft);margin:0;max-width:600px;}
+  .entry .meta{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);display:block;margin-top:14px;}
+
+  footer{padding:16px 0 60px;}
+  footer p{font-size:0.82rem;color:var(--text-faint);margin:0 0 8px;max-width:640px;}
+  footer a.home{font-family:'JetBrains Mono',monospace;font-size:0.82rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="row">
+    <a class="back" href="../index.html">← sarathkumar</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">◐</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="eyebrow">Personal research</p>
+  <h1>Responsible AI</h1>
+  <p class="lede">"Responsible AI" gets used to mean a lot of things. Here it means two specific, checkable ones: what building and running this technology actually costs the planet, and who actually ends up accountable — in public perception and in the record — when it fails.</p>
+</header>
+
+<div class="entries">
+  <a class="entry" href="who-takes-the-blame.html">
+    <span class="kicker">Accountability</span>
+    <h2>Who Takes the Blame?</h2>
+    <p>A Tomahawk strike destroyed an Iranian school in February 2026. The public argument was about whether AI models picked the target. It hadn't. What the actual chain of human decisions reveals about who gets credit when AI succeeds, and who gets blamed when it doesn't.</p>
+    <span class="meta">Co-written with MAX · researched 2026-09-20</span>
+  </a>
+
+  <a class="entry" href="../writing/per-query.html">
+    <span class="kicker">Environment</span>
+    <h2>Per Query</h2>
+    <p>What AI's growth actually costs the grid and the water table, the viral claims that get the number wrong, and where the real leverage for fixing it sits — grounded against the IEA's own 2026 analysis and the EU AI Act.</p>
+    <span class="meta">Researched 2026-09-16</span>
+  </a>
+</div>
+
+<footer>
+  <p>Both pieces are personal research, not academic sources — every figure and claim links to where it came from, so it can be re-checked as the story moves.</p>
+  <a class="home" href="../index.html">← back to sarathkumar.dev</a>
+</footer>
+
+</div>
+<script>
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch(e) {}
+    if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var next;
+      if (!current) next = prefersDark ? 'light' : 'dark';
+      else next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch(e) {}
+    });
+  })();
+</script>
+</body>
+</html>
