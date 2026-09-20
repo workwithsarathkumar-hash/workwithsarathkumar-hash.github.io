@@ -1,6 +1,6 @@
 # LinkedIn post — draft for review
 
-**Status:** NOT posted yet. Awaiting go-ahead.
+**Status:** Published 2026-09-20 — https://www.linkedin.com/feed/update/urn%3Ali%3Ashare%3A7507411763567562752/
 
 ---
 
