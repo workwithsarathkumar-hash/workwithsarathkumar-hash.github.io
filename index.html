@@ -673,8 +673,6 @@
       </div>
     </div>
 
-    <p class="proof-aside reveal">Also shipped a private resume scorer on a lazy Sunday scroll — scores skills and experience on the spot, nothing stored, nothing collected. <strong>Privacy isn't a feature, it's a right.</strong> <a href="https://resume-signal--sarath-works.replit.app/" target="_blank" rel="noopener">Go break it →</a></p>
-
   </div>
 </section>
 
@@ -844,6 +842,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
 <script>
 (function(){
   // Theme toggle
@@ -1337,22 +1336,21 @@
     });
   })();
 
-  // ---- Viewer count (ResumeSignal page-views API) ----
-  fetch('https://resume-signal--sarath-works.replit.app/api/page-views', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: 'personal-website' }),
-  })
-    .then(function (r) { return r.ok ? r.json() : Promise.reject(r); })
-    .then(function (data) {
+  // ---- Viewer count (CounterAPI free tier -- counterapi.dev) ----
+  // Workspace must exist under a free CounterAPI account before this will
+  // return real numbers (sign up at counterapi.dev, no card required, swap
+  // the workspace name below for the one you create).
+  if (window.Counter) {
+    var counter = new window.Counter({ workspace: 'sarathkumar-dev' });
+    counter.up('personal-website').then(function (result) {
       var el = document.getElementById('viewerCount');
       var num = document.getElementById('viewerCountNum');
-      if (el && num && data && typeof data.count === 'number') {
-        num.textContent = data.count.toLocaleString();
+      if (el && num && result && typeof result.value === 'number') {
+        num.textContent = result.value.toLocaleString();
         el.hidden = false;
       }
-    })
-    .catch(function () { /* API unreachable -- stay hidden */ });
+    }).catch(function () { /* API unreachable or workspace not set up yet -- stay hidden */ });
+  }
 })();
 </script>
 </body>
