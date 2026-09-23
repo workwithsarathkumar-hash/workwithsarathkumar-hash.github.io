@@ -842,7 +842,6 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
 <script>
 (function(){
   // Theme toggle
@@ -1336,21 +1335,19 @@
     });
   })();
 
-  // ---- Viewer count (CounterAPI free tier -- counterapi.dev) ----
-  // Workspace must exist under a free CounterAPI account before this will
-  // return real numbers (sign up at counterapi.dev, no card required, swap
-  // the workspace name below for the one you create).
-  if (window.Counter) {
-    var counter = new window.Counter({ workspace: 'sarathkumar-dev' });
-    counter.up('personal-website').then(function (result) {
+  // ---- Viewer count (via a Cloudflare Worker proxy -- keeps the real
+  // CounterAPI key server-side, never shipped to the browser) ----
+  fetch('https://sarath-counter-proxy.sarathkumar-dev.workers.dev')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r); })
+    .then(function (data) {
       var el = document.getElementById('viewerCount');
       var num = document.getElementById('viewerCountNum');
-      if (el && num && result && typeof result.value === 'number') {
-        num.textContent = result.value.toLocaleString();
+      if (el && num && data && typeof data.value === 'number') {
+        num.textContent = data.value.toLocaleString();
         el.hidden = false;
       }
-    }).catch(function () { /* API unreachable or workspace not set up yet -- stay hidden */ });
-  }
+    })
+    .catch(function () { /* proxy unreachable -- stay hidden */ });
 })();
 </script>
 </body>
