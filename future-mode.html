@@ -23,6 +23,11 @@
     --border:rgba(201,167,104,0.14);
     --border-strong:rgba(201,167,104,0.3);
     --hairline:rgba(201,167,104,0.22);
+    --glass-hi:rgba(255,241,217,0.09);
+    --glass-lo:rgba(201,167,104,0.02);
+    --glass-border:rgba(221,192,138,0.22);
+    --glass-sheen:rgba(255,245,224,0.12);
+    --glass-shadow:rgba(0,0,0,0.6);
   }
   *{box-sizing:border-box;}
   html{color-scheme:dark;}
@@ -60,7 +65,8 @@
   .hero{
     position:sticky;top:0;height:100svh;overflow:hidden;
     display:flex;flex-direction:column;justify-content:space-between;
-    padding:22px 22px 26px;pointer-events:none;
+    padding:clamp(16px,3vw,26px) clamp(16px,3vw,26px) clamp(18px,3.4vw,28px);
+    pointer-events:none;
   }
   .hero > *{pointer-events:auto;}
 
@@ -74,38 +80,41 @@
   .brand:hover .name{color:var(--gold-soft);}
   .pill{
     display:inline-flex;align-items:center;gap:9px;
-    border:1px solid var(--border-strong);border-radius:2px;
-    padding:9px 16px;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
-    background:rgba(4,4,5,0.26);backdrop-filter:blur(10px) saturate(1.1);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
-    text-decoration:none;
+    border:1px solid var(--glass-border);border-radius:2px;
+    padding:clamp(7px,1.3vw,9px) clamp(11px,2.2vw,16px);
+    font-size:clamp(0.6rem,1.3vw,0.68rem);letter-spacing:0.12em;text-transform:uppercase;font-weight:500;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(4,4,5,0.4);
+    background-blend-mode:normal;
+    -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 14px 30px -18px var(--glass-shadow);
+    text-decoration:none;transition:background .2s;
   }
-  .pill.mode{color:var(--gold-soft);transition:background .2s;}
-  .pill.mode:hover{background:rgba(201,167,104,0.12);}
+  .pill.mode{color:var(--gold-soft);}
+  .pill.mode:hover{background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(201,167,104,0.14);}
   .pill.mode .dot{width:5px;height:5px;border-radius:50%;background:var(--gold-soft);box-shadow:0 0 0 4px var(--gold-dim);}
   .pill.ar{color:var(--text-faint);border-color:var(--border);cursor:not-allowed;}
   .pill.ar .lock{opacity:0.6;}
   .pill.ar .soon{color:var(--text-soft);opacity:0.9;}
   .pill .short{display:none;}
 
-  .hud-center{max-width:min(660px,88vw);padding:0 2px;}
+  .hud-center{max-width:min(660px,90vw);padding:0 2px;}
   .eyebrow{
-    font-size:0.74rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);
-    margin:0 0 16px;display:flex;align-items:center;gap:8px;
+    font-size:clamp(0.68rem,1.4vw,0.74rem);letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);
+    margin:0 0 clamp(8px,1.8vw,16px);display:flex;align-items:center;gap:8px;
   }
   .eyebrow::before{content:"";width:16px;height:1px;background:var(--violet);}
   h1{
-    margin:0 0 16px;text-wrap:balance;
+    margin:0 0 clamp(8px,1.8vw,16px);text-wrap:balance;
     font-family:'Fraunces',Georgia,serif;
     font-weight:500;letter-spacing:-0.01em;
-    font-size:clamp(2.4rem,7.6vw,4.8rem);line-height:1.02;
+    font-size:clamp(2rem,7.6vw,4.8rem);line-height:1.02;
     color:var(--text);
   }
   h1 em{font-style:italic;font-weight:400;color:var(--gold-soft);}
   .subline{
     font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;
-    font-size:clamp(1.02rem,2.2vw,1.26rem);color:var(--text-soft);
-    margin:0 0 16px;max-width:46ch;text-wrap:balance;
+    font-size:clamp(0.96rem,2.2vw,1.26rem);color:var(--text-soft);
+    margin:0 0 clamp(8px,1.8vw,16px);max-width:46ch;text-wrap:balance;
   }
   .caption{font-size:0.86rem;color:var(--text-faint);line-height:1.6;max-width:50ch;margin:0 0 10px;}
   .scrollhint{
@@ -125,9 +134,14 @@
   }
   .waypoints .wp.active{background:var(--gold-soft);box-shadow:0 0 0 4px var(--gold-dim);transform:scale(1.3);}
 
-  .hud-bottom{display:flex;flex-wrap:wrap;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .hud-bottom{
+    display:flex;flex-wrap:wrap;gap:1px;background:var(--glass-border);
+    border:1px solid var(--glass-border);border-radius:2px;overflow:hidden;
+    box-shadow:0 14px 30px -18px var(--glass-shadow);
+  }
   .chip{
-    background:rgba(4,4,5,0.3);backdrop-filter:blur(10px) saturate(1.1);
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(4,4,5,0.48);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
     padding:11px 16px;min-width:128px;flex:1 1 auto;
   }
   .chip .k{display:block;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;}
@@ -165,6 +179,25 @@
     .chip .k{margin-bottom:3px;}
     .scrollhint{display:none;}
   }
+  /* short or landscape-phone viewports: compact vertically regardless of width */
+  @media (max-height:460px){
+    .hero{padding:12px 16px 14px;}
+    .hud-top{gap:8px;}
+    .pill{padding:5px 10px;font-size:0.58rem;}
+    .pill .full{display:none;}
+    .pill .short{display:inline;}
+    .eyebrow{margin:0 0 6px;}
+    h1{margin:0 0 6px;font-size:clamp(1.6rem,6vw,2.6rem);line-height:1;}
+    .subline{margin:0 0 6px;font-size:0.88rem;max-width:60ch;}
+    .caption{display:none;}
+    .waypoints{margin:0;}
+    .scrollhint{display:none;}
+    .hud-bottom{display:none;}
+  }
+  /* tablet range: a touch more room than mobile without the desktop scale */
+  @media (min-width:521px) and (max-width:900px){
+    .hud-center{max-width:min(600px,86vw);}
+  }
   @media (prefers-reduced-motion: reduce){
     .scrollhint .bar::after{animation:none;top:0;}
   }
@@ -180,10 +213,11 @@
   .toast{
     position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(0);
     z-index:10;width:min(480px,calc(100vw - 32px));
-    background:rgba(8,8,9,0.5);backdrop-filter:blur(14px) saturate(1.1);
-    border:1px solid var(--border-strong);
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(8,8,9,0.56);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
+    border:1px solid var(--glass-border);
     padding:18px 20px;
-    box-shadow:0 20px 60px -20px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 20px 50px -24px var(--glass-shadow);
     transition:opacity .4s ease, transform .4s ease;
   }
   .toast[hidden]{display:block;opacity:0;transform:translateX(-50%) translateY(10px);pointer-events:none;}
@@ -258,13 +292,13 @@
       <p class="eyebrow">Future Mode</p>
       <h1>Enter<br>the <em>Field</em></h1>
       <p class="subline">The essays and the numbers stay exactly as they are. This is just the room next door &mdash; keep scrolling and you're flying through it, section by section, the way you'd drift through open space.</p>
-      <p class="caption mono">five waypoints, three parallax layers &mdash; scroll back and the whole thing reverses, same as it would in a real ship</p>
+      <p class="caption mono">five waypoints, one real sky &mdash; scroll back and the whole thing reverses, same as it would in a real ship</p>
       <div class="waypoints" id="waypointDots"></div>
       <p class="scrollhint mono"><span class="bar"></span>scroll to fly in</p>
     </div>
 
     <div class="hud-bottom mono tnum">
-      <div class="chip"><span class="k">stars</span><span class="v" id="hud-particles">&mdash;</span></div>
+      <div class="chip"><span class="k">markers</span><span class="v" id="hud-particles">&mdash;</span></div>
       <div class="chip"><span class="k">coherence</span><span class="v" id="hud-coherence">&mdash;</span></div>
       <div class="chip"><span class="k">waypoint</span><span class="v" id="hud-waypoint">Hero</span></div>
       <div class="chip"><span class="k">render</span><span class="v" id="hud-fps">&mdash; fps</span></div>
@@ -278,7 +312,7 @@
       <span class="tag">What this actually is</span>
       <h2>The site stays. This is what you'd step into on purpose.</h2>
       <p>The idea isn't to replace the site you already know &mdash; the essays, the finance log, the parts of it that need to be read carefully still load in under two seconds on a phone at <a href="index.html">the default site</a>. This is a separate mode you opt into: dark nebula and open space instead of a stack of sections.</p>
-      <p>What's rendering behind this text is a single continuous starfield, no cuts, no page breaks &mdash; scrolling down flies the camera forward through it, and each of the real sections (Hero, In the Wild, Responsible AI, Mindfulness, Words I Build By) is a distinct nebula cluster the camera arrives at along the way, each with its own color drawn from the same gold&rarr;rose&rarr;violet gradient. Scroll back up and the whole flight reverses &mdash; nothing is baked in one direction only.</p>
+      <p>What's rendering behind this text is a real photograph of the Milky Way &mdash; an actual equirectangular sky map, not a generated starfield &mdash; with each of the real sections (Hero, In the Wild, Responsible AI, Mindfulness, Words I Build By) marked as a distinct nebula cluster the camera arrives at while scrolling, each with its own color drawn from the same gold&rarr;rose&rarr;violet gradient. No cuts, no page breaks. Scroll back up and the whole flight reverses &mdash; nothing is baked in one direction only.</p>
       <p>The same scene is the pitch for AR, not a separate build: once the WebXR layer exists, this is what would render around you on Quest 3's passthrough &mdash; not a flat screen floating in your room, but the field itself, surrounding you, with your actual walls still visible through it.</p>
       <ul class="roadmap">
         <li><span class="stage now">live</span><span class="desc"><strong>WebGL mode</strong> &mdash; this scene, reachable from the main nav. Default site stays untouched.</span></li>
@@ -287,6 +321,7 @@
     </section>
     <footer>
       <p>Three.js / WebGL, no build step. This is a separate mode, not the default experience &mdash; the badge at the top takes you straight back.</p>
+      <p>Sky imagery: <a href="https://commons.wikimedia.org/wiki/File:Solarsystemscope_texture_8k_stars_milky_way.jpg" target="_blank" rel="noopener">Solar System Scope</a>, CC BY 4.0, based on NASA elevation and imagery data.</p>
       <p><a href="index.html">&larr; back to the default site</a></p>
     </footer>
   </div>
@@ -363,26 +398,19 @@
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x040405, 1);
-
-  // -- very minute motion-blur trail: fade the previous frame instead of hard-clearing it.
-  // skipped entirely under reduced-motion, where every frame clears normally. --
-  var useTrail = !reduced;
-  var fadeScene, fadeCamera;
-  if (useTrail){
-    renderer.autoClear = false;
-    fadeScene = new THREE.Scene();
-    fadeCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    var fadeQuad = new THREE.Mesh(
-      new THREE.PlaneGeometry(2, 2),
-      new THREE.MeshBasicMaterial({ color: 0x040405, transparent: true, opacity: 0.4, depthTest: false, depthWrite: false })
-    );
-    fadeScene.add(fadeQuad);
-    renderer.clear();
-  }
+  renderer.outputEncoding = THREE.sRGBEncoding;
 
   var scene = new THREE.Scene();
-  if (!useTrail) scene.background = new THREE.Color(0x040405);
   scene.fog = new THREE.FogExp2(0x040405, 0.018);
+
+  // -- real sky: an equirectangular photograph of the actual Milky Way (ESO/NASA-sourced
+  // imagery via Solar System Scope, CC BY 4.0), not a procedural starfield. Picks the
+  // lighter asset on narrow/low-memory viewports. --
+  var skyFile = window.innerWidth <= 720 ? 'space/milkyway-1024.webp' : 'space/milkyway-2048.webp';
+  var skyTexture = new THREE.TextureLoader().load(skyFile);
+  skyTexture.mapping = THREE.EquirectangularReflectionMapping;
+  skyTexture.encoding = THREE.sRGBEncoding;
+  scene.background = skyTexture;
 
   var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 140);
 
@@ -465,37 +493,7 @@
     wp.worldPos = cloud.position;
   });
 
-  // -- continuous background starfield along the whole flight path, three parallax layers --
-  // kept dim on purpose: this is meant to read as quiet atmosphere behind the content
-  // (and behind a real room in AR passthrough), never as noise competing with it
-  var LAYERS = [
-    { n: 900, spread: 30, zpad: 16, size: 0.026, opacity: 0.3, speed: 1.0 },
-    { n: 500, spread: 46, zpad: 16, size: 0.042, opacity: 0.2,  speed: 0.55 },
-    { n: 260, spread: 64, zpad: 16, size: 0.065, opacity: 0.12, speed: 0.3 }
-  ];
   var flightLength = SPACING * (WAYPOINTS.length - 1);
-  var starLayers = LAYERS.map(function(def){
-    var geo = new THREE.BufferGeometry();
-    var pos = new Float32Array(def.n * 3);
-    var col = new Float32Array(def.n * 3);
-    for (var i = 0; i < def.n; i++){
-      pos[i*3]   = (Math.random() - 0.5) * def.spread;
-      pos[i*3+1] = (Math.random() - 0.5) * def.spread * 0.6;
-      pos[i*3+2] = Math.random() * (flightLength + def.zpad * 2) - flightLength - def.zpad + 10;
-      var c = hologram(Math.random());
-      var mute = 0.55;
-      col[i*3] = 1 - (1-c.r) * mute; col[i*3+1] = 1 - (1-c.g) * mute; col[i*3+2] = 1 - (1-c.b) * mute;
-    }
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-    var mat = new THREE.PointsMaterial({
-      size: def.size, map: glow, vertexColors: true, transparent: true, opacity: def.opacity,
-      blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
-    });
-    var pts = new THREE.Points(geo, mat);
-    world.add(pts);
-    return { pts: pts, speed: def.speed };
-  });
 
   // -- arrival flash when a waypoint is reached --
   var flashes = [];
@@ -512,8 +510,7 @@
   var hudCoherence = document.getElementById('hud-coherence');
   var hudWaypoint = document.getElementById('hud-waypoint');
   var hudFps = document.getElementById('hud-fps');
-  var totalStars = LAYERS.reduce(function(s,d){return s+d.n;},0) + waypoints.length * 220;
-  hudParticles.textContent = totalStars.toLocaleString();
+  hudParticles.textContent = (waypoints.length * 220).toLocaleString();
 
   // -- pointer parallax --
   var pointer = { x: 0, y: 0 };
@@ -566,7 +563,8 @@
     }
 
     if (!reduced){
-      starLayers.forEach(function(layer){ layer.pts.rotation.z += dt * 0.004 * layer.speed; });
+      // the real sky drifts past at a near-imperceptible rate -- the galaxy turning, not spinning
+      skyTexture.offset.x = (skyTexture.offset.x + dt * 0.0015) % 1;
     }
 
     for (var fi = flashes.length - 1; fi >= 0; fi--){
@@ -582,13 +580,7 @@
     frameCount++; fpsAccum += dt;
     if (fpsAccum >= 0.5){ hudFps.textContent = Math.round(frameCount / fpsAccum) + ' fps'; frameCount = 0; fpsAccum = 0; }
 
-    if (useTrail){
-      renderer.clearDepth();
-      renderer.render(fadeScene, fadeCamera);
-      renderer.render(scene, camera);
-    } else {
-      renderer.render(scene, camera);
-    }
+    renderer.render(scene, camera);
   }
   animate();
 })();
