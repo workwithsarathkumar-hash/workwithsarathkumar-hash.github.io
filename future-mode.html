@@ -97,26 +97,21 @@
   .pill.ar .soon{color:var(--text-soft);opacity:0.9;}
   .pill .short{display:none;}
 
-  .hud-center{max-width:min(660px,90vw);padding:0 2px;}
+  .hud-center{max-width:min(780px,90vw);padding:0 2px;}
   .eyebrow{
-    font-size:clamp(0.68rem,1.4vw,0.74rem);letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);
-    margin:0 0 clamp(8px,1.8vw,16px);display:flex;align-items:center;gap:8px;
+    font-size:clamp(0.68rem,1.4vw,0.76rem);letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);
+    margin:0 0 clamp(10px,2.2vw,20px);display:flex;align-items:center;gap:8px;
   }
   .eyebrow::before{content:"";width:16px;height:1px;background:var(--violet);}
   h1{
-    margin:0 0 clamp(8px,1.8vw,16px);text-wrap:balance;
+    margin:0 0 clamp(14px,2.6vw,22px);text-wrap:balance;
     font-family:'Fraunces',Georgia,serif;
     font-weight:500;letter-spacing:-0.01em;
-    font-size:clamp(2rem,7.6vw,4.8rem);line-height:1.02;
+    font-size:clamp(2.6rem,9vw,6rem);line-height:1;
     color:var(--text);
+    animation:titleIn .6s cubic-bezier(.2,.7,.2,1);
   }
-  h1 em{font-style:italic;font-weight:400;color:var(--gold-soft);}
-  .subline{
-    font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;
-    font-size:clamp(0.96rem,2.2vw,1.26rem);color:var(--text-soft);
-    margin:0 0 clamp(8px,1.8vw,16px);max-width:46ch;text-wrap:balance;
-  }
-  .caption{font-size:0.86rem;color:var(--text-faint);line-height:1.6;max-width:50ch;margin:0 0 10px;}
+  @keyframes titleIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
   .scrollhint{
     font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);
     display:flex;align-items:center;gap:8px;
@@ -128,24 +123,11 @@
   }
   @keyframes slide{0%{top:-12px;}100%{top:26px;}}
 
-  .waypoints{display:flex;gap:8px;margin:4px 0 18px;}
+  .waypoints{display:flex;gap:8px;margin:0 0 18px;}
   .waypoints .wp{
     width:5px;height:5px;border-radius:50%;background:var(--border-strong);transition:background .5s,box-shadow .5s,transform .5s;
   }
   .waypoints .wp.active{background:var(--gold-soft);box-shadow:0 0 0 4px var(--gold-dim);transform:scale(1.3);}
-
-  .hud-bottom{
-    display:flex;flex-wrap:wrap;gap:1px;background:var(--glass-border);
-    border:1px solid var(--glass-border);border-radius:2px;overflow:hidden;
-    box-shadow:0 14px 30px -18px var(--glass-shadow);
-  }
-  .chip{
-    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(4,4,5,0.48);
-    -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
-    padding:11px 16px;min-width:128px;flex:1 1 auto;
-  }
-  .chip .k{display:block;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;}
-  .chip .v{display:block;font-size:0.88rem;color:var(--gold-soft);font-weight:500;}
 
   main{position:relative;z-index:2;background:var(--void);border-top:1px solid var(--border);}
   .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
@@ -171,12 +153,7 @@
     .pill .full{display:none;}
     .pill .short{display:inline;}
     .eyebrow{margin:0 0 10px;}
-    h1{margin:0 0 10px;font-size:clamp(2rem,10vw,2.6rem);}
-    .subline{margin:0 0 10px;font-size:0.98rem;}
-    .caption{display:none;}
-    .waypoints{margin:2px 0 0;}
-    .chip{min-width:44%;flex:1 1 44%;padding:9px 12px;}
-    .chip .k{margin-bottom:3px;}
+    h1{margin:0 0 10px;font-size:clamp(2.1rem,13vw,3rem);}
     .scrollhint{display:none;}
   }
   /* short or landscape-phone viewports: compact vertically regardless of width */
@@ -187,12 +164,9 @@
     .pill .full{display:none;}
     .pill .short{display:inline;}
     .eyebrow{margin:0 0 6px;}
-    h1{margin:0 0 6px;font-size:clamp(1.6rem,6vw,2.6rem);line-height:1;}
-    .subline{margin:0 0 6px;font-size:0.88rem;max-width:60ch;}
-    .caption{display:none;}
+    h1{margin:0 0 6px;font-size:clamp(1.8rem,8vw,2.8rem);line-height:1;}
     .waypoints{margin:0;}
     .scrollhint{display:none;}
-    .hud-bottom{display:none;}
   }
   /* tablet range: a touch more room than mobile without the desktop scale */
   @media (min-width:521px) and (max-width:900px){
@@ -289,19 +263,10 @@
     </div>
 
     <div class="hud-center">
-      <p class="eyebrow">Future Mode</p>
-      <h1>Enter<br>the <em>Field</em></h1>
-      <p class="subline">The essays and the numbers stay exactly as they are. This is just the room next door &mdash; keep scrolling and you're flying through it, section by section, the way you'd drift through open space.</p>
-      <p class="caption mono">five waypoints, one real sky &mdash; scroll back and the whole thing reverses, same as it would in a real ship</p>
+      <p class="eyebrow mono" id="eyebrow">01 &mdash; Future Mode</p>
+      <h1 id="sectionTitle">Background</h1>
       <div class="waypoints" id="waypointDots"></div>
       <p class="scrollhint mono"><span class="bar"></span>scroll to fly in</p>
-    </div>
-
-    <div class="hud-bottom mono tnum">
-      <div class="chip"><span class="k">markers</span><span class="v" id="hud-particles">&mdash;</span></div>
-      <div class="chip"><span class="k">coherence</span><span class="v" id="hud-coherence">&mdash;</span></div>
-      <div class="chip"><span class="k">waypoint</span><span class="v" id="hud-waypoint">Hero</span></div>
-      <div class="chip"><span class="k">render</span><span class="v" id="hud-fps">&mdash; fps</span></div>
     </div>
   </div>
 </div>
@@ -312,7 +277,7 @@
       <span class="tag">What this actually is</span>
       <h2>The site stays. This is what you'd step into on purpose.</h2>
       <p>The idea isn't to replace the site you already know &mdash; the essays, the finance log, the parts of it that need to be read carefully still load in under two seconds on a phone at <a href="index.html">the default site</a>. This is a separate mode you opt into: dark nebula and open space instead of a stack of sections.</p>
-      <p>What's rendering behind this text is a real photograph of the Milky Way &mdash; an actual equirectangular sky map, not a generated starfield &mdash; with each of the real sections (Hero, In the Wild, Responsible AI, Mindfulness, Words I Build By) marked as a distinct nebula cluster the camera arrives at while scrolling, each with its own color drawn from the same gold&rarr;rose&rarr;violet gradient. No cuts, no page breaks. Scroll back up and the whole flight reverses &mdash; nothing is baked in one direction only.</p>
+      <p>What's rendering behind this text is a real photograph of the Milky Way &mdash; an actual equirectangular sky map, not a generated starfield &mdash; with every real section of the default site (Background, Quotes, In the Wild, Responsible AI, Mindfulness, 2050, in the same order as the nav above) marked as its own nebula cluster, the title overhead swapping to match as the camera reaches it, each cluster colored along the same gold&rarr;rose&rarr;violet gradient. No cuts, no page breaks. Scroll back up and the whole flight reverses &mdash; nothing is baked in one direction only.</p>
       <p>The same scene is the pitch for AR, not a separate build: once the WebXR layer exists, this is what would render around you on Quest 3's passthrough &mdash; not a flat screen floating in your room, but the field itself, surrounding you, with your actual walls still visible through it.</p>
       <ul class="roadmap">
         <li><span class="stage now">live</span><span class="desc"><strong>WebGL mode</strong> &mdash; this scene, reachable from the main nav. Default site stays untouched.</span></li>
@@ -444,7 +409,7 @@
   }
 
   // -- five waypoints, mapped to the real site's own sections --
-  var WAYPOINTS = ['Hero', 'In the Wild', 'Responsible AI', 'Mindfulness', 'Words I Build By'];
+  var WAYPOINTS = ['Background', 'Quotes', 'In the Wild', 'Responsible AI', 'Mindfulness', '2050'];
   var SPACING = 11;
   var waypoints = WAYPOINTS.map(function(name, i){
     var tt = i / (WAYPOINTS.length - 1);
@@ -505,12 +470,18 @@
     flashes.push({ sprite: sprite, life: 1 });
   }
 
-  // -- HUD --
-  var hudParticles = document.getElementById('hud-particles');
-  var hudCoherence = document.getElementById('hud-coherence');
-  var hudWaypoint = document.getElementById('hud-waypoint');
-  var hudFps = document.getElementById('hud-fps');
-  hudParticles.textContent = (waypoints.length * 220).toLocaleString();
+  // -- section title + numbered eyebrow, swapped (with a fresh fade-in) as each real
+  // section's waypoint is reached --
+  var sectionTitle = document.getElementById('sectionTitle');
+  var eyebrow = document.getElementById('eyebrow');
+  function pad2(n){ return (n < 10 ? '0' : '') + n; }
+  function showSection(idx){
+    sectionTitle.textContent = waypoints[idx].name;
+    eyebrow.textContent = pad2(idx + 1) + ' \u2014 Future Mode';
+    sectionTitle.style.animation = 'none';
+    void sectionTitle.offsetWidth;
+    sectionTitle.style.animation = '';
+  }
 
   // -- pointer parallax --
   var pointer = { x: 0, y: 0 };
@@ -537,7 +508,6 @@
   updateProgress();
 
   var clock = new THREE.Clock();
-  var frameCount = 0, fpsAccum = 0;
   var camZ = 9;
   var START_Z = 9;
 
@@ -557,7 +527,7 @@
     var wpIdx = Math.round(progress * (waypoints.length - 1));
     if (wpIdx !== lastWaypointIndex){
       lastWaypointIndex = wpIdx;
-      hudWaypoint.textContent = waypoints[wpIdx].name;
+      showSection(wpIdx);
       dotEls.forEach(function(d, i){ d.className = i === wpIdx ? 'wp active' : 'wp'; });
       if (!reduced) spawnFlash(waypoints[wpIdx]);
     }
@@ -574,11 +544,6 @@
       f.sprite.scale.setScalar(1.1 + (1 - f.life) * 2.2);
       if (f.life <= 0){ scene.remove(f.sprite); flashes.splice(fi, 1); }
     }
-
-    hudCoherence.textContent = (90 + Math.sin(t * 0.37) * 5 + Math.sin(t * 1.3) * 2.5).toFixed(1) + '%';
-
-    frameCount++; fpsAccum += dt;
-    if (fpsAccum >= 0.5){ hudFps.textContent = Math.round(frameCount / fpsAccum) + ' fps'; frameCount = 0; fpsAccum = 0; }
 
     renderer.render(scene, camera);
   }
