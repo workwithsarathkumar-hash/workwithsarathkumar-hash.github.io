@@ -66,8 +66,6 @@
   }
   nav .nav-links a:hover{color:var(--accent);}
   @media (max-width:900px){ nav .nav-links{display:none;} }
-  .future-link{display:inline-flex;align-items:center;gap:6px;}
-  .future-link::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
 
   /* Mobile nav burger */
   .nav-burger{
@@ -132,9 +130,7 @@
   .mobile-menu-links a:nth-child(4){transition-delay:0.21s;}
   .mobile-menu-links a:nth-child(5){transition-delay:0.26s;}
   .mobile-menu-links a:nth-child(6){transition-delay:0.31s;}
-  .mobile-menu-links a:nth-child(7){transition-delay:0.36s;}
   .mobile-menu-links a:hover, .mobile-menu-links a:active{background:var(--accent-soft);color:var(--accent);}
-  .mobile-menu-links .future-link{justify-content:center;}
   @media (prefers-reduced-motion: reduce){
     .nav-burger span, .mobile-menu, .mobile-menu-panel, .mobile-menu-links a{transition:none;}
   }
@@ -554,7 +550,6 @@
       <a href="#responsible-ai">Responsible AI</a>
       <a href="#games">Mindfulness</a>
       <a href="review-2050.html">2050</a>
-      <a href="future-mode.html" class="future-link">Future&nbsp;Mode</a>
     </div>
     <button class="nav-burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span><span></span><span></span>
@@ -572,7 +567,6 @@
       <a href="#responsible-ai">Responsible AI</a>
       <a href="#games">Mindfulness</a>
       <a href="review-2050.html">2050</a>
-      <a href="future-mode.html" class="future-link">Future&nbsp;Mode</a>
     </nav>
   </div>
 </div>
@@ -584,6 +578,9 @@
     <h1 class="name reveal">Sarath<br><em>Kumar</em></h1>
     <p class="role-line reveal">Forward Deployed Engineer — <strong>Sr. AI Systems Engineer</strong>, leading a GenAI team.</p>
     <p class="tagline reveal">Research. Understand. Learn. Develop. Deploy. Then again — that's the loop.</p>
+    <div class="cta-row reveal" style="margin-bottom:12px;">
+      <a class="btn btn-ghost" href="future-mode.html">Try Future Mode &#10022;</a>
+    </div>
     <div class="cta-row reveal">
       <a class="btn btn-primary" href="#proof">See what I've built →</a>
     </div>
