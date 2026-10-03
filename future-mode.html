@@ -86,6 +86,7 @@
   .pill.ar{color:var(--text-faint);border-color:var(--border);cursor:not-allowed;}
   .pill.ar .lock{opacity:0.6;}
   .pill.ar .soon{color:var(--text-soft);opacity:0.9;}
+  .pill .short{display:none;}
 
   .hud-center{max-width:min(660px,88vw);padding:0 2px;}
   .eyebrow{
@@ -151,8 +152,17 @@
   footer a{color:var(--text-soft);}
 
   @media (max-width:520px){
-    .hero{padding:18px 18px 22px;}
-    .chip{min-width:44%;flex:1 1 44%;}
+    .hero{padding:16px 16px 18px;}
+    .pill{padding:7px 11px;font-size:0.6rem;letter-spacing:0.08em;gap:6px;}
+    .pill .full{display:none;}
+    .pill .short{display:inline;}
+    .eyebrow{margin:0 0 10px;}
+    h1{margin:0 0 10px;font-size:clamp(2rem,10vw,2.6rem);}
+    .subline{margin:0 0 10px;font-size:0.98rem;}
+    .caption{display:none;}
+    .waypoints{margin:2px 0 0;}
+    .chip{min-width:44%;flex:1 1 44%;padding:9px 12px;}
+    .chip .k{margin-bottom:3px;}
     .scrollhint{display:none;}
   }
   @media (prefers-reduced-motion: reduce){
@@ -239,8 +249,8 @@
         <span class="name mono">sarathkumar</span>
       </a>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="pill mode mono" href="index.html" title="Back to the default site"><span class="dot"></span>mode &middot; webgl &mdash; exit</a>
-        <span class="pill ar mono"><span class="lock">&#9679;&#9675;</span> enter ar &mdash; quest 3 <span class="soon">&middot; coming next</span></span>
+        <a class="pill mode mono" href="index.html" title="Back to the default site"><span class="dot"></span><span class="full">mode &middot; webgl &mdash; exit</span><span class="short">exit</span></a>
+        <span class="pill ar mono"><span class="lock">&#9679;&#9675;</span> <span class="full">enter ar &mdash; quest 3 <span class="soon">&middot; coming next</span></span><span class="short">ar &middot; soon</span></span>
       </div>
     </div>
 
