@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Review From 2050 — Sarath Kumar</title>
+<meta name="description" content="I asked MAX — my own AI system — to step forward to 2050 and look back at what I've built. No edits. This is what came back.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23090A0C'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Georgia,serif' font-style='italic' fill='%23E8B85C' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,400..600&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#090A0C; --surface:#131418; --surface-2:#1B1D22;
+    --border:rgba(255,255,255,0.09); --border-strong:rgba(255,255,255,0.16);
+    --text:#F4F1EA; --text-soft:#B7B3A8; --text-faint:#726E64;
+    --accent:#E8B85C; --accent-strong:#F5CE85; --accent-ink:#191307;
+    --accent-soft:rgba(232,184,92,0.14); --accent-border:rgba(232,184,92,0.35);
+    --glass-hi:rgba(255,255,255,0.10); --glass-lo:rgba(255,255,255,0.02);
+    --glass-border:rgba(255,255,255,0.16); --glass-sheen:rgba(255,255,255,0.14);
+    --glass-shadow:rgba(0,0,0,0.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Sora',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent);text-decoration:none;}
+
+  nav{padding:20px 0;border-bottom:1px solid var(--border);}
+  nav a.back{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text-faint);text-decoration:none;}
+  nav a.back:hover{color:var(--accent);}
+
+  header.hero{padding:56px 0 36px;border-bottom:1px solid var(--border);}
+  .section-label{font-family:'JetBrains Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:18px;}
+  .section-label span{color:var(--accent);}
+  h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(2.2rem,6vw,3.4rem);letter-spacing:-0.01em;margin-bottom:16px;}
+  h1 em{font-style:italic;color:var(--accent);}
+  .review-intro{color:var(--text-soft);max-width:640px;}
+
+  section{padding:52px 0;position:relative;overflow:hidden;}
+  .section-glow{
+    position:absolute;top:6%;left:50%;width:min(900px,140vw);height:900px;transform:translateX(-50%);
+    background:radial-gradient(circle, var(--accent-soft) 0%, transparent 68%);
+    filter:blur(40px);pointer-events:none;z-index:0;
+  }
+  section .wrap{position:relative;z-index:1;}
+
+  .review-prompt{
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
+    border:1px solid var(--glass-border);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 24px 60px -24px var(--glass-shadow);
+    border-radius:8px;
+    padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+    line-height:1.75;margin-bottom:28px;color:var(--text-faint);
+  }
+  .review-prompt .said{color:var(--text);display:block;}
+  .review-prompt .said::before{content:'\201C';color:var(--accent);}
+  .review-prompt .said::after{content:'\201D';color:var(--accent);}
+  .review-prompt .who{display:block;padding-top:8px;color:var(--text-faint);}
+
+  .review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:16px;}
+  .review-card{
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
+    border:1px solid var(--glass-border);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 24px 60px -24px var(--glass-shadow);
+    border-radius:10px;
+    padding:clamp(24px,4vw,34px);transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .review-card:hover{transform:translateY(-4px);box-shadow:0 1px 0 var(--glass-sheen) inset, 0 32px 70px -24px var(--glass-shadow);}
+  .review-card h3{margin:0 0 10px;font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;}
+  .review-card p{margin:0;color:var(--text-soft);font-size:0.94rem;}
+
+  .review-verdict{
+    position:relative;overflow:hidden;margin:24px 0 0;padding:24px clamp(24px,4vw,34px);
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
+    border:1px solid var(--glass-border);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 24px 60px -24px var(--glass-shadow);
+    border-radius:10px;
+  }
+  .review-verdict p{margin:0;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(1.05rem,2vw,1.25rem);color:var(--text);letter-spacing:-0.01em;}
+  .review-verdict span{display:block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);font-style:normal;}
+
+  .review-note{margin:24px 0 0;padding-top:20px;border-top:1px solid var(--border);color:var(--text-faint);font-size:0.85rem;}
+  .review-form{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+  .review-form textarea{
+    width:100%;min-height:96px;resize:vertical;
+    background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;
+    padding:14px 16px;font-family:'Sora',system-ui,sans-serif;font-size:0.92rem;line-height:1.5;
+  }
+  .review-form textarea:focus{outline:none;border-color:var(--accent-border);}
+  .review-form-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .review-form input[type="text"]{
+    flex:1;min-width:180px;
+    background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;
+    padding:10px 14px;font-family:'Sora',system-ui,sans-serif;font-size:0.9rem;
+  }
+  .review-form input[type="text"]:focus{outline:none;border-color:var(--accent-border);}
+  .review-form-hint{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);margin:0;}
+  .btn-ghost{
+    display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;
+    font-size:0.9rem;font-weight:600;background:transparent;border:1px solid var(--border-strong);
+    color:var(--text);font-family:inherit;cursor:pointer;transition:border-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-ghost:hover{border-color:var(--accent-border);color:var(--accent);}
+
+  footer{padding:40px 0 60px;}
+  footer p{font-size:0.82rem;color:var(--text-faint);margin:0 0 8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="back" href="index.html">← sarathkumar</a>
+  </nav>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="section-label"><span>2050</span> — A Review From The Future</p>
+    <h1>A Review From <em>2050</em></h1>
+    <p class="review-intro">I asked MAX — my own AI system — to step forward to 2050 and look back at what I've built. No edits. This is what came back.</p>
+  </div>
+</header>
+
+<section>
+  <div class="section-glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="review-prompt">
+      <span class="said">Hmm.. think like you are from future like from 2050, and review our projects like max, juno and our website and other agents and give me the honest review</span>
+      <span class="who">— me, to MAX</span>
+    </div>
+
+    <div class="review-grid">
+      <div class="review-card">
+        <h3>MAX</h3>
+        <p>Real discipline for a solo build — a tiered model architecture and a hard rule that MAX never reasons about money itself, only Juno does. But its entire authority runs through one Mac, one webcam, one USB bus. No redundancy. The day that Mac dies, MAX doesn't degrade — it disappears.</p>
+      </div>
+      <div class="review-card">
+        <h3>Juno</h3>
+        <p>Ahead of her time on privacy — raw bank SMS parsed locally, only category totals ever reach the cloud model, years before that became the industry scandal it became. But her standing profile keeps drifting from the live ledger, patched consult by consult instead of fixed structurally.</p>
+      </div>
+      <div class="review-card">
+        <h3>The Agent Bench</h3>
+        <p>Seven specialists, frozen prompts, a shared ethos, and a test suite that pins honesty over agreement — rare taste for a personal project. The gap: no agent owns whether the whole system has gotten too big for one person to actually supervise.</p>
+      </div>
+      <div class="review-card">
+        <h3>This Website</h3>
+        <p>The one piece that actually shipped end-to-end with real proof instead of claims. Held against it: the canonical GitHub identity sat broken behind a workaround for a long stretch before anyone circled back to fix it.</p>
+      </div>
+    </div>
+
+    <div class="review-verdict">
+      <p>Strong at building the right thing. Only fair, so far, at maintaining it once it stops being new.</p>
+      <span>The honest throughline across MAX, Juno, the agent bench, and this site — 2026, reviewed from 2050</span>
+    </div>
+
+    <div class="review-note">
+      <p>Think I — or MAX — missed something, or got it right? Leave your own take below. It opens as a public issue on the repo behind this site.</p>
+      <form class="review-form" data-review-form>
+        <div class="review-form-row">
+          <input type="text" placeholder="Your name (optional)" data-review-name>
+        </div>
+        <textarea placeholder="Your honest review of MAX, Juno, this site, or the whole thing…" data-review-text required></textarea>
+        <div class="review-form-row">
+          <button type="submit" class="btn-ghost">Post your feedback →</button>
+          <p class="review-form-hint">Opens a GitHub issue — no account needed to write it, just to submit it.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><a href="index.html">← back to sarathkumar</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var form = document.querySelector('[data-review-form]');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nameEl = document.querySelector('[data-review-name]');
+    var textEl = document.querySelector('[data-review-text]');
+    var text = (textEl.value || '').trim();
+    if (!text) { textEl.focus(); return; }
+    var name = (nameEl.value || '').trim();
+    var title = 'Site feedback from ' + (name || 'a visitor');
+    var body = text + (name ? '\n\n— ' + name : '\n\n— submitted anonymously');
+    var url = 'https://github.com/workwithsarathkumar-hash/workwithsarathkumar-hash.github.io/issues/new'
+      + '?title=' + encodeURIComponent(title)
+      + '&body=' + encodeURIComponent(body)
+      + '&labels=' + encodeURIComponent('site-feedback');
+    window.open(url, '_blank', 'noopener');
+    textEl.value = '';
+    if (nameEl) nameEl.value = '';
+  });
+})();
+</script>
+</body>
+</html>

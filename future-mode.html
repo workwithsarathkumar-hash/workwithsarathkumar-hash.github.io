@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Mode — Sarath Kumar</title>
+<meta name="description" content="An alternate way through the site — a continuous dark-nebula flythrough where scrolling flies you from section to section, built as the foundation for a future WebXR / Quest 3 AR layer.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23090A0C'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Georgia,serif' font-style='italic' fill='%23E8B85C' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --void:#040405;
+    --void-2:#0a0a0c;
+    --gold:#c9a768;
+    --gold-soft:#ddc08a;
+    --gold-dim:rgba(201,167,104,0.32);
+    --violet:#5d4e85;
+    --violet-dim:rgba(93,78,133,0.32);
+    --rose:#9c5570;
+    --text:#f0ece2;
+    --text-soft:#a8a39a;
+    --text-faint:#67635c;
+    --border:rgba(201,167,104,0.14);
+    --border-strong:rgba(201,167,104,0.3);
+    --hairline:rgba(201,167,104,0.22);
+  }
+  *{box-sizing:border-box;}
+  html{color-scheme:dark;}
+  body{
+    margin:0;background:var(--void);color:var(--text);
+    font-family:'Sora',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--violet-dim);color:var(--text);}
+  a{color:var(--gold);}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  .tnum{font-variant-numeric:tabular-nums;}
+
+  #scene{position:fixed;inset:0;display:block;width:100%;height:100%;z-index:0;}
+  .vignette{
+    position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 46%, transparent 28%, rgba(4,4,5,0.56) 76%, rgba(4,4,5,0.97) 100%);
+  }
+  .grain{
+    position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .frame{
+    position:fixed;inset:14px;z-index:4;pointer-events:none;
+    border:1px solid var(--hairline);
+  }
+  .frame::before, .frame::after{
+    content:"";position:absolute;width:13px;height:13px;border-color:var(--gold-soft);
+  }
+  .frame::before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid;}
+  .frame::after{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid;}
+
+  .hero-track{height:520vh;position:relative;z-index:2;}
+  .hero{
+    position:sticky;top:0;height:100svh;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:22px 22px 26px;pointer-events:none;
+  }
+  .hero > *{pointer-events:auto;}
+
+  .hud-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .brand .glyph{
+    width:30px;height:30px;border-radius:50%;border:1px solid var(--gold-dim);
+    display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.92rem;
+  }
+  .brand .name{font-size:0.82rem;letter-spacing:0.04em;color:var(--text-soft);}
+  .brand:hover .name{color:var(--gold-soft);}
+  .pill{
+    display:inline-flex;align-items:center;gap:9px;
+    border:1px solid var(--border-strong);border-radius:2px;
+    padding:9px 16px;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+    background:rgba(4,4,5,0.26);backdrop-filter:blur(10px) saturate(1.1);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
+    text-decoration:none;
+  }
+  .pill.mode{color:var(--gold-soft);transition:background .2s;}
+  .pill.mode:hover{background:rgba(201,167,104,0.12);}
+  .pill.mode .dot{width:5px;height:5px;border-radius:50%;background:var(--gold-soft);box-shadow:0 0 0 4px var(--gold-dim);}
+  .pill.ar{color:var(--text-faint);border-color:var(--border);cursor:not-allowed;}
+  .pill.ar .lock{opacity:0.6;}
+  .pill.ar .soon{color:var(--text-soft);opacity:0.9;}
+
+  .hud-center{max-width:min(660px,88vw);padding:0 2px;}
+  .eyebrow{
+    font-size:0.74rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);
+    margin:0 0 16px;display:flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:"";width:16px;height:1px;background:var(--violet);}
+  h1{
+    margin:0 0 16px;text-wrap:balance;
+    font-family:'Fraunces',Georgia,serif;
+    font-weight:500;letter-spacing:-0.01em;
+    font-size:clamp(2.4rem,7.6vw,4.8rem);line-height:1.02;
+    color:var(--text);
+  }
+  h1 em{font-style:italic;font-weight:400;color:var(--gold-soft);}
+  .subline{
+    font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;
+    font-size:clamp(1.02rem,2.2vw,1.26rem);color:var(--text-soft);
+    margin:0 0 16px;max-width:46ch;text-wrap:balance;
+  }
+  .caption{font-size:0.86rem;color:var(--text-faint);line-height:1.6;max-width:50ch;margin:0 0 10px;}
+  .scrollhint{
+    font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);
+    display:flex;align-items:center;gap:8px;
+  }
+  .scrollhint .bar{width:1px;height:26px;background:linear-gradient(var(--gold),transparent);position:relative;overflow:hidden;}
+  .scrollhint .bar::after{
+    content:"";position:absolute;left:0;top:-26px;width:100%;height:12px;background:var(--gold);
+    animation:slide 1.8s ease-in-out infinite;
+  }
+  @keyframes slide{0%{top:-12px;}100%{top:26px;}}
+
+  .waypoints{display:flex;gap:8px;margin:4px 0 18px;}
+  .waypoints .wp{
+    width:5px;height:5px;border-radius:50%;background:var(--border-strong);transition:background .5s,box-shadow .5s,transform .5s;
+  }
+  .waypoints .wp.active{background:var(--gold-soft);box-shadow:0 0 0 4px var(--gold-dim);transform:scale(1.3);}
+
+  .hud-bottom{display:flex;flex-wrap:wrap;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .chip{
+    background:rgba(4,4,5,0.3);backdrop-filter:blur(10px) saturate(1.1);
+    padding:11px 16px;min-width:128px;flex:1 1 auto;
+  }
+  .chip .k{display:block;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;}
+  .chip .v{display:block;font-size:0.88rem;color:var(--gold-soft);font-weight:500;}
+
+  main{position:relative;z-index:2;background:var(--void);border-top:1px solid var(--border);}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .about{padding:56px 0 20px;}
+  .about .tag{font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);display:block;margin:0 0 14px;}
+  .about h2{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.5rem;margin:0 0 14px;text-wrap:balance;}
+  .about p{color:var(--text-soft);line-height:1.7;margin:0 0 16px;max-width:62ch;}
+
+  .roadmap{list-style:none;margin:22px 0 0;padding:0;border-top:1px solid var(--border);}
+  .roadmap li{display:grid;grid-template-columns:84px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);align-items:baseline;}
+  .roadmap .stage{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-faint);letter-spacing:0.05em;}
+  .roadmap .stage.now{color:var(--rose);}
+  .roadmap .desc{color:var(--text-soft);font-size:0.92rem;line-height:1.6;}
+  .roadmap .desc strong{color:var(--text);font-weight:600;}
+
+  footer{padding:30px 0 56px;}
+  footer p{color:var(--text-faint);font-size:0.8rem;margin:0 0 8px;}
+  footer a{color:var(--text-soft);}
+
+  @media (max-width:520px){
+    .hero{padding:18px 18px 22px;}
+    .chip{min-width:44%;flex:1 1 44%;}
+    .scrollhint{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scrollhint .bar::after{animation:none;top:0;}
+  }
+
+  .fallback-bg{
+    position:fixed;inset:0;z-index:0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 35%, rgba(156,85,112,0.22), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 20% 70%, rgba(93,78,133,0.18), transparent 70%),
+      var(--void);
+  }
+
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(0);
+    z-index:10;width:min(480px,calc(100vw - 32px));
+    background:rgba(8,8,9,0.5);backdrop-filter:blur(14px) saturate(1.1);
+    border:1px solid var(--border-strong);
+    padding:18px 20px;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .toast[hidden]{display:block;opacity:0;transform:translateX(-50%) translateY(10px);pointer-events:none;}
+  .toast-head{display:flex;align-items:flex-start;gap:10px;margin:0 0 10px;}
+  .toast-dot{width:7px;height:7px;border-radius:50%;background:var(--gold-soft);margin-top:5px;flex:none;box-shadow:0 0 0 4px var(--gold-dim);}
+  .toast-title{font-family:'Fraunces',Georgia,serif;font-size:1.02rem;color:var(--text);margin:0 0 4px;}
+  .toast-body{font-size:0.84rem;color:var(--text-soft);line-height:1.55;margin:0;}
+  .toast-close{
+    margin-left:auto;background:none;border:none;color:var(--text-faint);cursor:pointer;
+    font-size:0.9rem;line-height:1;padding:2px 4px;
+  }
+  .toast-close:hover{color:var(--text);}
+  .toast-row{
+    display:flex;align-items:center;gap:10px;margin-top:14px;
+    border-top:1px solid var(--border);padding-top:14px;
+  }
+  .toast-link{
+    flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:0.76rem;color:var(--text-faint);
+  }
+  .toast-copy{
+    flex:none;border:1px solid var(--border-strong);background:rgba(201,167,104,0.08);
+    color:var(--gold-soft);padding:7px 13px;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+    cursor:pointer;transition:background .2s,color .2s;
+  }
+  .toast-copy:hover{background:rgba(201,167,104,0.16);}
+  .toast-copy.done{color:var(--text);border-color:var(--border);background:rgba(255,255,255,0.03);}
+  @media (max-width:520px){
+    .toast{bottom:16px;}
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<canvas id="scene" aria-hidden="true"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="frame"></div>
+
+<div class="toast" id="compatToast" hidden role="status">
+  <div class="toast-head">
+    <span class="toast-dot" aria-hidden="true"></span>
+    <div>
+      <p class="toast-title">This browser can't render Future Mode</p>
+      <p class="toast-body" id="toastBody">WebGL isn't available here. The rest of the site works fine &mdash; open this link in Chrome, Edge, or Firefox to see this mode.</p>
+    </div>
+    <button class="toast-close mono" id="toastClose" aria-label="Dismiss">&#10005;</button>
+  </div>
+  <div class="toast-row">
+    <span class="toast-link mono" id="toastLink"></span>
+    <button class="toast-copy mono" id="toastCopy">Copy link</button>
+  </div>
+</div>
+
+<div class="hero-track" id="heroTrack">
+  <div class="hero">
+    <div class="hud-top">
+      <a class="brand" href="index.html">
+        <span class="glyph">S</span>
+        <span class="name mono">sarathkumar</span>
+      </a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="pill mode mono" href="index.html" title="Back to the default site"><span class="dot"></span>mode &middot; webgl &mdash; exit</a>
+        <span class="pill ar mono"><span class="lock">&#9679;&#9675;</span> enter ar &mdash; quest 3 <span class="soon">&middot; coming next</span></span>
+      </div>
+    </div>
+
+    <div class="hud-center">
+      <p class="eyebrow">Future Mode</p>
+      <h1>Enter<br>the <em>Field</em></h1>
+      <p class="subline">The essays and the numbers stay exactly as they are. This is just the room next door &mdash; keep scrolling and you're flying through it, section by section, the way you'd drift through open space.</p>
+      <p class="caption mono">five waypoints, three parallax layers &mdash; scroll back and the whole thing reverses, same as it would in a real ship</p>
+      <div class="waypoints" id="waypointDots"></div>
+      <p class="scrollhint mono"><span class="bar"></span>scroll to fly in</p>
+    </div>
+
+    <div class="hud-bottom mono tnum">
+      <div class="chip"><span class="k">stars</span><span class="v" id="hud-particles">&mdash;</span></div>
+      <div class="chip"><span class="k">coherence</span><span class="v" id="hud-coherence">&mdash;</span></div>
+      <div class="chip"><span class="k">waypoint</span><span class="v" id="hud-waypoint">Hero</span></div>
+      <div class="chip"><span class="k">render</span><span class="v" id="hud-fps">&mdash; fps</span></div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <section class="about">
+      <span class="tag">What this actually is</span>
+      <h2>The site stays. This is what you'd step into on purpose.</h2>
+      <p>The idea isn't to replace the site you already know &mdash; the essays, the finance log, the parts of it that need to be read carefully still load in under two seconds on a phone at <a href="index.html">the default site</a>. This is a separate mode you opt into: dark nebula and open space instead of a stack of sections.</p>
+      <p>What's rendering behind this text is a single continuous starfield, no cuts, no page breaks &mdash; scrolling down flies the camera forward through it, and each of the real sections (Hero, In the Wild, Responsible AI, Mindfulness, Words I Build By) is a distinct nebula cluster the camera arrives at along the way, each with its own color drawn from the same gold&rarr;rose&rarr;violet gradient. Scroll back up and the whole flight reverses &mdash; nothing is baked in one direction only.</p>
+      <p>The same scene is the pitch for AR, not a separate build: once the WebXR layer exists, this is what would render around you on Quest 3's passthrough &mdash; not a flat screen floating in your room, but the field itself, surrounding you, with your actual walls still visible through it.</p>
+      <ul class="roadmap">
+        <li><span class="stage now">live</span><span class="desc"><strong>WebGL mode</strong> &mdash; this scene, reachable from the main nav. Default site stays untouched.</span></li>
+        <li><span class="stage">next</span><span class="desc"><strong>WebXR enabler</strong> &mdash; immersive-AR session for Quest 3's passthrough, so the field renders into your actual room instead of a headset void.</span></li>
+      </ul>
+    </section>
+    <footer>
+      <p>Three.js / WebGL, no build step. This is a separate mode, not the default experience &mdash; the badge at the top takes you straight back.</p>
+      <p><a href="index.html">&larr; back to the default site</a></p>
+    </footer>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  function supportsWebGL(){
+    try {
+      var c = document.createElement('canvas');
+      var gl = c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl');
+      return !!gl;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function showCompatToast(){
+    document.body.classList.add('no-webgl');
+    var bg = document.createElement('div');
+    bg.className = 'fallback-bg';
+    document.body.insertBefore(bg, document.body.firstChild);
+    var canvasEl = document.getElementById('scene');
+    if (canvasEl) canvasEl.style.display = 'none';
+
+    var toast = document.getElementById('compatToast');
+    var linkEl = document.getElementById('toastLink');
+    var copyBtn = document.getElementById('toastCopy');
+    var closeBtn = document.getElementById('toastClose');
+    var url = window.location.href;
+    linkEl.textContent = url;
+    toast.hidden = false;
+
+    function markCopied(ok){
+      copyBtn.textContent = ok ? 'Copied \u2713' : 'Copy failed \u2014 select manually';
+      copyBtn.classList.toggle('done', ok);
+    }
+    function doCopy(){
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function(){ markCopied(true); }).catch(function(){ markCopied(false); });
+        return;
+      }
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        markCopied(ok);
+      } catch (e) { markCopied(false); }
+    }
+    copyBtn.addEventListener('click', doCopy);
+    closeBtn.addEventListener('click', function(){ toast.hidden = true; });
+
+    // best-effort silent attempt on load; many browsers require the click above instead
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function(){ markCopied(true); }).catch(function(){ /* falls back to the button */ });
+    }
+  }
+
+  var forceFallback = /[?&]forceFallback=1\b/.test(window.location.search);
+  if (forceFallback || !supportsWebGL()){
+    showCompatToast();
+    return;
+  }
+
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var canvas = document.getElementById('scene');
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x040405, 1);
+
+  // -- very minute motion-blur trail: fade the previous frame instead of hard-clearing it.
+  // skipped entirely under reduced-motion, where every frame clears normally. --
+  var useTrail = !reduced;
+  var fadeScene, fadeCamera;
+  if (useTrail){
+    renderer.autoClear = false;
+    fadeScene = new THREE.Scene();
+    fadeCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    var fadeQuad = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 2),
+      new THREE.MeshBasicMaterial({ color: 0x040405, transparent: true, opacity: 0.4, depthTest: false, depthWrite: false })
+    );
+    fadeScene.add(fadeQuad);
+    renderer.clear();
+  }
+
+  var scene = new THREE.Scene();
+  if (!useTrail) scene.background = new THREE.Color(0x040405);
+  scene.fog = new THREE.FogExp2(0x040405, 0.018);
+
+  var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 140);
+
+  function makeGlowTexture(){
+    var size = 128;
+    var c = document.createElement('canvas');
+    c.width = c.height = size;
+    var ctx = c.getContext('2d');
+    var g = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.3, 'rgba(255,255,255,0.6)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    var tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    return tex;
+  }
+  var glow = makeGlowTexture();
+
+  // -- holographic gradient: champagne gold -> deep wine -> dark amethyst, no blue anywhere --
+  var GOLD = [0xc9, 0xa7, 0x68], ROSE = [0x9c, 0x55, 0x70], VIOLET = [0x5d, 0x4e, 0x85];
+  function hologram(t){
+    t = Math.max(0, Math.min(1, t));
+    var a, b, lt;
+    if (t < 0.5){ a = GOLD; b = ROSE; lt = t / 0.5; } else { a = ROSE; b = VIOLET; lt = (t - 0.5) / 0.5; }
+    var r = (a[0] + (b[0]-a[0])*lt) / 255;
+    var g = (a[1] + (b[1]-a[1])*lt) / 255;
+    var bl = (a[2] + (b[2]-a[2])*lt) / 255;
+    return new THREE.Color(r, g, bl);
+  }
+
+  // -- five waypoints, mapped to the real site's own sections --
+  var WAYPOINTS = ['Hero', 'In the Wild', 'Responsible AI', 'Mindfulness', 'Words I Build By'];
+  var SPACING = 11;
+  var waypoints = WAYPOINTS.map(function(name, i){
+    var tt = i / (WAYPOINTS.length - 1);
+    return { name: name, z: -i * SPACING, color: hologram(tt), index: i };
+  });
+
+  // waypoint progress dots in the HUD
+  var dotsEl = document.getElementById('waypointDots');
+  var dotEls = waypoints.map(function(){ var d = document.createElement('span'); d.className = 'wp'; dotsEl.appendChild(d); return d; });
+  dotEls[0].className = 'wp active';
+
+  var world = new THREE.Group();
+  scene.add(world);
+
+  // -- nebula clusters at each waypoint: a soft cloud + a dense point halo --
+  waypoints.forEach(function(wp){
+    var cloud = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: glow, color: wp.color, transparent: true, blending: THREE.AdditiveBlending, opacity: 0.3
+    }));
+    cloud.scale.set(9, 9, 9);
+    cloud.position.set((wp.index % 2 === 0 ? 1 : -1) * 1.6, Math.sin(wp.index * 1.7) * 1.1, wp.z);
+    world.add(cloud);
+
+    var haloN = 220;
+    var hGeo = new THREE.BufferGeometry();
+    var hPos = new Float32Array(haloN * 3);
+    var hCol = new Float32Array(haloN * 3);
+    for (var i = 0; i < haloN; i++){
+      var r = Math.pow(Math.random(), 0.5) * 3.4;
+      var th = Math.random() * Math.PI * 2;
+      var ph = Math.acos((Math.random() * 2) - 1);
+      hPos[i*3]   = cloud.position.x + r * Math.sin(ph) * Math.cos(th);
+      hPos[i*3+1] = cloud.position.y + r * Math.sin(ph) * Math.sin(th);
+      hPos[i*3+2] = cloud.position.z + r * Math.cos(ph) * 0.6;
+      var jc = hologram(Math.max(0, Math.min(1, wp.index / (waypoints.length - 1) + (Math.random()-0.5)*0.12)));
+      hCol[i*3] = jc.r; hCol[i*3+1] = jc.g; hCol[i*3+2] = jc.b;
+    }
+    hGeo.setAttribute('position', new THREE.BufferAttribute(hPos, 3));
+    hGeo.setAttribute('color', new THREE.BufferAttribute(hCol, 3));
+    var hMat = new THREE.PointsMaterial({
+      size: 0.075, map: glow, vertexColors: true, transparent: true, opacity: 0.5,
+      blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+    });
+    world.add(new THREE.Points(hGeo, hMat));
+
+    wp.worldPos = cloud.position;
+  });
+
+  // -- continuous background starfield along the whole flight path, three parallax layers --
+  // kept dim on purpose: this is meant to read as quiet atmosphere behind the content
+  // (and behind a real room in AR passthrough), never as noise competing with it
+  var LAYERS = [
+    { n: 900, spread: 30, zpad: 16, size: 0.026, opacity: 0.3, speed: 1.0 },
+    { n: 500, spread: 46, zpad: 16, size: 0.042, opacity: 0.2,  speed: 0.55 },
+    { n: 260, spread: 64, zpad: 16, size: 0.065, opacity: 0.12, speed: 0.3 }
+  ];
+  var flightLength = SPACING * (WAYPOINTS.length - 1);
+  var starLayers = LAYERS.map(function(def){
+    var geo = new THREE.BufferGeometry();
+    var pos = new Float32Array(def.n * 3);
+    var col = new Float32Array(def.n * 3);
+    for (var i = 0; i < def.n; i++){
+      pos[i*3]   = (Math.random() - 0.5) * def.spread;
+      pos[i*3+1] = (Math.random() - 0.5) * def.spread * 0.6;
+      pos[i*3+2] = Math.random() * (flightLength + def.zpad * 2) - flightLength - def.zpad + 10;
+      var c = hologram(Math.random());
+      var mute = 0.55;
+      col[i*3] = 1 - (1-c.r) * mute; col[i*3+1] = 1 - (1-c.g) * mute; col[i*3+2] = 1 - (1-c.b) * mute;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    var mat = new THREE.PointsMaterial({
+      size: def.size, map: glow, vertexColors: true, transparent: true, opacity: def.opacity,
+      blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+    });
+    var pts = new THREE.Points(geo, mat);
+    world.add(pts);
+    return { pts: pts, speed: def.speed };
+  });
+
+  // -- arrival flash when a waypoint is reached --
+  var flashes = [];
+  function spawnFlash(wp){
+    var sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xffffff, transparent: true, blending: THREE.AdditiveBlending, opacity: 1 }));
+    sprite.position.copy(wp.worldPos);
+    sprite.scale.set(1.1, 1.1, 1.1);
+    scene.add(sprite);
+    flashes.push({ sprite: sprite, life: 1 });
+  }
+
+  // -- HUD --
+  var hudParticles = document.getElementById('hud-particles');
+  var hudCoherence = document.getElementById('hud-coherence');
+  var hudWaypoint = document.getElementById('hud-waypoint');
+  var hudFps = document.getElementById('hud-fps');
+  var totalStars = LAYERS.reduce(function(s,d){return s+d.n;},0) + waypoints.length * 220;
+  hudParticles.textContent = totalStars.toLocaleString();
+
+  // -- pointer parallax --
+  var pointer = { x: 0, y: 0 };
+  window.addEventListener('pointermove', function(e){
+    pointer.x = (e.clientX / window.innerWidth - 0.5) * 2;
+    pointer.y = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  // -- scroll-driven flight, fully reversible --
+  var heroTrack = document.getElementById('heroTrack');
+  var progress = 0;
+  var lastWaypointIndex = -1;
+  function updateProgress(){
+    var range = heroTrack.offsetHeight - window.innerHeight;
+    progress = range > 0 ? Math.max(0, Math.min(1, window.scrollY / range)) : 0;
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', function(){
+    updateProgress();
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+  updateProgress();
+
+  var clock = new THREE.Clock();
+  var frameCount = 0, fpsAccum = 0;
+  var camZ = 9;
+  var START_Z = 9;
+
+  function animate(){
+    requestAnimationFrame(animate);
+    var dt = Math.min(clock.getDelta(), 0.05);
+    var t = clock.elapsedTime;
+
+    var targetZ = START_Z - progress * (flightLength + 6);
+    camZ += (targetZ - camZ) * 0.055;
+
+    var parX = pointer.x * 0.55;
+    var parY = pointer.y * 0.32;
+    camera.position.set(parX, parY, camZ);
+    camera.lookAt(parX * 0.4, parY * 0.4, camZ - 10);
+
+    var wpIdx = Math.round(progress * (waypoints.length - 1));
+    if (wpIdx !== lastWaypointIndex){
+      lastWaypointIndex = wpIdx;
+      hudWaypoint.textContent = waypoints[wpIdx].name;
+      dotEls.forEach(function(d, i){ d.className = i === wpIdx ? 'wp active' : 'wp'; });
+      if (!reduced) spawnFlash(waypoints[wpIdx]);
+    }
+
+    if (!reduced){
+      starLayers.forEach(function(layer){ layer.pts.rotation.z += dt * 0.004 * layer.speed; });
+    }
+
+    for (var fi = flashes.length - 1; fi >= 0; fi--){
+      var f = flashes[fi];
+      f.life -= dt * 0.7;
+      f.sprite.material.opacity = Math.max(0, f.life);
+      f.sprite.scale.setScalar(1.1 + (1 - f.life) * 2.2);
+      if (f.life <= 0){ scene.remove(f.sprite); flashes.splice(fi, 1); }
+    }
+
+    hudCoherence.textContent = (90 + Math.sin(t * 0.37) * 5 + Math.sin(t * 1.3) * 2.5).toFixed(1) + '%';
+
+    frameCount++; fpsAccum += dt;
+    if (fpsAccum >= 0.5){ hudFps.textContent = Math.round(frameCount / fpsAccum) + ' fps'; frameCount = 0; fpsAccum = 0; }
+
+    if (useTrail){
+      renderer.clearDepth();
+      renderer.render(fadeScene, fadeCamera);
+      renderer.render(scene, camera);
+    } else {
+      renderer.render(scene, camera);
+    }
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

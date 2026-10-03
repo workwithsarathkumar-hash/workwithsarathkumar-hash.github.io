@@ -49,19 +49,94 @@
   }
 
   /* ---------- Nav ---------- */
-  nav.top{position:fixed;top:0;left:0;right:0;z-index:50;padding:18px 0;mix-blend-mode:difference;}
+  nav.top{
+    position:fixed;top:0;left:0;right:0;z-index:50;padding:15px 0;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(9,10,12,0.42);
+    background-blend-mode:normal;
+    border-bottom:1px solid var(--glass-border);
+    -webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 20px 50px -30px var(--glass-shadow);
+  }
   nav .row{display:flex;justify-content:space-between;align-items:center;}
-  nav .brand{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:1.05rem;color:#fff;}
+  nav .brand{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:1.05rem;color:var(--text);}
   nav .nav-links{display:flex;gap:22px;flex-wrap:wrap;}
   nav .nav-links a{
     font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;
-    color:rgba(255,255,255,0.75);
+    color:var(--text-soft);
   }
-  nav .nav-links a:hover{color:#fff;}
+  nav .nav-links a:hover{color:var(--accent);}
   @media (max-width:900px){ nav .nav-links{display:none;} }
-  nav .toggle{
-    background:none;border:1px solid rgba(255,255,255,0.4);border-radius:999px;
-    width:32px;height:32px;color:#fff;cursor:pointer;font-size:0.9rem;
+  .future-link{display:inline-flex;align-items:center;gap:6px;}
+  .future-link::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+
+  /* Mobile nav burger */
+  .nav-burger{
+    display:none;position:relative;flex-shrink:0;
+    width:38px;height:38px;border-radius:999px;
+    background:none;border:1px solid var(--border-strong);cursor:pointer;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .nav-burger:hover{border-color:var(--accent-border);}
+  .nav-burger span{
+    position:absolute;left:10px;right:10px;height:2px;background:var(--text);border-radius:2px;
+    transition:transform 0.32s cubic-bezier(.22,.8,.32,1), opacity 0.25s ease;
+  }
+  .nav-burger span:nth-child(1){top:13px;}
+  .nav-burger span:nth-child(2){top:18px;}
+  .nav-burger span:nth-child(3){top:23px;}
+  .nav-burger.open span:nth-child(1){transform:translateY(5px) rotate(45deg);}
+  .nav-burger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+  .nav-burger.open span:nth-child(3){transform:translateY(-5px) rotate(-45deg);}
+  @media (max-width:900px){ .nav-burger{display:block;} }
+
+  /* Mobile nav overlay -- glass/blur recipe, matches the rest of the site */
+  body.menu-open{overflow:hidden;}
+  .mobile-menu{
+    position:fixed;inset:0;z-index:60;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity 0.4s ease, visibility 0.4s ease;
+  }
+  .mobile-menu.open{opacity:1;visibility:visible;pointer-events:auto;}
+  .mobile-menu-backdrop{
+    position:absolute;inset:0;
+    background:rgba(9,10,12,0.72);
+    -webkit-backdrop-filter:blur(26px) saturate(150%);backdrop-filter:blur(26px) saturate(150%);
+  }
+  .mobile-menu-panel{
+    position:relative;z-index:1;width:min(340px,88vw);
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
+    border:1px solid var(--glass-border);border-radius:22px;
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 30px 80px -24px var(--glass-shadow);
+    padding:14px;display:flex;flex-direction:column;gap:4px;
+    transform:translateY(18px) scale(0.97);opacity:0;
+    transition:transform 0.4s cubic-bezier(.22,.8,.32,1), opacity 0.4s ease;
+  }
+  .mobile-menu.open .mobile-menu-panel{transform:none;opacity:1;}
+  .mobile-menu-panel::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(125deg, var(--glass-sheen) 0%, transparent 40%);
+  }
+  .mobile-menu-links a{
+    position:relative;z-index:1;display:block;width:100%;text-align:center;
+    padding:16px 10px;border-radius:14px;
+    font-family:'JetBrains Mono',monospace;font-size:0.92rem;letter-spacing:0.05em;text-transform:uppercase;
+    color:var(--text-soft);
+    opacity:0;transform:translateY(10px);
+    transition:opacity 0.35s ease, transform 0.35s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .mobile-menu.open .mobile-menu-links a{opacity:1;transform:none;}
+  .mobile-menu-links a:nth-child(1){transition-delay:0.06s;}
+  .mobile-menu-links a:nth-child(2){transition-delay:0.11s;}
+  .mobile-menu-links a:nth-child(3){transition-delay:0.16s;}
+  .mobile-menu-links a:nth-child(4){transition-delay:0.21s;}
+  .mobile-menu-links a:nth-child(5){transition-delay:0.26s;}
+  .mobile-menu-links a:nth-child(6){transition-delay:0.31s;}
+  .mobile-menu-links a:nth-child(7){transition-delay:0.36s;}
+  .mobile-menu-links a:hover, .mobile-menu-links a:active{background:var(--accent-soft);color:var(--accent);}
+  .mobile-menu-links .future-link{justify-content:center;}
+  @media (prefers-reduced-motion: reduce){
+    .nav-burger span, .mobile-menu, .mobile-menu-panel, .mobile-menu-links a{transition:none;}
   }
 
   /* ---------- Hero ---------- */
@@ -110,13 +185,6 @@
   .bio-facts .v{font-size:0.98rem;color:var(--text);}
   .bio-body{color:var(--text-soft);}
 
-  /* Manifesto */
-  .manifesto{max-width:920px;}
-  .manifesto p{font-family:'Fraunces',serif;font-weight:340;font-size:clamp(1.6rem,4.4vw,2.9rem);line-height:1.25;letter-spacing:-0.01em;margin-bottom:20px;color:var(--text-faint);}
-  .manifesto p.hit{color:var(--text);}
-  .manifesto p.accent-line{color:var(--accent);font-style:italic;font-weight:500;}
-  .manifesto .q{margin-top:44px;font-family:'JetBrains Mono',monospace;font-size:0.95rem;color:var(--text-soft);border-left:3px solid var(--accent);padding-left:18px;}
-
   /* Quotes */
   .quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
   .quote-card{
@@ -142,6 +210,7 @@
     font-family:'Fraunces',serif;font-style:italic;font-weight:500;
     font-size:clamp(1.1rem,2.2vw,1.35rem);color:var(--text);margin:0 0 16px;letter-spacing:-0.01em;
   }
+  .quote-card p[lang="ta"]{font-style:normal;line-height:1.5;}
   .quote-attr{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);display:block;line-height:1.6;}
   .quote-attr em{font-style:normal;opacity:0.75;}
   .morph-icon{position:relative;width:64px;height:40px;margin-top:22px;color:var(--accent);}
@@ -162,13 +231,13 @@
 
   /* Shared ambient glow, for uniformity across every section that carries
      the glass/motion treatment -- same recipe as .proof-glow. */
-  #quotes, #games, #review2050{position:relative;overflow:hidden;}
+  #quotes, #games, #responsible-ai{position:relative;overflow:hidden;}
   .section-glow{
     position:absolute;top:6%;left:50%;width:min(900px,140vw);height:900px;transform:translateX(-50%);
     background:radial-gradient(circle, var(--accent-soft) 0%, transparent 68%);
     filter:blur(40px);pointer-events:none;z-index:0;
   }
-  #quotes .wrap, #games .wrap, #review2050 .wrap{position:relative;z-index:1;}
+  #quotes .wrap, #games .wrap, #responsible-ai .wrap{position:relative;z-index:1;}
   .proof-block{
     padding:34px 0;border-top:1px solid var(--border);
     perspective:1400px;
@@ -301,31 +370,11 @@
   .share-actions button.primary:hover{background:var(--accent-strong);color:var(--accent-ink);}
   .share-close{margin-top:12px;width:100%;background:none;border:none;color:var(--text-faint);font-family:inherit;font-size:0.78rem;cursor:pointer;}
 
-  /* 2050 review */
-  .review-intro{color:var(--text-soft);margin:0 0 20px;max-width:640px;}
-  .review-prompt{
-    position:relative;overflow:hidden;
-    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
-    border:1px solid var(--glass-border);
-    -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
-    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 24px 60px -24px var(--glass-shadow);
-    border-radius:8px;
-    padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;
-    line-height:1.75;margin-bottom:28px;color:var(--text-faint);
-    transition:transform 0.45s cubic-bezier(.22,.8,.32,1), box-shadow 0.45s cubic-bezier(.22,.8,.32,1);
-  }
-  .review-prompt::after{
-    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(125deg, var(--glass-sheen) 0%, transparent 38%);
-  }
-  .review-prompt:hover{transform:translateY(-4px);box-shadow:0 1px 0 var(--glass-sheen) inset, 0 32px 70px -24px var(--glass-shadow);}
-  .review-prompt .said{color:var(--text);display:block;}
-  .review-prompt .said::before{content:'“';color:var(--accent);}
-  .review-prompt .said::after{content:'”';color:var(--accent);}
-  .review-prompt .who{display:block;padding-top:8px;color:var(--text-faint);}
-  .review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:16px;}
-  .review-card{
-    position:relative;overflow:hidden;
+  /* Responsible AI highlights */
+  .ai-intro{color:var(--text-soft);margin:0 0 20px;max-width:640px;}
+  .ai-highlights{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  .ai-card{
+    position:relative;overflow:hidden;display:block;
     background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
     border:1px solid var(--glass-border);
     -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
@@ -333,48 +382,17 @@
     border-radius:10px;
     padding:clamp(24px,4vw,34px);transition:transform 0.45s cubic-bezier(.22,.8,.32,1), box-shadow 0.45s cubic-bezier(.22,.8,.32,1);
   }
-  .review-card::after{
+  .ai-card::after{
     content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
     background:linear-gradient(125deg, var(--glass-sheen) 0%, transparent 38%);
   }
-  .review-card:hover{transform:translateY(-4px);box-shadow:0 1px 0 var(--glass-sheen) inset, 0 32px 70px -24px var(--glass-shadow);}
-  .review-card h3{margin:0 0 10px;font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;}
-  .review-card p{margin:0;color:var(--text-soft);font-size:0.94rem;}
-  .review-verdict{
-    position:relative;overflow:hidden;margin:24px 0 0;padding:24px clamp(24px,4vw,34px);
-    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
-    border:1px solid var(--glass-border);
-    -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
-    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 24px 60px -24px var(--glass-shadow);
-    border-radius:10px;
-    transition:transform 0.45s cubic-bezier(.22,.8,.32,1), box-shadow 0.45s cubic-bezier(.22,.8,.32,1);
-  }
-  .review-verdict::after{
-    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(125deg, var(--glass-sheen) 0%, transparent 38%);
-  }
-  .review-verdict:hover{transform:translateY(-4px);box-shadow:0 1px 0 var(--glass-sheen) inset, 0 32px 70px -24px var(--glass-shadow);}
-  .review-verdict p{
-    margin:0;font-family:'Fraunces',serif;font-style:italic;font-weight:500;
-    font-size:clamp(1.05rem,2vw,1.25rem);color:var(--text);letter-spacing:-0.01em;
-  }
-  .review-verdict span{display:block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);font-style:normal;}
-  .review-note{margin:24px 0 0;padding-top:20px;border-top:1px solid var(--border);color:var(--text-faint);font-size:0.85rem;}
-  .review-form{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
-  .review-form textarea{
-    width:100%;min-height:96px;resize:vertical;
-    background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;
-    padding:14px 16px;font-family:'Sora',system-ui,sans-serif;font-size:0.92rem;line-height:1.5;
-  }
-  .review-form textarea:focus{outline:none;border-color:var(--accent-border);}
-  .review-form-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
-  .review-form input[type="text"]{
-    flex:1;min-width:180px;
-    background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;
-    padding:10px 14px;font-family:'Sora',system-ui,sans-serif;font-size:0.9rem;
-  }
-  .review-form input[type="text"]:focus{outline:none;border-color:var(--accent-border);}
-  .review-form-hint{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);margin:0;}
+  .ai-card:hover{transform:translateY(-4px);box-shadow:0 1px 0 var(--glass-sheen) inset, 0 32px 70px -24px var(--glass-shadow);}
+  .ai-card .pb-index{display:block;font-family:'JetBrains Mono',monospace;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+  .ai-card h3{margin:0 0 10px;font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;color:var(--text);}
+  .ai-card p{margin:0 0 14px;color:var(--text-soft);font-size:0.94rem;}
+  .ai-card .pb-meta{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--accent);}
+  .ai-more{margin-top:20px;}
+  .ai-more a{font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;}
 
   /* Closing */
   .closing{
@@ -469,6 +487,59 @@
   }
   .viewer-count .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
   .viewer-count strong{color:var(--text);font-weight:600;}
+
+  /* ---------- Mascot: a tiny animated version of me that hops between
+     sections as you scroll and says hi. Fixed position, event-driven
+     (IntersectionObserver only -- no scroll listener, so it costs nothing
+     while you're not crossing a section boundary). ---------- */
+  .mascot{
+    position:fixed;right:18px;bottom:18px;z-index:40;
+    display:flex;flex-direction:column;align-items:flex-end;gap:8px;
+    pointer-events:none;
+  }
+  .mascot-avatar{
+    width:56px;height:56px;border-radius:50%;overflow:hidden;cursor:pointer;
+    pointer-events:auto;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
+    border:1px solid var(--glass-border);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 14px 34px -12px var(--glass-shadow);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    animation:mascot-bob 3.2s ease-in-out infinite;
+    transition:transform 0.15s ease;
+  }
+  .mascot-avatar:hover{transform:scale(1.06);}
+  .mascot-avatar img{width:100%;height:100%;object-fit:cover;display:block;transform:translateY(2px) scale(1.12);}
+  .mascot-avatar.jump{animation:mascot-jump 0.5s cubic-bezier(.22,.8,.32,1);}
+  @keyframes mascot-bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-5px);}
+  }
+  @keyframes mascot-jump{
+    0%{transform:translateY(0) scale(1);}
+    35%{transform:translateY(-22px) scale(1.05);}
+    60%{transform:translateY(0) scale(0.96);}
+    80%{transform:translateY(-6px) scale(1.02);}
+    100%{transform:translateY(0) scale(1);}
+  }
+  .mascot-bubble{
+    max-width:200px;padding:9px 13px;border-radius:12px 12px 2px 12px;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
+    border:1px solid var(--glass-border);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 14px 34px -12px var(--glass-shadow);
+    -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
+    font-family:'Sora',system-ui,sans-serif;font-size:0.82rem;color:var(--text);
+    opacity:0;transform:translateY(6px) scale(0.96);transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+  .mascot-bubble.show{opacity:1;transform:none;}
+  @media (max-width:640px){
+    .mascot{right:12px;bottom:12px;}
+    .mascot-avatar{width:44px;height:44px;}
+    .mascot-bubble{max-width:150px;font-size:0.76rem;padding:7px 10px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .mascot-avatar{animation:none;}
+    .mascot-avatar.jump{animation:none;}
+  }
 </style>
 </head>
 <body>
@@ -478,16 +549,33 @@
     <a class="brand" href="#top">Sarath Kumar</a>
     <div class="nav-links">
       <a href="#background">Background</a>
-      <a href="#manifesto">Manifesto</a>
       <a href="#quotes">Quotes</a>
-      <a href="#proof">Proof</a>
-      <a href="#games">Games</a>
-      <a href="#review2050">2050</a>
-      <a href="writing/per-query.html">Writing</a>
-      <a href="responsible-ai/index.html">Responsible AI</a>
+      <a href="#proof">In the Wild</a>
+      <a href="#responsible-ai">Responsible AI</a>
+      <a href="#games">Mindfulness</a>
+      <a href="review-2050.html">2050</a>
+      <a href="future-mode.html" class="future-link">Future&nbsp;Mode</a>
     </div>
+    <button class="nav-burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-backdrop" data-menu-backdrop></div>
+  <div class="mobile-menu-panel">
+    <nav class="mobile-menu-links">
+      <a href="#background">Background</a>
+      <a href="#quotes">Quotes</a>
+      <a href="#proof">In the Wild</a>
+      <a href="#responsible-ai">Responsible AI</a>
+      <a href="#games">Mindfulness</a>
+      <a href="review-2050.html">2050</a>
+      <a href="future-mode.html" class="future-link">Future&nbsp;Mode</a>
+    </nav>
+  </div>
+</div>
 
 <header class="hero" id="top">
   <canvas id="heroCanvas" aria-hidden="true"></canvas>
@@ -520,21 +608,10 @@
   </div>
 </section>
 
-<section id="manifesto">
-  <div class="wrap manifesto">
-    <p class="section-label reveal"><span>02</span> — Manifesto</p>
-    <p class="reveal">Most people wait for the perfect plan before they move.</p>
-    <p class="reveal accent-line">I move first — and figure out the rest in motion.</p>
-    <p class="reveal hit">Call it manifestation, call it a bias toward action: belief plus motion is how the unclear becomes real. This site, and MAX — a personal AI operating system built from the ground up — are proof of the same instinct: build first, refine live.</p>
-    <p class="reveal accent-line">I don't look for opportunities. I build them.</p>
-    <div class="q reveal">What are you still waiting for the right time to start?</div>
-  </div>
-</section>
-
 <section id="quotes">
   <div class="section-glow" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="section-label reveal"><span>03</span> — Words I Build By</p>
+    <p class="section-label reveal"><span>02</span> — Words I Build By</p>
     <div class="quotes stagger">
       <div class="reveal" style="--i:0">
         <div class="quote-card motion-tilt" id="fordQuoteCard">
@@ -557,6 +634,17 @@
           </div>
         </div>
       </div>
+      <div class="reveal" style="--i:1">
+        <div class="quote-card motion-tilt">
+          <blockquote>
+            <p lang="ta">தெய்வத்தான் ஆகா தெனினும் முயற்சிதன்<br>மெய்வருத்தக் கூலி தரும்</p>
+            <footer class="quote-attr">
+              <em>"Even if fate withholds the outcome, effort never goes unpaid."</em><br>
+              — Thiruvalluvar, <cite>Thirukural</cite>, Kural 619
+            </footer>
+          </blockquote>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -564,7 +652,7 @@
 <section id="proof">
   <div class="proof-glow" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="section-label reveal"><span>04</span> — Proof</p>
+    <p class="section-label reveal"><span>03</span> — In the Wild</p>
 
     <div class="proof-block reveal">
       <div class="pb-cyl">
@@ -642,10 +730,39 @@
   </div>
 </section>
 
+<section id="responsible-ai">
+  <div class="section-glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="section-label reveal"><span>04</span> — Responsible AI</p>
+    <p class="ai-intro reveal">"Responsible AI" gets used to mean a lot of things. Three honest, sourced pieces — co-researched with MAX — on what it actually costs, who actually gets blamed when it fails, and where it genuinely helps.</p>
+    <div class="ai-highlights stagger">
+      <a class="ai-card reveal motion-tilt" style="--i:0" href="responsible-ai/who-takes-the-blame.html">
+        <span class="pb-index">Accountability</span>
+        <h3>Who Takes the Blame?</h3>
+        <p>A Tomahawk strike destroyed an Iranian school in February 2026. The public argument was about whether AI models picked the target. It hadn't. What the actual chain of human decisions reveals about who gets credit — and who gets blamed.</p>
+        <span class="pb-meta">Read the piece →</span>
+      </a>
+      <a class="ai-card reveal motion-tilt" style="--i:1" href="writing/per-query.html">
+        <span class="pb-index">Environment</span>
+        <h3>Per Query</h3>
+        <p>What AI's growth actually costs the grid and the water table, and where the real leverage for fixing it sits — grounded against the IEA's own 2026 analysis.</p>
+        <span class="pb-meta">Read the piece →</span>
+      </a>
+      <a class="ai-card reveal motion-tilt" style="--i:2" href="responsible-ai/faster-than-the-disease.html">
+        <span class="pb-index">Medicine</span>
+        <h3>The Easy Part</h3>
+        <p>AI can screen antibiotic candidates in weeks instead of years — but 73% of global antimicrobial use goes to livestock that don't need it. Calling AI the lifesaver here, without saying that, is its own false narrative.</p>
+        <span class="pb-meta">Read the piece →</span>
+      </a>
+    </div>
+    <p class="ai-more reveal"><a href="responsible-ai/index.html">See all three pieces, and what's next →</a></p>
+  </div>
+</section>
+
 <section id="games">
   <div class="section-glow" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="section-label reveal"><span>05</span> — Games</p>
+    <p class="section-label reveal"><span>05</span> — Mindfulness</p>
     <p class="games-intro reveal">Three small, mindful games — designed and coded end-to-end by MAX, my personal AI system. No build tools, no tracking, nothing stored. Just something quiet to play with for a minute.</p>
     <div class="games-grid stagger">
       <div class="reveal" style="--i:0">
@@ -701,65 +818,6 @@
   </div>
 </div>
 
-<section id="review2050">
-  <div class="section-glow" aria-hidden="true"></div>
-  <div class="wrap">
-    <p class="section-label reveal"><span>06</span> — A Review From 2050</p>
-    <p class="review-intro reveal">I asked MAX — my own AI system — to step forward to 2050 and look back at what I've built. No edits. This is what came back.</p>
-    <div class="reveal">
-      <div class="review-prompt motion-tilt">
-        <span class="said">Hmm.. think like you are from future like from 2050, and review our projects like max, juno and our website and other agents and give me the honest review</span>
-        <span class="who">— me, to MAX</span>
-      </div>
-    </div>
-    <div class="review-grid stagger">
-      <div class="reveal" style="--i:0">
-        <div class="review-card motion-tilt">
-          <h3>MAX</h3>
-          <p>Real discipline for a solo build — a tiered model architecture and a hard rule that MAX never reasons about money itself, only Juno does. But its entire authority runs through one Mac, one webcam, one USB bus. No redundancy. The day that Mac dies, MAX doesn't degrade — it disappears.</p>
-        </div>
-      </div>
-      <div class="reveal" style="--i:1">
-        <div class="review-card motion-tilt">
-          <h3>Juno</h3>
-          <p>Ahead of her time on privacy — raw bank SMS parsed locally, only category totals ever reach the cloud model, years before that became the industry scandal it became. But her standing profile keeps drifting from the live ledger, patched consult by consult instead of fixed structurally.</p>
-        </div>
-      </div>
-      <div class="reveal" style="--i:2">
-        <div class="review-card motion-tilt">
-          <h3>The Agent Bench</h3>
-          <p>Seven specialists, frozen prompts, a shared ethos, and a test suite that pins honesty over agreement — rare taste for a personal project. The gap: no agent owns whether the whole system has gotten too big for one person to actually supervise.</p>
-        </div>
-      </div>
-      <div class="reveal" style="--i:3">
-        <div class="review-card motion-tilt">
-          <h3>This Website</h3>
-          <p>The one piece that actually shipped end-to-end with real proof instead of claims. Held against it: the canonical GitHub identity sat broken behind a workaround for a long stretch before anyone circled back to fix it.</p>
-        </div>
-      </div>
-    </div>
-    <div class="reveal">
-      <div class="review-verdict motion-tilt">
-        <p>Strong at building the right thing. Only fair, so far, at maintaining it once it stops being new.</p>
-        <span>The honest throughline across MAX, Juno, the agent bench, and this site — 2026, reviewed from 2050</span>
-      </div>
-    </div>
-    <div class="review-note reveal">
-      <p>Think I — or MAX — missed something, or got it right? Leave your own take below. It opens as a public issue on the repo behind this site.</p>
-      <form class="review-form" data-review-form>
-        <div class="review-form-row">
-          <input type="text" placeholder="Your name (optional)" data-review-name>
-        </div>
-        <textarea placeholder="Your honest review of MAX, Juno, this site, or the whole thing…" data-review-text required></textarea>
-        <div class="review-form-row">
-          <button type="submit" class="btn-ghost">Post your feedback →</button>
-          <p class="review-form-hint">Opens a GitHub issue — no account needed to write it, just to submit it.</p>
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
-
 <section class="closing">
   <div class="wrap">
     <h2 class="reveal">Let's <em>build</em>.</h2>
@@ -808,8 +866,46 @@
   </div>
 </footer>
 
+<div class="mascot" id="siteMascot" aria-hidden="true">
+  <div class="mascot-bubble" id="mascotBubble"></div>
+  <div class="mascot-avatar" id="mascotAvatar">
+    <img src="mascot.png" width="56" height="56" alt="" loading="eager">
+  </div>
+</div>
+
 <script>
 (function(){
+  // ---- Mobile nav (burger -> glass overlay) ----
+  (function () {
+    var burger = document.getElementById('navBurger');
+    var menu = document.getElementById('mobileMenu');
+    if (!burger || !menu) return;
+    var links = menu.querySelectorAll('a');
+    var backdrop = menu.querySelector('[data-menu-backdrop]');
+
+    function openMenu() {
+      burger.classList.add('open');
+      burger.setAttribute('aria-expanded', 'true');
+      menu.classList.add('open');
+      menu.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('menu-open');
+    }
+    function closeMenu() {
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      menu.classList.remove('open');
+      menu.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open');
+    }
+    burger.addEventListener('click', function () {
+      if (menu.classList.contains('open')) closeMenu(); else openMenu();
+    });
+    links.forEach(function (a) { a.addEventListener('click', closeMenu); });
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+    window.addEventListener('resize', function () { if (window.innerWidth > 900) closeMenu(); });
+  })();
+
   // Scroll reveal
   var els = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
@@ -998,7 +1094,7 @@
 
     x.fillStyle = '#E8B85C';
     x.font = "500 30px 'JetBrains Mono', monospace";
-    x.fillText('workwithsarathkumar-hash.github.io', W / 2, 775);
+    x.fillText('sarathkumar.pages.dev', W / 2, 775);
     return c;
   }
 
@@ -1087,7 +1183,7 @@
           post: 'I hit a streak of ' + best + ' on Color Match 🎨\n\n'
             + 'Click the ink colour, not the word — the classic Stroop test. '
             + 'Way harder than it looks once your brain starts arguing with itself.\n\n'
-            + 'Think you can beat it? → https://workwithsarathkumar-hash.github.io/#games'
+            + 'Think you can beat it? → https://sarathkumar.pages.dev/#games'
         });
       });
     }
@@ -1165,7 +1261,7 @@
           post: 'I made it to round ' + bestRound + ' on Memory Sequence 🧠\n\n'
             + 'Watch the pattern, repeat it back, watch it grow by one. '
             + 'Simple until it very much isn\'t.\n\n'
-            + 'Think you can beat it? → https://workwithsarathkumar-hash.github.io/#games'
+            + 'Think you can beat it? → https://sarathkumar.pages.dev/#games'
         });
       });
     }
@@ -1236,29 +1332,6 @@
     });
   })();
 
-  // ---- Visitor feedback on "A Review From 2050" ----
-  (function () {
-    var form = document.querySelector('[data-review-form]');
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var nameEl = document.querySelector('[data-review-name]');
-      var textEl = document.querySelector('[data-review-text]');
-      var text = (textEl.value || '').trim();
-      if (!text) { textEl.focus(); return; }
-      var name = (nameEl.value || '').trim();
-      var title = 'Site feedback from ' + (name || 'a visitor');
-      var body = text + (name ? '\n\n— ' + name : '\n\n— submitted anonymously');
-      var url = 'https://github.com/workwithsarathkumar-hash/workwithsarathkumar-hash.github.io/issues/new'
-        + '?title=' + encodeURIComponent(title)
-        + '&body=' + encodeURIComponent(body)
-        + '&labels=' + encodeURIComponent('site-feedback');
-      window.open(url, '_blank', 'noopener');
-      textEl.value = '';
-      if (nameEl) nameEl.value = '';
-    });
-  })();
-
   // ---- Holographic ID card: tilts toward the cursor, and the foil
   // gradient's position shifts with it -- the two together are what make it
   // read as "material that reacts to viewing angle" rather than a plain
@@ -1283,6 +1356,67 @@
       card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
       holo.style.backgroundPosition = '';
       if (gloss) gloss.style.backgroundPosition = '';
+    });
+  })();
+
+  // ---- Mascot: hops to each section as you scroll into it, says a short
+  // line once per section (event-driven off the same IntersectionObserver
+  // pattern as .reveal -- no scroll listener, so it's free while idle). ----
+  (function () {
+    var avatar = document.getElementById('mascotAvatar');
+    var bubble = document.getElementById('mascotBubble');
+    if (!avatar || !bubble) return;
+
+    var GREETINGS = {
+      top: "Hey, I'm Sarath! 👋",
+      background: 'This is my story 📖',
+      quotes: 'Words I actually live by',
+      proof: "Here's what I've shipped 🚀",
+      'responsible-ai': "Let's talk AI, honestly",
+      games: 'Take a breather with me 🎮'
+    };
+    var bubbleTimer = null;
+
+    function say(text) {
+      if (!text) return;
+      bubble.textContent = text;
+      bubble.classList.add('show');
+      clearTimeout(bubbleTimer);
+      bubbleTimer = setTimeout(function () { bubble.classList.remove('show'); }, 3200);
+    }
+
+    function jump(text) {
+      if (!reduceMotion) {
+        avatar.classList.remove('jump');
+        // force reflow so the animation can retrigger on back-to-back jumps
+        void avatar.offsetWidth;
+        avatar.classList.add('jump');
+      }
+      say(text);
+    }
+
+    var seen = {};
+    var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+    if (sections.length && 'IntersectionObserver' in window) {
+      var sectionIo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var id = entry.target.id;
+          if (seen[id]) return;
+          seen[id] = true;
+          jump(GREETINGS[id]);
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      sections.forEach(function (el) { sectionIo.observe(el); });
+    }
+
+    // Initial hello shortly after load, before any section has been "seen".
+    setTimeout(function () { jump(GREETINGS.top); }, 900);
+
+    // Poke it -- click/tap replays a friendly bounce.
+    avatar.addEventListener('click', function () {
+      var lines = ['Still building 🛠️', 'Effort never goes unpaid', "Let's build something →"];
+      jump(lines[Math.floor(Math.random() * lines.length)]);
     });
   })();
 
