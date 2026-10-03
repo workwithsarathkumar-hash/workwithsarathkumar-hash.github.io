@@ -63,6 +63,10 @@
     position:absolute;top:clamp(16px,3vw,26px);left:clamp(16px,3vw,26px);right:clamp(16px,3vw,26px);
     display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;
   }
+  .hud-corner{
+    position:absolute;bottom:clamp(16px,3vw,26px);right:clamp(16px,3vw,26px);
+    display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;
+  }
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
   .brand .glyph{
     width:30px;height:30px;border-radius:50%;border:1px solid var(--gold-dim);
@@ -289,11 +293,12 @@
         <span class="glyph">S</span>
         <span class="name mono">sarathkumar</span>
       </a>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button class="pill back mono" id="backPill" type="button" hidden><span class="dot"></span>back</button>
-        <a class="pill mode mono" href="index.html" title="Back to the default site"><span class="dot"></span><span class="full">mode &middot; webgl &mdash; exit</span><span class="short">exit</span></a>
-        <span class="pill ar mono"><span class="lock">&#9679;&#9675;</span> <span class="full">enter ar &mdash; quest 3 <span class="soon">&middot; coming next</span></span><span class="short">ar &middot; soon</span></span>
-      </div>
+      <span class="pill ar mono"><span class="lock">&#9679;&#9675;</span> <span class="full">enter ar &mdash; quest 3 <span class="soon">&middot; coming next</span></span><span class="short">ar &middot; soon</span></span>
+    </div>
+
+    <div class="hud-corner">
+      <button class="pill back mono" id="backPill" type="button" hidden><span class="dot"></span>back</button>
+      <a class="pill mode mono" href="index.html" title="Back to the default site"><span class="dot"></span><span class="full">mode &middot; webgl &mdash; exit</span><span class="short">exit</span></a>
     </div>
 
     <div class="hud-center">
