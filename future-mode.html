@@ -51,16 +51,6 @@
     position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  .frame{
-    position:fixed;inset:14px;z-index:4;pointer-events:none;
-    border:1px solid var(--hairline);
-  }
-  .frame::before, .frame::after{
-    content:"";position:absolute;width:13px;height:13px;border-color:var(--gold-soft);
-  }
-  .frame::before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid;}
-  .frame::after{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid;}
-
   .hero-track{height:520vh;position:relative;z-index:2;}
   .hero{
     position:sticky;top:0;height:100svh;overflow:hidden;
@@ -80,7 +70,7 @@
   .brand:hover .name{color:var(--gold-soft);}
   .pill{
     display:inline-flex;align-items:center;gap:9px;
-    border:1px solid var(--glass-border);border-radius:2px;
+    border:1px solid var(--glass-border);border-radius:999px;
     padding:clamp(7px,1.3vw,9px) clamp(11px,2.2vw,16px);
     font-size:clamp(0.6rem,1.3vw,0.68rem);letter-spacing:0.12em;text-transform:uppercase;font-weight:500;
     background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(4,4,5,0.4);
@@ -104,14 +94,20 @@
   }
   .eyebrow::before{content:"";width:16px;height:1px;background:var(--violet);}
   h1{
-    margin:0 0 clamp(14px,2.6vw,22px);text-wrap:balance;
+    margin:0 0 clamp(10px,2vw,16px);text-wrap:balance;
     font-family:'Fraunces',Georgia,serif;
     font-weight:500;letter-spacing:-0.01em;
-    font-size:clamp(2.6rem,9vw,6rem);line-height:1;
+    font-size:clamp(2.4rem,7.6vw,5.2rem);line-height:1;
     color:var(--text);
     animation:titleIn .6s cubic-bezier(.2,.7,.2,1);
   }
   @keyframes titleIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  .excerpt{
+    font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;
+    font-size:clamp(1rem,2vw,1.2rem);line-height:1.55;color:var(--text-soft);
+    margin:0 0 clamp(14px,2.4vw,22px);max-width:52ch;text-wrap:balance;
+    animation:titleIn .6s cubic-bezier(.2,.7,.2,1) .08s backwards;
+  }
   .scrollhint{
     font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);
     display:flex;align-items:center;gap:8px;
@@ -232,7 +228,6 @@
 <canvas id="scene" aria-hidden="true"></canvas>
 <div class="vignette"></div>
 <div class="grain"></div>
-<div class="frame"></div>
 
 <div class="toast" id="compatToast" hidden role="status">
   <div class="toast-head">
@@ -265,6 +260,7 @@
     <div class="hud-center">
       <p class="eyebrow mono" id="eyebrow">01 &mdash; Future Mode</p>
       <h1 id="sectionTitle">Background</h1>
+      <p class="excerpt" id="sectionExcerpt">Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.</p>
       <div class="waypoints" id="waypointDots"></div>
       <p class="scrollhint mono"><span class="bar"></span>scroll to fly in</p>
     </div>
@@ -408,12 +404,20 @@
     return new THREE.Color(r, g, bl);
   }
 
-  // -- five waypoints, mapped to the real site's own sections --
-  var WAYPOINTS = ['Background', 'Quotes', 'In the Wild', 'Responsible AI', 'Mindfulness', '2050'];
+  // -- six waypoints, mapped to the real site's own sections -- excerpts are real
+  // text pulled from index.html / review-2050.html, not invented copy --
+  var WAYPOINTS = [
+    { name: 'Background', excerpt: 'Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.' },
+    { name: 'Quotes', excerpt: '\u201cIf I had asked people what they wanted, they would have said faster horses.\u201d \u2014 Henry Ford' },
+    { name: 'In the Wild', excerpt: 'MAX \u2014 a personal AI operating system built from the ground up, tiering between fast local inference and frontier models.' },
+    { name: 'Responsible AI', excerpt: 'Three honest, sourced pieces on what AI actually costs, who gets blamed when it fails, and where it genuinely helps.' },
+    { name: 'Mindfulness', excerpt: 'Three small, mindful games \u2014 designed and coded end-to-end by MAX. No tracking, nothing stored.' },
+    { name: '2050', excerpt: 'I asked MAX to step forward to 2050 and look back at what I\u2019ve built. No edits. This is what came back.' }
+  ];
   var SPACING = 11;
-  var waypoints = WAYPOINTS.map(function(name, i){
+  var waypoints = WAYPOINTS.map(function(def, i){
     var tt = i / (WAYPOINTS.length - 1);
-    return { name: name, z: -i * SPACING, color: hologram(tt), index: i };
+    return { name: def.name, excerpt: def.excerpt, z: -i * SPACING, color: hologram(tt), index: i };
   });
 
   // waypoint progress dots in the HUD
@@ -470,17 +474,21 @@
     flashes.push({ sprite: sprite, life: 1 });
   }
 
-  // -- section title + numbered eyebrow, swapped (with a fresh fade-in) as each real
-  // section's waypoint is reached --
+  // -- section title, excerpt, and numbered eyebrow, swapped (with a fresh fade-in)
+  // as each real section's waypoint is reached --
   var sectionTitle = document.getElementById('sectionTitle');
+  var sectionExcerpt = document.getElementById('sectionExcerpt');
   var eyebrow = document.getElementById('eyebrow');
   function pad2(n){ return (n < 10 ? '0' : '') + n; }
   function showSection(idx){
     sectionTitle.textContent = waypoints[idx].name;
+    sectionExcerpt.textContent = waypoints[idx].excerpt;
     eyebrow.textContent = pad2(idx + 1) + ' \u2014 Future Mode';
-    sectionTitle.style.animation = 'none';
-    void sectionTitle.offsetWidth;
-    sectionTitle.style.animation = '';
+    [sectionTitle, sectionExcerpt].forEach(function(el){
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
   }
 
   // -- pointer parallax --
