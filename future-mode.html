@@ -54,13 +54,15 @@
   .hero-track{height:520vh;position:relative;z-index:2;}
   .hero{
     position:sticky;top:0;height:100svh;overflow:hidden;
-    display:flex;flex-direction:column;justify-content:space-between;
     padding:clamp(16px,3vw,26px) clamp(16px,3vw,26px) clamp(18px,3.4vw,28px);
     pointer-events:none;
   }
   .hero > *{pointer-events:auto;}
 
-  .hud-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .hud-top{
+    position:absolute;top:clamp(16px,3vw,26px);left:clamp(16px,3vw,26px);right:clamp(16px,3vw,26px);
+    display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
   .brand .glyph{
     width:30px;height:30px;border-radius:50%;border:1px solid var(--gold-dim);
@@ -77,7 +79,8 @@
     background-blend-mode:normal;
     -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
     box-shadow:0 1px 0 var(--glass-sheen) inset, 0 14px 30px -18px var(--glass-shadow);
-    text-decoration:none;transition:background .2s;
+    text-decoration:none;transition:background .2s,opacity .2s;
+    font-family:inherit;cursor:pointer;margin:0;
   }
   .pill.mode{color:var(--gold-soft);}
   .pill.mode:hover{background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(201,167,104,0.14);}
@@ -86,8 +89,42 @@
   .pill.ar .lock{opacity:0.6;}
   .pill.ar .soon{color:var(--text-soft);opacity:0.9;}
   .pill .short{display:none;}
+  .pill.back{color:var(--gold-soft);}
+  .pill.back:hover{background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(201,167,104,0.14);}
+  .pill.back .dot{width:5px;height:5px;border-radius:50%;background:var(--gold-soft);box-shadow:0 0 0 4px var(--gold-dim);}
+  .pill.back[hidden]{display:none;}
 
-  .hud-center{max-width:min(780px,90vw);padding:0 2px;}
+  .section-trigger{
+    display:block;background:none;border:none;padding:0;margin:0 0 clamp(14px,2.4vw,22px);
+    text-align:left;cursor:pointer;font-family:inherit;max-width:100%;
+  }
+  .section-trigger[hidden]{display:none;}
+  .section-trigger .excerpt{margin:0 0 6px;transition:color .2s;}
+  .section-trigger:hover .excerpt{color:var(--text);}
+  .section-trigger .view-full{
+    font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-soft);
+    opacity:0;transform:translateX(-4px);transition:opacity .2s,transform .2s;display:inline-block;
+  }
+  .section-trigger:hover .view-full, .section-trigger:focus-visible .view-full{opacity:1;transform:none;}
+
+  .detail{animation:titleIn .5s cubic-bezier(.2,.7,.2,1);}
+  .detail-text{
+    font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;
+    font-size:clamp(1rem,2vw,1.2rem);line-height:1.6;color:var(--text-soft);
+    margin:0 0 14px;max-width:56ch;text-wrap:balance;
+  }
+  .detail-link{
+    font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-soft);
+    display:inline-block;margin-bottom:clamp(14px,2.4vw,22px);
+  }
+  .detail-link:hover{color:var(--gold);}
+  .detail[hidden]{display:none;}
+
+  .hud-center{
+    position:absolute;left:clamp(16px,3vw,26px);right:clamp(16px,3vw,26px);
+    top:50%;transform:translateY(-58%);
+    max-width:min(780px,90vw);padding:0 2px;
+  }
   .eyebrow{
     font-size:clamp(0.68rem,1.4vw,0.76rem);letter-spacing:0.14em;text-transform:uppercase;color:var(--violet);
     margin:0 0 clamp(10px,2.2vw,20px);display:flex;align-items:center;gap:8px;
@@ -112,6 +149,7 @@
     font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);
     display:flex;align-items:center;gap:8px;
   }
+  .scrollhint[hidden]{display:none;}
   .scrollhint .bar{width:1px;height:26px;background:linear-gradient(var(--gold),transparent);position:relative;overflow:hidden;}
   .scrollhint .bar::after{
     content:"";position:absolute;left:0;top:-26px;width:100%;height:12px;background:var(--gold);
@@ -252,6 +290,7 @@
         <span class="name mono">sarathkumar</span>
       </a>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="pill back mono" id="backPill" type="button" hidden><span class="dot"></span>back</button>
         <a class="pill mode mono" href="index.html" title="Back to the default site"><span class="dot"></span><span class="full">mode &middot; webgl &mdash; exit</span><span class="short">exit</span></a>
         <span class="pill ar mono"><span class="lock">&#9679;&#9675;</span> <span class="full">enter ar &mdash; quest 3 <span class="soon">&middot; coming next</span></span><span class="short">ar &middot; soon</span></span>
       </div>
@@ -260,9 +299,19 @@
     <div class="hud-center">
       <p class="eyebrow mono" id="eyebrow">01 &mdash; Future Mode</p>
       <h1 id="sectionTitle">Background</h1>
-      <p class="excerpt" id="sectionExcerpt">Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.</p>
+
+      <button class="section-trigger" id="sectionTrigger" type="button">
+        <p class="excerpt" id="sectionExcerpt">Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.</p>
+        <span class="view-full mono">view full &rarr;</span>
+      </button>
+
+      <div class="detail" id="detailPanel" hidden>
+        <p class="detail-text" id="detailText"></p>
+        <a class="detail-link mono" id="detailLink" href="index.html">read it on the default site &rarr;</a>
+      </div>
+
       <div class="waypoints" id="waypointDots"></div>
-      <p class="scrollhint mono"><span class="bar"></span>scroll to fly in</p>
+      <p class="scrollhint mono" id="scrollHint"><span class="bar"></span>scroll to fly in</p>
     </div>
   </div>
 </div>
@@ -407,17 +456,35 @@
   // -- six waypoints, mapped to the real site's own sections -- excerpts are real
   // text pulled from index.html / review-2050.html, not invented copy --
   var WAYPOINTS = [
-    { name: 'Background', excerpt: 'Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.' },
-    { name: 'Quotes', excerpt: '\u201cIf I had asked people what they wanted, they would have said faster horses.\u201d \u2014 Henry Ford' },
-    { name: 'In the Wild', excerpt: 'MAX \u2014 a personal AI operating system built from the ground up, tiering between fast local inference and frontier models.' },
-    { name: 'Responsible AI', excerpt: 'Three honest, sourced pieces on what AI actually costs, who gets blamed when it fails, and where it genuinely helps.' },
-    { name: 'Mindfulness', excerpt: 'Three small, mindful games \u2014 designed and coded end-to-end by MAX. No tracking, nothing stored.' },
-    { name: '2050', excerpt: 'I asked MAX to step forward to 2050 and look back at what I\u2019ve built. No edits. This is what came back.' }
+    { name: 'Background',
+      excerpt: 'Seven-plus years embedding directly with client teams, turning ambiguous, high-stakes problems into deployed AI systems.',
+      full: 'Currently an AI Systems and Forward Deployed Engineer at Mphasis, leading the Generative AI team \u2014 building enterprise-scale document intelligence in the financial domain, where OCR/ICR and LLM pipelines turn unstructured data into production-grade decisions. Before that: cloud contact-centre modernization and conversational AI for banking, insurance, and retail clients at Accenture and Virtusa. Kore.ai, Amazon Connect, Google CCAI, AWS, Python \u2014 the stack has changed, the discipline hasn\u2019t.',
+      link: 'index.html#background' },
+    { name: 'Quotes',
+      excerpt: '\u201cIf I had asked people what they wanted, they would have said faster horses.\u201d \u2014 Henry Ford',
+      full: '\u201cIf I had asked people what they wanted, they would have said faster horses.\u201d \u2014 widely attributed to Henry Ford (the line\u2019s origin is disputed and unconfirmed \u2014 the idea still holds). And: \u201cEven if fate withholds the outcome, effort never goes unpaid.\u201d \u2014 Thiruvalluvar, Thirukural, Kural 619.',
+      link: 'index.html#quotes' },
+    { name: 'In the Wild',
+      excerpt: 'MAX \u2014 a personal AI operating system built from the ground up, tiering between fast local inference and frontier models.',
+      full: 'MAX: a personal AI operating system built from the ground up \u2014 a reasoning core that tiers between fast local inference and frontier models, wired into voice, home automation, and real tool use. Also live: a fine-tuned small language model prototype for first-line mental-health coping support, with a deterministic crisis-safety gate that hard-excludes risk content from the model entirely.',
+      link: 'index.html#proof' },
+    { name: 'Responsible AI',
+      excerpt: 'Three honest, sourced pieces on what AI actually costs, who gets blamed when it fails, and where it genuinely helps.',
+      full: '\u201cResponsible AI\u201d gets used to mean a lot of things. Three honest, sourced pieces \u2014 co-researched with MAX \u2014 on what it actually costs, who actually gets blamed when it fails, and where it genuinely helps.',
+      link: 'responsible-ai/index.html' },
+    { name: 'Mindfulness',
+      excerpt: 'Three small, mindful games \u2014 designed and coded end-to-end by MAX. No tracking, nothing stored.',
+      full: 'Three small, mindful games \u2014 designed and coded end-to-end by MAX, my personal AI system. No build tools, no tracking, nothing stored. Just something quiet to play with for a minute.',
+      link: 'index.html#games' },
+    { name: '2050',
+      excerpt: 'I asked MAX to step forward to 2050 and look back at what I\u2019ve built. No edits. This is what came back.',
+      full: 'I asked MAX \u2014 my own AI system \u2014 to step forward to 2050 and look back at what I\u2019ve built. No edits. This is what came back: strong at building the right thing, only fair, so far, at maintaining it once it stops being new.',
+      link: 'review-2050.html' }
   ];
   var SPACING = 11;
   var waypoints = WAYPOINTS.map(function(def, i){
     var tt = i / (WAYPOINTS.length - 1);
-    return { name: def.name, excerpt: def.excerpt, z: -i * SPACING, color: hologram(tt), index: i };
+    return { name: def.name, excerpt: def.excerpt, full: def.full, link: def.link, z: -i * SPACING, color: hologram(tt), index: i };
   });
 
   // waypoint progress dots in the HUD
@@ -489,7 +556,42 @@
       void el.offsetWidth;
       el.style.animation = '';
     });
+    closeDetail();
   }
+
+  // -- clicking a section's excerpt dives the camera in closer on that waypoint and
+  // reveals its full real content; the back pill reverses it with the same lerp, so
+  // the "zoom out" is literally the same mechanism as the forward dive, undone --
+  var sectionTrigger = document.getElementById('sectionTrigger');
+  var backPill = document.getElementById('backPill');
+  var detailPanel = document.getElementById('detailPanel');
+  var detailText = document.getElementById('detailText');
+  var detailLink = document.getElementById('detailLink');
+  var scrollHint = document.getElementById('scrollHint');
+  var detailMode = false;
+  var detailIdx = 0;
+
+  function openDetail(){
+    detailIdx = lastWaypointIndex;
+    detailMode = true;
+    var wp = waypoints[detailIdx];
+    detailText.textContent = wp.full;
+    detailLink.href = wp.link;
+    sectionTrigger.hidden = true;
+    scrollHint.hidden = true;
+    detailPanel.hidden = false;
+    backPill.hidden = false;
+  }
+  function closeDetail(){
+    if (!detailMode) return;
+    detailMode = false;
+    sectionTrigger.hidden = false;
+    scrollHint.hidden = false;
+    detailPanel.hidden = true;
+    backPill.hidden = true;
+  }
+  sectionTrigger.addEventListener('click', openDetail);
+  backPill.addEventListener('click', closeDetail);
 
   // -- pointer parallax --
   var pointer = { x: 0, y: 0 };
@@ -506,7 +608,7 @@
     var range = heroTrack.offsetHeight - window.innerHeight;
     progress = range > 0 ? Math.max(0, Math.min(1, window.scrollY / range)) : 0;
   }
-  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('scroll', function(){ updateProgress(); closeDetail(); }, { passive: true });
   window.addEventListener('resize', function(){
     updateProgress();
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -524,7 +626,9 @@
     var dt = Math.min(clock.getDelta(), 0.05);
     var t = clock.elapsedTime;
 
-    var targetZ = START_Z - progress * (flightLength + 6);
+    var targetZ = detailMode
+      ? waypoints[detailIdx].z - 3.5
+      : START_Z - progress * (flightLength + 6);
     camZ += (targetZ - camZ) * 0.055;
 
     var parX = pointer.x * 0.55;
