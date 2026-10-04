@@ -206,7 +206,15 @@
     font-family:'Fraunces',serif;font-style:italic;font-weight:500;
     font-size:clamp(1.1rem,2.2vw,1.35rem);color:var(--text);margin:0 0 16px;letter-spacing:-0.01em;
   }
-  .quote-card p[lang="ta"]{font-style:normal;line-height:1.5;}
+  /* Thirukural couplets are always exactly 2 lines (4 Tamil words, then 3)
+     -- the <br> in the markup already marks that real break. white-space:
+     nowrap stops the browser from ALSO soft-wrapping within either line on
+     narrow screens (which breaks the couplet's actual structure); <br>
+     itself still forces the intended line break regardless of nowrap. */
+  .quote-card p[lang="ta"]{font-style:normal;line-height:1.5;white-space:nowrap;}
+  @media (max-width:480px){
+    .quote-card p[lang="ta"]{font-size:0.92rem;}
+  }
   .quote-attr{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-faint);display:block;line-height:1.6;}
   .quote-attr em{font-style:normal;opacity:0.75;}
   .morph-icon{position:relative;width:64px;height:40px;margin-top:22px;color:var(--accent);}
