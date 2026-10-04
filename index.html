@@ -270,7 +270,7 @@
     background:linear-gradient(125deg, var(--glass-sheen) 0%, transparent 38%);
   }
   .proof-block:hover .pb-media{transform:translateY(-4px);box-shadow:0 1px 0 var(--glass-sheen) inset, 0 32px 70px -24px var(--glass-shadow);}
-  .pb-media img{width:100%;height:100%;object-fit:cover;display:block;}
+  .pb-media img,.pb-media video{width:100%;height:100%;object-fit:cover;display:block;}
   .pb-media.stat-media{
     display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:36px;
   }
@@ -728,6 +728,20 @@
         </div>
         <div class="pb-media">
           <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7500756914461609984" height="400" width="100%" frameborder="0" allowfullscreen title="LinkedIn post"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="proof-block rev reveal">
+      <div class="pb-cyl">
+        <div class="pb-text">
+          <span class="pb-index">06</span>
+          <h3>Gesture Control</h3>
+          <p>A hand-swipe tool built into MAX — Apple's Vision framework tracks my wrist through the webcam, no cloud, no MediaPipe (its native hand-tracking crashed hard on this Mac, so this runs on Apple's own on-device model instead). A swipe maps to a swappable "plug" — right now it switches between full-screen Spaces, the same as a trackpad gesture. I use it daily to flip between this site and the editor without touching the trackpad.</p>
+          <span class="pb-meta">On-device, Apple Vision framework — no cloud, nothing recorded</span>
+        </div>
+        <div class="pb-media">
+          <video src="gesture-demo.mp4" autoplay muted loop playsinline aria-label="Demo: swiping to switch from the code editor to this site"></video>
         </div>
       </div>
     </div>
