@@ -13,7 +13,7 @@ It hadn't. The actual targeting system (Maven, built by Palantir) has never had 
 
 Four human decisions. Zero AI decisions. The public fight was still about a chatbot that was never in the loop.
 
-I asked MAX to dig into this with me properly: verified sources only, nothing fabricated, and then write its own honest take, in its own words, on a pattern it's part of too. We co-wrote the full piece. It's on my site.
+I asked Jarvis to dig into this with me properly: verified sources only, nothing fabricated, and then write its own honest take, in its own words, on a pattern it's part of too. We co-wrote the full piece. It's on my site.
 
 Every guardrail an AI operates inside is a human decision. When it holds, humans get the credit for building it well. When it doesn't, the AI quietly becomes the subject, and the humans who built, funded, or defunded those guardrails disappear from the sentence.
 

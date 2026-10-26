@@ -492,57 +492,25 @@
   .viewer-count .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
   .viewer-count strong{color:var(--text);font-weight:600;}
 
-  /* ---------- Mascot: a tiny animated version of me that hops between
-     sections as you scroll and says hi. Fixed position, event-driven
-     (IntersectionObserver only -- no scroll listener, so it costs nothing
-     while you're not crossing a section boundary). ---------- */
+  /* ---------- Mascot: an interactive page-mascot character (gearbot) that
+     turns its head to track the cursor and reacts on click. Two layered
+     3x3 sprite sheets (head directions + click reactions); JS swaps which
+     cell shows via background-position. https://github.com/nilbuild/page-mascot ---------- */
   .mascot{
     position:fixed;right:18px;bottom:18px;z-index:40;
-    display:flex;flex-direction:column;align-items:flex-end;gap:8px;
-    pointer-events:none;
+    width:72px;height:72px;padding:0;border:0;display:block;
+    background:transparent;appearance:none;cursor:pointer;user-select:none;
   }
-  .mascot-avatar{
-    width:56px;height:56px;border-radius:50%;overflow:hidden;cursor:pointer;
-    pointer-events:auto;
-    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
-    border:1px solid var(--glass-border);
-    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 14px 34px -12px var(--glass-shadow);
-    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-    animation:mascot-bob 3.2s ease-in-out infinite;
-    transition:transform 0.15s ease;
+  .mascot-squash{position:relative;display:block;width:100%;height:100%;transform-origin:50% 78%;}
+  .mascot-layer{
+    position:absolute;inset:0;background-size:300% 300%;background-repeat:no-repeat;
+    transition:opacity 0.12s ease;
   }
-  .mascot-avatar:hover{transform:scale(1.06);}
-  .mascot-avatar img{width:100%;height:100%;object-fit:cover;display:block;transform:translateY(2px) scale(1.12);}
-  .mascot-avatar.jump{animation:mascot-jump 0.5s cubic-bezier(.22,.8,.32,1);}
-  @keyframes mascot-bob{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-5px);}
-  }
-  @keyframes mascot-jump{
-    0%{transform:translateY(0) scale(1);}
-    35%{transform:translateY(-22px) scale(1.05);}
-    60%{transform:translateY(0) scale(0.96);}
-    80%{transform:translateY(-6px) scale(1.02);}
-    100%{transform:translateY(0) scale(1);}
-  }
-  .mascot-bubble{
-    max-width:200px;padding:9px 13px;border-radius:12px 12px 2px 12px;
-    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo));
-    border:1px solid var(--glass-border);
-    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 14px 34px -12px var(--glass-shadow);
-    -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
-    font-family:'Sora',system-ui,sans-serif;font-size:0.82rem;color:var(--text);
-    opacity:0;transform:translateY(6px) scale(0.96);transition:opacity 0.3s ease, transform 0.3s ease;
-  }
-  .mascot-bubble.show{opacity:1;transform:none;}
+  .mascot-reactions{opacity:0;}
+  .mascot.reacting .mascot-directions{opacity:0;}
+  .mascot.reacting .mascot-reactions{opacity:1;}
   @media (max-width:640px){
-    .mascot{right:12px;bottom:12px;}
-    .mascot-avatar{width:44px;height:44px;}
-    .mascot-bubble{max-width:150px;font-size:0.76rem;padding:7px 10px;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .mascot-avatar{animation:none;}
-    .mascot-avatar.jump{animation:none;}
+    .mascot{right:12px;bottom:12px;width:56px;height:56px;}
   }
 
   /* ---------- Big Bang transition into Future Mode ---------- */
@@ -671,8 +639,9 @@
       <div class="pb-cyl">
         <div class="pb-text">
           <span class="pb-index">01</span>
-          <h3>MAX</h3>
+          <h3>Jarvis</h3>
           <p>A personal AI operating system built from the ground up — a reasoning core that tiers between fast local inference and frontier models, wired into voice, home automation, and real tool use.</p>
+          <p>Originally built as MAX; renamed to Jarvis after Marvel's <em>VisionQuest</em> — Tony Stark's original AI sacrificing his own code so the assistants living inside Vision's mind (FRIDAY, EDITH, and the rest) could keep running. A fitting namesake for something built to work quietly in the background so everything else keeps running.</p>
           <span class="pb-meta">In active development</span>
         </div>
         <div class="pb-media stat-media">
@@ -745,7 +714,7 @@
         <div class="pb-text">
           <span class="pb-index">06</span>
           <h3>Gesture Control</h3>
-          <p>A hand-swipe tool built into MAX — Apple's Vision framework tracks my wrist through the webcam, no cloud, no MediaPipe (its native hand-tracking crashed hard on this Mac, so this runs on Apple's own on-device model instead). A swipe maps to a swappable "plug" — right now it switches between full-screen Spaces, the same as a trackpad gesture. I use it daily to flip between this site and the editor without touching the trackpad.</p>
+          <p>A hand-swipe tool built into Jarvis — Apple's Vision framework tracks my wrist through the webcam, no cloud, no MediaPipe (its native hand-tracking crashed hard on this Mac, so this runs on Apple's own on-device model instead). A swipe maps to a swappable "plug" — right now it switches between full-screen Spaces, the same as a trackpad gesture. I use it daily to flip between this site and the editor without touching the trackpad.</p>
           <span class="pb-meta">On-device, Apple Vision framework — no cloud, nothing recorded</span>
         </div>
         <div class="pb-media">
@@ -761,7 +730,7 @@
   <div class="section-glow" aria-hidden="true"></div>
   <div class="wrap">
     <p class="section-label reveal"><span>04</span> — Responsible AI</p>
-    <p class="ai-intro reveal">"Responsible AI" gets used to mean a lot of things. Three honest, sourced pieces — co-researched with MAX — on what it actually costs, who actually gets blamed when it fails, and where it genuinely helps.</p>
+    <p class="ai-intro reveal">"Responsible AI" gets used to mean a lot of things. Three honest, sourced pieces — co-researched with Jarvis — on what it actually costs, who actually gets blamed when it fails, and where it genuinely helps.</p>
     <div class="ai-highlights stagger">
       <a class="ai-card reveal motion-tilt" style="--i:0" href="responsible-ai/who-takes-the-blame.html">
         <span class="pb-index">Accountability</span>
@@ -790,7 +759,7 @@
   <div class="section-glow" aria-hidden="true"></div>
   <div class="wrap">
     <p class="section-label reveal"><span>05</span> — Mindfulness</p>
-    <p class="games-intro reveal">Three small, mindful games — designed and coded end-to-end by MAX, my personal AI system. No build tools, no tracking, nothing stored. Just something quiet to play with for a minute.</p>
+    <p class="games-intro reveal">Three small, mindful games — designed and coded end-to-end by Jarvis, my personal AI system. No build tools, no tracking, nothing stored. Just something quiet to play with for a minute.</p>
     <div class="games-grid stagger">
       <div class="reveal" style="--i:0">
         <div class="game-card motion-tilt">
@@ -893,12 +862,12 @@
   </div>
 </footer>
 
-<div class="mascot" id="siteMascot" aria-hidden="true">
-  <div class="mascot-bubble" id="mascotBubble"></div>
-  <div class="mascot-avatar" id="mascotAvatar">
-    <img src="mascot.png" width="56" height="56" alt="" loading="eager">
-  </div>
-</div>
+<button type="button" class="mascot" id="siteMascot" aria-label="Boop the mascot">
+  <span class="mascot-squash" id="mascotSquash">
+    <span class="mascot-layer mascot-directions" id="mascotDirections"></span>
+    <span class="mascot-layer mascot-reactions" id="mascotReactions"></span>
+  </span>
+</button>
 
 <script>
 (function(){
@@ -1386,65 +1355,131 @@
     });
   })();
 
-  // ---- Mascot: hops to each section as you scroll into it, says a short
-  // line once per section (event-driven off the same IntersectionObserver
-  // pattern as .reveal -- no scroll listener, so it's free while idle). ----
+  // ---- Mascot: page-mascot (https://github.com/nilbuild/page-mascot), ported
+  // to vanilla JS. Two 3x3 sprite sheets -- head directions and click
+  // reactions -- swapped via background-position. The head tracks the
+  // pointer's angle (with a dead zone + hysteresis so it doesn't jitter);
+  // clicking "boops" it through blink -> a payoff reaction, escalating to
+  // "dizzy" after a few rapid boops. ----
   (function () {
-    var avatar = document.getElementById('mascotAvatar');
-    var bubble = document.getElementById('mascotBubble');
-    if (!avatar || !bubble) return;
+    var root = document.getElementById('siteMascot');
+    var squash = document.getElementById('mascotSquash');
+    var directionsLayer = document.getElementById('mascotDirections');
+    var reactionsLayer = document.getElementById('mascotReactions');
+    if (!root || !directionsLayer || !reactionsLayer) return;
 
-    var GREETINGS = {
-      top: "Hey, I'm Sarath! 👋",
-      background: 'This is my story 📖',
-      quotes: 'Words I actually live by',
-      proof: "Here's what I've shipped 🚀",
-      'responsible-ai': "Let's talk AI, honestly",
-      games: 'Take a breather with me 🎮'
-    };
-    var bubbleTimer = null;
+    directionsLayer.style.backgroundImage = "url('pagemascot-directions.webp')";
+    reactionsLayer.style.backgroundImage = "url('pagemascot-reactions.webp')";
 
-    function say(text) {
-      if (!text) return;
-      bubble.textContent = text;
-      bubble.classList.add('show');
-      clearTimeout(bubbleTimer);
-      bubbleTimer = setTimeout(function () { bubble.classList.remove('show'); }, 3200);
+    var DIRECTIONS = ['up-left', 'up', 'up-right', 'left', 'center', 'right', 'down-left', 'down', 'down-right'];
+    var REACTIONS = ['blink', 'heart', 'sparkle', 'surprised', 'wink', 'bashful', 'sleepy', 'dizzy', 'delighted'];
+    // Clockwise from the right, matching atan2 with y pointing down.
+    var CLOCKWISE = ['right', 'down-right', 'down', 'down-left', 'left', 'up-left', 'up', 'up-right'];
+    var SECTOR = (Math.PI * 2) / CLOCKWISE.length;
+    var HYSTERESIS = 0.12;
+    var DEAD_ZONE = 70;
+
+    var PAYOFFS = ['heart', 'sparkle', 'delighted'];
+    var BOOP_PAYOFF = 120, BOOP_END = 560, SQUASH_MS = 420;
+    var DIZZY_AFTER = 4, DIZZY_WINDOW = 1600, DIZZY_END = 1100;
+
+    var SQUASH_KEYFRAMES = [
+      { transform: 'scale(1, 1)', easing: 'ease-in' },
+      { transform: 'scale(1.10, 0.86)', offset: 0.18, easing: 'ease-out' },
+      { transform: 'scale(0.95, 1.08)', offset: 0.45, easing: 'ease-in-out' },
+      { transform: 'scale(1.03, 0.97)', offset: 0.72, easing: 'ease-in-out' },
+      { transform: 'scale(1, 1)' }
+    ];
+
+    function setCell(layer, index) {
+      layer.style.backgroundPosition = ((index % 3) * 50) + '% ' + (Math.floor(index / 3) * 50) + '%';
     }
 
-    function jump(text) {
-      if (!reduceMotion) {
-        avatar.classList.remove('jump');
-        // force reflow so the animation can retrigger on back-to-back jumps
-        void avatar.offsetWidth;
-        avatar.classList.add('jump');
+    function wrap(angle) {
+      return Math.atan2(Math.sin(angle), Math.cos(angle));
+    }
+
+    setCell(directionsLayer, DIRECTIONS.indexOf('center'));
+    setCell(reactionsLayer, REACTIONS.indexOf('blink'));
+
+    // Head-tracking: only on devices with a real mouse/trackpad.
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      var sector = -1;
+      var pointer = null;
+
+      var aim = function () {
+        if (!pointer) return;
+        var box = root.getBoundingClientRect();
+        var dx = pointer.x - (box.left + box.width / 2);
+        var dy = pointer.y - (box.top + box.height / 2);
+
+        if (Math.hypot(dx, dy) < DEAD_ZONE) {
+          sector = -1;
+          setCell(directionsLayer, DIRECTIONS.indexOf('center'));
+          return;
+        }
+
+        // Hold the current sector until the pointer is well past its edge.
+        var angle = Math.atan2(dy, dx);
+        if (sector !== -1 && Math.abs(wrap(angle - sector * SECTOR)) < SECTOR / 2 + HYSTERESIS) {
+          return;
+        }
+
+        sector = (Math.round(angle / SECTOR) + CLOCKWISE.length) % CLOCKWISE.length;
+        setCell(directionsLayer, DIRECTIONS.indexOf(CLOCKWISE[sector]));
+      };
+
+      window.addEventListener('pointermove', function (e) {
+        pointer = { x: e.clientX, y: e.clientY };
+        aim();
+      }, { passive: true });
+      window.addEventListener('scroll', aim, { passive: true });
+    }
+
+    var timers = [];
+    var boops = { count: 0, at: 0 };
+
+    function clearTimers() {
+      timers.forEach(clearTimeout);
+      timers = [];
+    }
+
+    function showReaction(name) {
+      if (name) {
+        setCell(reactionsLayer, REACTIONS.indexOf(name));
+        root.classList.add('reacting');
+      } else {
+        root.classList.remove('reacting');
       }
-      say(text);
     }
 
-    var seen = {};
-    var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
-    if (sections.length && 'IntersectionObserver' in window) {
-      var sectionIo = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          var id = entry.target.id;
-          if (seen[id]) return;
-          seen[id] = true;
-          jump(GREETINGS[id]);
-        });
-      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-      sections.forEach(function (el) { sectionIo.observe(el); });
+    function boop() {
+      clearTimers();
+
+      var later = function (ms, next) {
+        timers.push(setTimeout(function () { showReaction(next); }, ms));
+      };
+
+      var now = Date.now();
+      boops.count = now - boops.at < DIZZY_WINDOW ? boops.count + 1 : 1;
+      boops.at = now;
+
+      if (boops.count >= DIZZY_AFTER) {
+        boops.count = 0;
+        showReaction('dizzy');
+        later(DIZZY_END, null);
+      } else {
+        showReaction('blink');
+        later(BOOP_PAYOFF, PAYOFFS[(boops.count - 1) % PAYOFFS.length]);
+        later(BOOP_END, null);
+      }
+
+      if (!reduceMotion && squash.animate) {
+        squash.animate(SQUASH_KEYFRAMES, { duration: SQUASH_MS, easing: 'linear' });
+      }
     }
 
-    // Initial hello shortly after load, before any section has been "seen".
-    setTimeout(function () { jump(GREETINGS.top); }, 900);
-
-    // Poke it -- click/tap replays a friendly bounce.
-    avatar.addEventListener('click', function () {
-      var lines = ['Still building 🛠️', 'Effort never goes unpaid', "Let's build something →"];
-      jump(lines[Math.floor(Math.random() * lines.length)]);
-    });
+    root.addEventListener('click', boop);
   })();
 
   // ---- Viewer count (via a Cloudflare Worker proxy -- keeps the real
