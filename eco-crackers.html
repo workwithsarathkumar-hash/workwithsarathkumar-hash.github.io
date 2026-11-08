@@ -251,7 +251,7 @@
       </div>
 
       <div class="stick-holder">
-        <div class="doop-stick" data-stick tabindex="0" role="button" aria-label="Lighting stick — drag onto the glowing fuse, or press Enter to light it">
+        <div class="doop-stick" data-stick tabindex="0" role="button" aria-label="Lighting stick — drag it onto the glowing fuse and hold it there to light it">
           <div class="stick-tip"></div>
         </div>
       </div>
@@ -259,7 +259,7 @@
       <div class="stage-toast" data-toast></div>
     </div>
 
-    <p class="stage-hint">Drag the glowing stick onto the pulsing fuse — or just tap the fuse, or focus the stick and press Enter.</p>
+    <p class="stage-hint">Drag the glowing stick onto the pulsing fuse and hold it there for a second.</p>
 
     <div class="eco-note">
       <h3>Why this exists</h3>
@@ -674,10 +674,20 @@
     }
   }
 
-  // ---------- stick drag ----------
-  var dragging = false, baseX = 0, baseY = 0, startX = 0, startY = 0;
+  // ---------- stick drag: hold near the fuse to light it ----------
+  var HOLD_MS = 500;
+  var dragging = false, baseX = 0, baseY = 0, startX = 0, startY = 0, nearSince = null;
+  function releaseStick () {
+    dragging = false;
+    nearSince = null;
+    stick.classList.remove('dragging');
+    stage.classList.remove('fuse-near');
+    stick.style.transition = 'transform 0.38s cubic-bezier(.22,.9,.3,1.1)';
+    stick.style.transform = 'translate(0,0) rotate(-32deg)';
+  }
   stick.addEventListener('pointerdown', function (e) {
     dragging = true;
+    nearSince = null;
     stick.classList.add('dragging');
     startX = e.clientX; startY = e.clientY;
     baseX = 0; baseY = 0;
@@ -693,7 +703,18 @@
     stick.style.transform = 'translate(' + (baseX + dx) + 'px,' + (baseY + dy) + 'px) rotate(-32deg)';
     var tip = stickTipCenter();
     var fuse = fuseCenter();
-    stage.classList.toggle('fuse-near', dist(tip, fuse) < 32);
+    var isNear = dist(tip, fuse) < 32;
+    stage.classList.toggle('fuse-near', isNear);
+    if (isNear) {
+      if (nearSince == null) { nearSince = performance.now(); }
+      else if (!lit && (performance.now() - nearSince) >= HOLD_MS) {
+        ignite();
+        releaseStick();
+        return;
+      }
+    } else {
+      nearSince = null;
+    }
     if (Math.random() < 0.5) {
       var p = toStage(tip.x, tip.y);
       emitSpark(p.x, p.y, { spread: 0.9, minSpeed: 5, maxSpeed: 20, minSize: 0.5, maxSize: 1.1, color: '#FFC24D', minLife: 0.15, maxLife: 0.3, gravity: 40, glowSize: 5 });
@@ -701,28 +722,10 @@
   });
   function endDrag (e) {
     if (!dragging) { return; }
-    dragging = false;
-    stick.classList.remove('dragging');
-    stage.classList.remove('fuse-near');
-    var tip = stickTipCenter();
-    var fuse = fuseCenter();
-    var hit = dist(tip, fuse) < 34;
-    stick.style.transition = 'transform 0.38s cubic-bezier(.22,.9,.3,1.1)';
-    stick.style.transform = 'translate(0,0) rotate(-32deg)';
-    if (hit) { ignite(); }
+    releaseStick();
   }
   stick.addEventListener('pointerup', endDrag);
   stick.addEventListener('pointercancel', endDrag);
-  stick.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ignite(); }
-  });
-
-  // tap-to-light fallback on the fuse itself
-  stage.addEventListener('click', function (e) {
-    if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-tip')) {
-      ignite();
-    }
-  });
 
   // ---------- cracker switching ----------
   function selectType (type) {
