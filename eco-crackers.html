@@ -80,11 +80,6 @@
   @keyframes fusePulse{0%,100%{transform:scale(0.9);opacity:0.35;}50%{transform:scale(1.15);opacity:0.75;}}
   .stage.fuse-near .fuse-point::after{border-color:var(--accent-strong);opacity:1;}
 
-  /* sparkler */
-  .rig-sparkler .rod{position:absolute;left:50%;bottom:16%;width:5px;height:150px;transform:translateX(-50%);background:linear-gradient(180deg,#cfd3da,#8a8f99);border-radius:3px;}
-  .rig-sparkler .tip{left:50%;top:-7px;transform:translateX(-50%);background:radial-gradient(circle,#d7dadf 0%,#9a9ea6 70%,transparent 100%);}
-  .rig-sparkler .tip.lit{background:radial-gradient(circle,#fff3c4 0%,#ffb03d 50%,#c23b0e 80%,transparent 100%);box-shadow:0 0 16px 5px rgba(255,170,60,0.75),0 0 34px 12px rgba(255,90,20,0.4);}
-
   /* anaar / flower pot */
   .rig-anaar .pot{position:absolute;left:50%;bottom:16%;width:64px;height:54px;transform:translateX(-50%);
     background:linear-gradient(180deg,#8a5a34,#5c3a1f);border-radius:6px 6px 26px 26px/6px 6px 40px 40px;
@@ -194,8 +189,7 @@
   <div class="wrap">
 
     <div class="cracker-shelf" role="tablist" aria-label="Choose a cracker">
-      <button class="cracker-choice" type="button" data-cracker="sparkler" aria-selected="true">✨ Sparkler</button>
-      <button class="cracker-choice" type="button" data-cracker="anaar" aria-selected="false">🌺 Flower Pot</button>
+      <button class="cracker-choice" type="button" data-cracker="anaar" aria-selected="true">🌺 Flower Pot</button>
       <button class="cracker-choice" type="button" data-cracker="chakra" aria-selected="false">🌀 Chakra</button>
       <button class="cracker-choice" type="button" data-cracker="rocket" aria-selected="false">🚀 Rocket</button>
       <button class="cracker-choice" type="button" data-cracker="ladi" aria-selected="false">🧨 Ladi / Saravedi</button>
@@ -206,12 +200,7 @@
       <div class="stage-flash" data-flash></div>
       <div class="stage-ground"></div>
 
-      <div class="cracker-rig rig-sparkler is-active" data-rig="sparkler">
-        <div class="rod"></div>
-        <div class="fuse-point tip" data-tip></div>
-      </div>
-
-      <div class="cracker-rig rig-anaar" data-rig="anaar">
+      <div class="cracker-rig rig-anaar is-active" data-rig="anaar">
         <div class="pot"></div>
         <div class="pot-band"></div>
         <div class="fuse-wick"></div>
@@ -263,7 +252,7 @@
 
     <div class="eco-note">
       <h3>Why this exists</h3>
-      <p>Every Diwali, the air over Indian cities spikes to some of the worst particulate levels of the year, burn wards fill up, and streets full of dogs, birds, and infants sit through hours of noise well past safe limits — all for a few seconds of color each. This page is the same spark, the same sound, the same small ritual of lighting something by hand — just moved entirely off the atmosphere and onto a screen. Pick a cracker, light it as many times as you want, and leave nothing behind.</p>
+      <p>Every Diwali, the air over Indian cities spikes to some of the worst particulate levels of the year, burn wards fill up, and streets full of dogs, birds, and infants sit through hours of noise well past safe limits — all for a few seconds of color each. This page is the same spark, the same sound, the same small ritual of lighting something by hand — just moved entirely off the atmosphere and onto a screen. Pick a cracker, light it as many times as you want, and leave nothing behind. Even the sparkler you hand a kid isn't innocent — it burns at close to 1800°C and showers hot metal flakes onto hands and feet, behind more Diwali ER visits than almost any other cracker.</p>
     </div>
 
   </div>
@@ -291,7 +280,7 @@
   var isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
   var motionScale = reduceMotion ? 0.5 : (isCoarsePointer ? 0.75 : 1);
 
-  var currentType = 'sparkler';
+  var currentType = 'anaar';
   var lit = false;
   var timers = []; // interval/timeout ids to clear on reset
   var raf1 = null; // dedicated rAF ids for chakra / rocket loops
@@ -460,7 +449,6 @@
 
   // ---------- eco facts per type ----------
   var FACTS = {
-    sparkler: 'A real sparkler burns at close to 1800°C and showers hot metal flakes onto hands and feet — more Diwali ER visits than almost any other cracker. This one only glows on your screen.',
     anaar: 'Flower pots tipping over mid-burn cause some of the worst Diwali burn injuries every year. This one can\'t tip, can\'t burn, can\'t scar.',
     chakra: 'Ground chakras fling sparks low and sideways, right at ankles and bare feet. This one only spins light.',
     rocket: 'Stray rockets are behind more Diwali fire-brigade calls than any other cracker — roofs, trees, parked bikes. This one always lands exactly where you are: your screen.',
@@ -481,10 +469,7 @@
   }
 
   function resetVisual (type) {
-    if (type === 'sparkler') {
-      var tip = document.querySelector('.rig-sparkler .tip');
-      tip.classList.remove('lit');
-    } else if (type === 'chakra') {
+    if (type === 'chakra') {
       wheel.style.transform = 'translate(-50%,-50%) rotate(0deg)';
     } else if (type === 'rocket') {
       rocketGroup.style.transition = 'none';
@@ -502,30 +487,7 @@
     var local = toStage(fuse.x, fuse.y);
     var type = currentType;
 
-    if (type === 'sparkler') {
-      var tip = document.querySelector('.rig-sparkler .tip');
-      tip.classList.add('lit');
-      SFX.fizzle(3.0, 0);
-      var dur = 3100, start = performance.now();
-      var id = setInterval(function () {
-        var elapsed = performance.now() - start;
-        if (elapsed > dur) {
-          clearInterval(id); tip.classList.remove('lit'); lit = false; return;
-        }
-        var fade = 1 - elapsed / dur;
-        var n = Math.round((3 + Math.random() * 3) * motionScale);
-        for (var k = 0; k < n; k++) {
-          emitSpark(local.x, local.y, {
-            spread: Math.PI * 2, minSpeed: 15, maxSpeed: 20 + 80 * fade,
-            minSize: 0.7, maxSize: 2.1, color: pick(['#FFE9B0', '#FFFFFF', '#FFC24D']),
-            minLife: 0.25, maxLife: 0.6, gravity: 150
-          });
-        }
-      }, 40);
-      timers.push(id);
-      showToast(FACTS.sparkler);
-
-    } else if (type === 'anaar') {
+    if (type === 'anaar') {
       SFX.fuseHiss(0);
       var t1 = setTimeout(function () {
         doFlash();
