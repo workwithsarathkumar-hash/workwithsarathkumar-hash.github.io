@@ -610,8 +610,15 @@
 
     } else if (type === 'ladi') {
       ladiUnits.forEach(function (u) { u.classList.remove('flash', 'spent'); });
-      ladiUnits.forEach(function (u, idx) {
-        var delay = idx * 32 + Math.random() * 14;
+      var order = ladiUnits.map(function (_, i) { return i; });
+      for (var oi = order.length - 1; oi > 0; oi--) {
+        var oj = Math.floor(Math.random() * (oi + 1));
+        var tmp = order[oi]; order[oi] = order[oj]; order[oj] = tmp;
+      }
+      var tAcc = 0;
+      order.forEach(function (unitIdx, seq) {
+        tAcc += 10 + Math.random() * Math.random() * 90;
+        var u = ladiUnits[unitIdx];
         var id3 = setTimeout(function () {
           var rect = u.getBoundingClientRect();
           var p = toStage(rect.left + rect.width / 2, rect.top + rect.height / 2);
@@ -627,11 +634,11 @@
           }
           var id4 = setTimeout(function () { u.classList.remove('flash'); u.classList.add('spent'); }, 140);
           timers.push(id4);
-          if (idx === ladiUnits.length - 1) {
+          if (seq === order.length - 1) {
             var id5 = setTimeout(function () { lit = false; }, 300);
             timers.push(id5);
           }
-        }, delay);
+        }, tAcc);
         timers.push(id3);
       });
       showToast(FACTS.ladi);
