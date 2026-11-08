@@ -109,12 +109,12 @@
   .rig-rocket .fuse-point{left:50%;bottom:16%;transform:translate(-50%,2px);background:#9a7a4a;}
 
   /* ladi / string */
-  .rig-ladi .thread{position:absolute;left:50%;bottom:calc(16% + 26px);width:260px;height:2px;transform:translateX(-50%);background:#4a3c2c;}
-  .rig-ladi .units{position:absolute;left:50%;bottom:calc(16% + 10px);width:260px;transform:translateX(-50%);display:flex;justify-content:space-between;}
-  .rig-ladi .unit{width:14px;height:30px;border-radius:3px;background:linear-gradient(180deg,#e63946,#9c1c2e);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset;transition:background 0.25s ease,transform 0.1s ease;}
-  .rig-ladi .unit.flash{background:#fff;box-shadow:0 0 16px 6px rgba(255,255,255,0.9);transform:scale(1.12);}
+  .rig-ladi .thread{position:absolute;left:50%;bottom:calc(16% + 26px);width:88%;max-width:320px;height:2px;transform:translateX(-50%);background:#4a3c2c;}
+  .rig-ladi .units{position:absolute;left:50%;bottom:calc(16% + 10px);width:88%;max-width:320px;transform:translateX(-50%);display:flex;justify-content:space-between;}
+  .rig-ladi .unit{width:7px;height:26px;border-radius:2px;background:linear-gradient(180deg,#e63946,#9c1c2e);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset;transition:background 0.2s ease,transform 0.08s ease;}
+  .rig-ladi .unit.flash{background:#fff;box-shadow:0 0 16px 6px rgba(255,255,255,0.9);transform:scale(1.25);}
   .rig-ladi .unit.spent{background:linear-gradient(180deg,#3a3a3a,#232323);}
-  .rig-ladi .fuse-point{left:calc(50% - 130px);bottom:calc(16% + 26px);background:#9a7a4a;}
+  .rig-ladi .fuse-point{left:calc(50% - min(44%,160px) - 3px);bottom:calc(16% + 26px);background:#9a7a4a;}
 
   /* ---------- doop stick ---------- */
   .stick-holder{position:absolute;right:16px;bottom:16%;width:60px;height:150px;z-index:4;}
@@ -227,15 +227,7 @@
 
       <div class="cracker-rig rig-ladi" data-rig="ladi">
         <div class="thread"></div>
-        <div class="units" data-ladi-units>
-          <div class="unit" data-unit="0"></div>
-          <div class="unit" data-unit="1"></div>
-          <div class="unit" data-unit="2"></div>
-          <div class="unit" data-unit="3"></div>
-          <div class="unit" data-unit="4"></div>
-          <div class="unit" data-unit="5"></div>
-          <div class="unit" data-unit="6"></div>
-        </div>
+        <div class="units" data-ladi-units></div>
         <div class="fuse-point" data-tip></div>
       </div>
 
@@ -274,6 +266,16 @@
   var toast = document.querySelector('[data-toast]');
   var wheel = document.querySelector('[data-wheel]');
   var rocketGroup = document.querySelector('[data-rocket-group]');
+  var LADI_COUNT = 26;
+  (function buildLadiUnits () {
+    var wrap = document.querySelector('[data-ladi-units]');
+    for (var i = 0; i < LADI_COUNT; i++) {
+      var u = document.createElement('div');
+      u.className = 'unit';
+      u.setAttribute('data-unit', i);
+      wrap.appendChild(u);
+    }
+  })();
   var ladiUnits = Array.prototype.slice.call(document.querySelectorAll('[data-ladi-units] .unit'));
   var shelfButtons = Array.prototype.slice.call(document.querySelectorAll('.cracker-choice'));
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -609,13 +611,13 @@
     } else if (type === 'ladi') {
       ladiUnits.forEach(function (u) { u.classList.remove('flash', 'spent'); });
       ladiUnits.forEach(function (u, idx) {
-        var delay = idx * 130 + Math.random() * 40;
+        var delay = idx * 32 + Math.random() * 14;
         var id3 = setTimeout(function () {
           var rect = u.getBoundingClientRect();
           var p = toStage(rect.left + rect.width / 2, rect.top + rect.height / 2);
           u.classList.add('flash');
           SFX.pop(0);
-          var n4 = Math.round(8 * motionScale);
+          var n4 = Math.round(6 * motionScale);
           for (var k = 0; k < n4; k++) {
             emitSpark(p.x, p.y, {
               spread: Math.PI * 2, minSpeed: 30, maxSpeed: 110, gravity: 260,
