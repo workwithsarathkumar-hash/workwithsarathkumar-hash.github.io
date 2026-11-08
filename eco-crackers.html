@@ -71,6 +71,7 @@
   .fx-canvas{position:absolute;inset:0;z-index:3;pointer-events:none;}
   .stage-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:6;}
   .stage-flash.go{opacity:0.55;transition:opacity 0.45s ease-out;}
+  .stage-flash.go-big{opacity:0.95;transition:opacity 0.8s ease-out;}
 
   .cracker-rig{position:absolute;inset:0;z-index:2;display:none;}
   .cracker-rig.is-active{display:block;}
@@ -117,6 +118,33 @@
   .rig-ladi .unit.spent{background:linear-gradient(180deg,#3a3a3a,#232323);}
   .rig-ladi .fuse-point{left:calc(50% - min(44%,160px) - 3px);bottom:calc(16% + 27px);background:#9a7a4a;}
 
+  /* atom bomb */
+  .rig-atombomb .bomb-body{position:absolute;left:50%;bottom:16%;width:48px;height:40px;transform:translateX(-50%);background:linear-gradient(180deg,#54545c,#1c1c20);border-radius:50% 50% 8px 8px/65% 65% 8px 8px;box-shadow:0 1px 0 rgba(255,255,255,0.12) inset;}
+  .rig-atombomb .bomb-band{position:absolute;left:50%;bottom:calc(16% + 14px);width:50px;height:7px;transform:translateX(-50%);background:#e63946;border-radius:2px;}
+  .rig-atombomb .bomb-cap{position:absolute;left:50%;bottom:calc(16% + 36px);width:12px;height:10px;transform:translateX(-50%);background:#2b2b30;border-radius:3px 3px 0 0;}
+  .rig-atombomb .fuse-point{left:50%;bottom:calc(16% + 44px);transform:translateX(-50%);background:#9a7a4a;}
+  .shockwave{
+    position:absolute;left:50%;bottom:calc(16% + 20px);width:10px;height:10px;
+    transform:translate(-50%,50%) scale(1);border-radius:50%;
+    border:3px solid rgba(255,225,160,0.9);opacity:0;pointer-events:none;z-index:4;
+  }
+  .shockwave.go{animation:shockwaveExpand 0.7s ease-out forwards;}
+  @keyframes shockwaveExpand{
+    0%{opacity:0.9;transform:translate(-50%,50%) scale(1);}
+    100%{opacity:0;transform:translate(-50%,50%) scale(38);}
+  }
+  .stage.shake{animation:stageShake 0.42s ease-in-out;}
+  @keyframes stageShake{
+    0%{transform:translate(0,0);}15%{transform:translate(-7px,3px);}30%{transform:translate(6px,-5px);}
+    45%{transform:translate(-5px,5px);}60%{transform:translate(5px,-3px);}75%{transform:translate(-3px,2px);}
+    100%{transform:translate(0,0);}
+  }
+
+  /* multi-shot repeater */
+  .rig-multirocket .crate{position:absolute;left:50%;bottom:16%;width:84px;height:26px;transform:translateX(-50%);background:linear-gradient(180deg,#6b4a2f,#3f2a1a);border-radius:3px;box-shadow:0 1px 0 rgba(255,255,255,0.1) inset;}
+  .rig-multirocket .crate::before{content:'';position:absolute;inset:4px 6px;background:repeating-linear-gradient(90deg,#1c130b 0 6px,transparent 6px 14px);border-radius:2px;}
+  .rig-multirocket .fuse-point{left:calc(50% + 30px);bottom:calc(16% + 22px);background:#9a7a4a;}
+
   /* ---------- doop stick ---------- */
   .stick-holder{position:absolute;right:16px;bottom:16%;width:60px;height:150px;z-index:4;}
   .doop-stick{
@@ -138,11 +166,11 @@
   @keyframes emberFlicker{from{opacity:0.82;transform:translateX(-50%) scale(0.9);}to{opacity:1;transform:translateX(-50%) scale(1.1);}}
 
   .stage-toast{
-    position:absolute;left:50%;bottom:4%;transform:translateX(-50%);z-index:5;max-width:88%;
-    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(9,10,12,0.72);
+    max-width:640px;margin:14px auto 0;min-height:3.2em;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(9,10,12,0.5);
     border:1px solid var(--glass-border);border-radius:10px;padding:12px 16px;
     font-size:0.86rem;color:var(--text-soft);text-align:center;
-    opacity:0;pointer-events:none;transition:opacity 0.4s ease;
+    opacity:0;transition:opacity 0.4s ease;
   }
   .stage-toast.show{opacity:1;}
 
@@ -162,7 +190,7 @@
     .cracker-shelf{gap:8px;justify-content:center;}
     .cracker-choice{padding:11px 14px;font-size:0.76rem;}
     .stick-holder{right:8px;}
-    .stage-toast{font-size:0.82rem;padding:10px 14px;bottom:3%;}
+    .stage-toast{font-size:0.82rem;padding:10px 14px;}
     .stage-hint{font-size:0.73rem;padding:0 6px;}
   }
 
@@ -194,6 +222,8 @@
       <button class="cracker-choice" type="button" data-cracker="chakra" aria-selected="false">🌀 Chakra</button>
       <button class="cracker-choice" type="button" data-cracker="rocket" aria-selected="false">🚀 Rocket</button>
       <button class="cracker-choice" type="button" data-cracker="ladi" aria-selected="false">🧨 Ladi / Saravedi</button>
+      <button class="cracker-choice" type="button" data-cracker="atombomb" aria-selected="false">💣 Atom Bomb</button>
+      <button class="cracker-choice" type="button" data-cracker="multirocket" aria-selected="false">🎇 Multi-Shot</button>
     </div>
 
     <div class="stage" data-stage>
@@ -232,15 +262,27 @@
         <div class="fuse-point" data-tip></div>
       </div>
 
+      <div class="cracker-rig rig-atombomb" data-rig="atombomb">
+        <div class="bomb-body"></div>
+        <div class="bomb-band"></div>
+        <div class="bomb-cap"></div>
+        <div class="shockwave" data-shockwave></div>
+        <div class="fuse-point" data-tip></div>
+      </div>
+
+      <div class="cracker-rig rig-multirocket" data-rig="multirocket">
+        <div class="crate"></div>
+        <div class="fuse-point" data-tip></div>
+      </div>
+
       <div class="stick-holder">
         <div class="doop-stick" data-stick tabindex="0" role="button" aria-label="Lighting stick — drag it onto the glowing fuse and hold it there to light it">
           <div class="stick-tip"></div>
         </div>
       </div>
-
-      <div class="stage-toast" data-toast></div>
     </div>
 
+    <div class="stage-toast" data-toast></div>
     <p class="stage-hint">Drag the glowing stick onto the pulsing fuse and hold it there for a second.</p>
 
     <div class="eco-note">
@@ -294,7 +336,7 @@
   var currentType = 'anaar';
   var lit = false;
   var timers = []; // interval/timeout ids to clear on reset
-  var raf1 = null; // dedicated rAF ids for chakra / rocket loops
+  var rafs = []; // requestAnimationFrame ids to cancel on reset (chakra / rocket / multi-shot loops)
 
   // ---------- a few twinkling stars ----------
   (function addStars () {
@@ -369,13 +411,21 @@
     fuseHiss: function (delay) { noiseBurst({ duration: 0.5, freq: 3400, q: 0.7, filterType: 'highpass', volume: 0.1, delay: delay || 0, decay: 0.8 }); },
     fizzle: function (dur, delay) { noiseBurst({ duration: dur || 2.6, freq: 4200, q: 0.5, filterType: 'highpass', volume: 0.09, delay: delay || 0, decay: 0.2 }); },
     pop: function (delay) {
-      noiseBurst({ duration: 0.12, freq: 1800, filterType: 'bandpass', q: 0.8, volume: 0.5, delay: delay || 0, decay: 1.4 });
-      tone({ type: 'sine', freqStart: 190, freqEnd: 55, duration: 0.12, volume: 0.28, delay: delay || 0 });
+      noiseBurst({ duration: 0.22, freq: 1700, filterType: 'bandpass', q: 0.7, volume: 0.5, delay: delay || 0, decay: 1.0 });
+      noiseBurst({ duration: 0.3, freq: 450, filterType: 'lowpass', q: 0.6, volume: 0.22, delay: delay || 0, decay: 1.3 });
+      tone({ type: 'sine', freqStart: 190, freqEnd: 50, duration: 0.2, volume: 0.28, delay: delay || 0 });
     },
     whoosh: function (dur, delay) { noiseBurst({ duration: dur || 1.0, freq: 900, filterType: 'lowpass', q: 0.5, volume: 0.28, delay: delay || 0, decay: 0.9 }); },
     boom: function (delay) {
-      noiseBurst({ duration: 0.55, freq: 300, filterType: 'lowpass', q: 0.6, volume: 0.55, delay: delay || 0, decay: 1.2 });
-      tone({ type: 'sine', freqStart: 120, freqEnd: 28, duration: 0.4, volume: 0.45, delay: delay || 0 });
+      noiseBurst({ duration: 0.9, freq: 280, filterType: 'lowpass', q: 0.6, volume: 0.55, delay: delay || 0, decay: 0.9 });
+      noiseBurst({ duration: 0.4, freq: 1200, filterType: 'bandpass', q: 0.6, volume: 0.3, delay: delay || 0, decay: 1.6 });
+      tone({ type: 'sine', freqStart: 120, freqEnd: 25, duration: 0.65, volume: 0.45, delay: delay || 0 });
+    },
+    bigBoom: function (delay) {
+      noiseBurst({ duration: 1.5, freq: 200, filterType: 'lowpass', q: 0.5, volume: 0.75, delay: delay || 0, decay: 0.6 });
+      noiseBurst({ duration: 0.55, freq: 1400, filterType: 'bandpass', q: 0.6, volume: 0.42, delay: delay || 0, decay: 1.7 });
+      noiseBurst({ duration: 1.1, freq: 500, filterType: 'lowpass', q: 0.4, volume: 0.3, delay: (delay || 0) + 0.08, decay: 1.0 });
+      tone({ type: 'sine', freqStart: 95, freqEnd: 20, duration: 1.3, volume: 0.65, delay: delay || 0 });
     },
     whistleUp: function (dur, delay) { tone({ type: 'sine', freqStart: 280, freqEnd: 1300, duration: dur || 1.0, volume: 0.2, delay: delay || 0 }); },
     whirrPulse: function (delay) { noiseBurst({ duration: 0.16, freq: 650, filterType: 'bandpass', q: 2.4, volume: 0.16, delay: delay || 0, decay: 1.6 }); }
@@ -437,10 +487,63 @@
   }
   requestAnimationFrame(engineLoop);
 
-  function doFlash () {
+  function doFlash (big) {
     if (reduceMotion) { return; }
-    flash.classList.add('go');
-    setTimeout(function () { flash.classList.remove('go'); }, 60);
+    var cls = big ? 'go-big' : 'go';
+    flash.classList.add(cls);
+    setTimeout(function () { flash.classList.remove(cls); }, big ? 110 : 60);
+  }
+
+  function triggerShockwave () {
+    var el = document.querySelector('.cracker-rig.is-active [data-shockwave]');
+    if (!el || reduceMotion) { return; }
+    el.classList.remove('go');
+    void el.offsetWidth;
+    el.classList.add('go');
+  }
+
+  // fires one aerial shell from a given horizontal fraction of the stage width (0-1),
+  // used by the multi-shot repeater — a canvas-only rocket, no DOM body needed
+  function fireAerialShell (xFrac, opts) {
+    opts = opts || {};
+    var riseDur = opts.riseDur || (720 + Math.random() * 260);
+    var travel = stageRect.height * (opts.travelFrac != null ? opts.travelFrac : (0.42 + Math.random() * 0.26));
+    var startX = stageRect.width * xFrac;
+    var groundY = stageRect.height * 0.84;
+    var colorSets = [
+      ['#FF6B4A', '#FFD23F', '#FFFFFF'], ['#4DB8FF', '#FFFFFF', '#8CFF9E'],
+      ['#8CFF9E', '#FFD23F', '#4DB8FF'], ['#FF4FA0', '#FFFFFF', '#FFD23F']
+    ];
+    var colors = opts.colors || pick(colorSets);
+    SFX.whistleUp(riseDur / 1000, 0);
+    var t0 = performance.now();
+    function step () {
+      var elapsed = performance.now() - t0;
+      var p = Math.min(1, elapsed / riseDur);
+      var eased = 1 - Math.pow(1 - p, 2);
+      var y = groundY - eased * travel;
+      if (Math.random() < 0.85) {
+        emitSpark(startX, y, {
+          angle: Math.PI / 2, spread: 0.25, minSpeed: 15, maxSpeed: 45, gravity: 40,
+          color: '#FFD23F', minSize: 0.8, maxSize: 1.6, minLife: 0.18, maxLife: 0.32, glowSize: 6
+        });
+      }
+      if (p < 1) {
+        rafs.push(requestAnimationFrame(step));
+      } else {
+        SFX.boom(0);
+        if (Math.random() < 0.4) { doFlash(); }
+        var n = Math.round((32 + Math.random() * 20) * motionScale);
+        for (var k = 0; k < n; k++) {
+          emitSpark(startX, y, {
+            spread: Math.PI * 2, minSpeed: 50, maxSpeed: 200, gravity: 230,
+            color: pick(colors), minSize: 1.1, maxSize: 2.5, minLife: 0.55, maxLife: 1.15
+          });
+        }
+        if (opts.onDone) { opts.onDone(); }
+      }
+    }
+    rafs.push(requestAnimationFrame(step));
   }
 
   function toStage (clientX, clientY) {
@@ -463,7 +566,9 @@
     anaar: 'Flower pots tipping over mid-burn cause some of the worst Diwali burn injuries every year. This one can\'t tip, can\'t burn, can\'t scar.',
     chakra: 'Ground chakras fling sparks low and sideways, right at ankles and bare feet. This one only spins light.',
     rocket: 'Stray rockets are behind more Diwali fire-brigade calls than any other cracker — roofs, trees, parked bikes. This one always lands exactly where you are: your screen.',
-    ladi: 'A single ladi can peak past 125 dB — loud enough to spike real anxiety in pets, infants, and elderly ears for streets around. This one is silent outside your own speakers.'
+    ladi: 'A single ladi can peak past 125 dB — loud enough to spike real anxiety in pets, infants, and elderly ears for streets around. This one is silent outside your own speakers.',
+    atombomb: 'The "Atom Bomb" is sold as a single-shot cracker but reaches some of the highest decibel levels on the market — loud enough that several states have moved to cap or ban it outright. This one only shakes your screen.',
+    multirocket: 'Multi-shot repeaters pack dozens of explosions into one box, stretching the noise and the smoke over minutes instead of seconds — they are now one of the biggest single contributors to Diwali night\'s air-quality spike. This one can run as many encores as you want, for free.'
   };
   var toastTimer = null;
   function showToast (text) {
@@ -476,7 +581,8 @@
   function clearTimers () {
     timers.forEach(function (id) { clearTimeout(id); clearInterval(id); });
     timers = [];
-    if (raf1) { cancelAnimationFrame(raf1); raf1 = null; }
+    rafs.forEach(function (id) { cancelAnimationFrame(id); });
+    rafs = [];
   }
 
   function resetVisual (type) {
@@ -537,7 +643,7 @@
         function spin (ts) {
           var elapsed = performance.now() - start3;
           if (elapsed > dur3) {
-            raf1 = null; lit = false; return;
+            lit = false; return;
           }
           var p = elapsed / dur3;
           var speed = p < 0.25 ? (p / 0.25) : (p > 0.75 ? (1 - p) / 0.25 : 1);
@@ -558,9 +664,9 @@
             });
           }
           if (Math.random() < 0.12) { SFX.whirrPulse(0); }
-          raf1 = requestAnimationFrame(spin);
+          rafs.push(requestAnimationFrame(spin));
         }
-        raf1 = requestAnimationFrame(spin);
+        rafs.push(requestAnimationFrame(spin));
       }, 450);
       timers.push(t2);
       showToast(FACTS.chakra);
@@ -587,9 +693,8 @@
             });
           }
           if (p < 1) {
-            raf1 = requestAnimationFrame(rise);
+            rafs.push(requestAnimationFrame(rise));
           } else {
-            raf1 = null;
             var rect2 = rocketGroup.getBoundingClientRect();
             var apex = toStage(rect2.left + rect2.width / 2, rect2.top);
             rocketGroup.style.opacity = '0';
@@ -612,7 +717,7 @@
             timers.push(t4);
           }
         }
-        raf1 = requestAnimationFrame(rise);
+        rafs.push(requestAnimationFrame(rise));
       }, 380);
       timers.push(t3);
       showToast(FACTS.rocket);
@@ -657,6 +762,56 @@
         });
       });
       showToast(FACTS.ladi);
+
+    } else if (type === 'atombomb') {
+      SFX.fuseHiss(0);
+      var tBomb = setTimeout(function () {
+        if (!reduceMotion) { stage.classList.add('shake'); }
+        doFlash(true);
+        triggerShockwave();
+        SFX.bigBoom(0);
+        var nBomb = Math.round(90 * motionScale);
+        for (var kb = 0; kb < nBomb; kb++) {
+          emitSpark(local.x, local.y, {
+            spread: Math.PI * 2, minSpeed: 70, maxSpeed: 320, gravity: 280,
+            color: pick(['#FFD23F', '#FF6B4A', '#FFFFFF', '#FFB84D']), minSize: 1.4, maxSize: 3.2,
+            minLife: 0.5, maxLife: 1.2
+          });
+        }
+        var nSmoke = Math.round(16 * motionScale);
+        for (var ks = 0; ks < nSmoke; ks++) {
+          emitSpark(local.x, local.y, {
+            spread: Math.PI * 2, minSpeed: 8, maxSpeed: 35, gravity: -16,
+            color: pick(['#8a8a8a', '#5c5c5c', '#3a3a3a']), minSize: 3, maxSize: 6.5,
+            minLife: 1.6, maxLife: 2.4, glow: false
+          });
+        }
+        var idShake = setTimeout(function () { stage.classList.remove('shake'); }, 430);
+        timers.push(idShake);
+        var idBombDone = setTimeout(function () { lit = false; }, 1300);
+        timers.push(idBombDone);
+      }, 550);
+      timers.push(tBomb);
+      showToast(FACTS.atombomb);
+
+    } else if (type === 'multirocket') {
+      SFX.fuseHiss(0);
+      var totalShots = 9;
+      function scheduleShot (i) {
+        if (i >= totalShots) {
+          var idMrDone = setTimeout(function () { lit = false; }, 400);
+          timers.push(idMrDone);
+          return;
+        }
+        var xFrac = 0.3 + Math.random() * 0.4;
+        fireAerialShell(xFrac, { travelFrac: 0.38 + Math.random() * 0.3 });
+        var gap = 400 + Math.random() * 420;
+        var idShot = setTimeout(function () { scheduleShot(i + 1); }, gap);
+        timers.push(idShot);
+      }
+      var idMrStart = setTimeout(function () { scheduleShot(0); }, 500);
+      timers.push(idMrStart);
+      showToast(FACTS.multirocket);
     }
   }
 
