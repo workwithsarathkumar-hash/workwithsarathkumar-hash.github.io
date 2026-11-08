@@ -60,7 +60,7 @@
   /* ---------- stage ---------- */
   .stage{
     position:relative;max-width:720px;margin:0 auto;overflow:hidden;
-    height:clamp(380px,56vw,540px);border-radius:16px;
+    height:clamp(320px,88vw,540px);border-radius:16px;
     background:radial-gradient(ellipse at 50% 0%, #11131a 0%, #05060a 70%);
     border:1px solid var(--glass-border);
     box-shadow:0 1px 0 var(--glass-sheen) inset, 0 30px 80px -24px var(--glass-shadow);
@@ -75,7 +75,8 @@
   .cracker-rig{position:absolute;inset:0;z-index:2;display:none;}
   .cracker-rig.is-active{display:block;}
   .fuse-point{position:absolute;width:14px;height:14px;border-radius:50%;cursor:pointer;}
-  .fuse-point::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed var(--accent-border);opacity:0.55;animation:fusePulse 1.6s ease-in-out infinite;}
+  .fuse-point::before{content:'';position:absolute;inset:-14px;border-radius:50%;}
+  .fuse-point::after{content:'';position:absolute;inset:-9px;border-radius:50%;border:1px dashed var(--accent-border);opacity:0.55;animation:fusePulse 1.6s ease-in-out infinite;}
   @keyframes fusePulse{0%,100%{transform:scale(0.9);opacity:0.35;}50%{transform:scale(1.15);opacity:0.75;}}
   .stage.fuse-near .fuse-point::after{border-color:var(--accent-strong);opacity:1;}
 
@@ -131,6 +132,7 @@
   }
   .doop-stick.dragging{cursor:grabbing;transition:none;}
   .doop-stick:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}
+  .doop-stick::before{content:'';position:absolute;top:-16px;left:-18px;right:-18px;bottom:-16px;}
   .stick-tip{
     position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:15px;height:15px;border-radius:50%;
     background:radial-gradient(circle,#fff2c4 0%,#ff8a3d 45%,#c23b0e 78%,transparent 100%);
@@ -158,6 +160,14 @@
     .stick-tip{animation:none;}
     .fuse-point::after{animation:none;}
     .stage-star{animation:none;opacity:0.5;}
+  }
+
+  @media (max-width:480px){
+    .cracker-shelf{gap:8px;justify-content:center;}
+    .cracker-choice{padding:11px 14px;font-size:0.76rem;}
+    .stick-holder{right:8px;}
+    .stage-toast{font-size:0.82rem;padding:10px 14px;bottom:3%;}
+    .stage-hint{font-size:0.73rem;padding:0 6px;}
   }
 
   footer{padding:40px 0 60px;}
@@ -278,7 +288,8 @@
   var ladiUnits = Array.prototype.slice.call(document.querySelectorAll('[data-ladi-units] .unit'));
   var shelfButtons = Array.prototype.slice.call(document.querySelectorAll('.cracker-choice'));
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var motionScale = reduceMotion ? 0.5 : 1;
+  var isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+  var motionScale = reduceMotion ? 0.5 : (isCoarsePointer ? 0.75 : 1);
 
   var currentType = 'sparkler';
   var lit = false;
