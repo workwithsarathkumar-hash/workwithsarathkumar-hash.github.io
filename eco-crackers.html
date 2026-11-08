@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eco Crackers — Burst The Joy, Not The Planet — Sarath Kumar</title>
+<meta name="description" content="Pick a cracker, drag the stick to the fuse, and let it go — the full sound and spark, none of the smoke, none of the noise, none of the risk. A cleaner Diwali idea, built end-to-end by Jarvis.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23090A0C'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Georgia,serif' font-style='italic' fill='%23E8B85C' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,400..600&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#090A0C; --surface:#131418; --surface-2:#1B1D22;
+    --border:rgba(255,255,255,0.09); --border-strong:rgba(255,255,255,0.16);
+    --text:#F4F1EA; --text-soft:#B7B3A8; --text-faint:#726E64;
+    --accent:#E8B85C; --accent-strong:#F5CE85; --accent-ink:#191307;
+    --accent-soft:rgba(232,184,92,0.14); --accent-border:rgba(232,184,92,0.35);
+    --glass-hi:rgba(255,255,255,0.10); --glass-lo:rgba(255,255,255,0.02);
+    --glass-border:rgba(255,255,255,0.16); --glass-sheen:rgba(255,255,255,0.14);
+    --glass-shadow:rgba(0,0,0,0.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Sora',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent);text-decoration:none;}
+
+  nav{padding:20px 0;border-bottom:1px solid var(--border);}
+  nav a.back{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text-faint);text-decoration:none;}
+  nav a.back:hover{color:var(--accent);}
+
+  header.hero{padding:56px 0 36px;border-bottom:1px solid var(--border);}
+  .section-label{font-family:'JetBrains Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:18px;}
+  .section-label span{color:var(--accent);}
+  h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(2.2rem,6vw,3.4rem);letter-spacing:-0.01em;margin-bottom:16px;}
+  h1 em{font-style:italic;color:var(--accent);}
+  .review-intro{color:var(--text-soft);max-width:640px;}
+
+  section{padding:52px 0;position:relative;overflow:hidden;}
+  .section-glow{
+    position:absolute;top:6%;left:50%;width:min(900px,140vw);height:900px;transform:translateX(-50%);
+    background:radial-gradient(circle, var(--accent-soft) 0%, transparent 68%);
+    filter:blur(40px);pointer-events:none;z-index:0;
+  }
+  section .wrap{position:relative;z-index:1;}
+
+  /* ---------- cracker shelf ---------- */
+  .cracker-shelf{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px;}
+  .cracker-choice{
+    display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;letter-spacing:0.02em;
+    background:transparent;border:1px solid var(--border-strong);color:var(--text-soft);
+    cursor:pointer;transition:border-color 0.15s ease,color 0.15s ease,background 0.15s ease;
+  }
+  .cracker-choice:hover{border-color:var(--accent-border);color:var(--accent);}
+  .cracker-choice[aria-selected="true"]{background:var(--accent-soft);border-color:var(--accent-border);color:var(--accent-strong);}
+
+  /* ---------- stage ---------- */
+  .stage{
+    position:relative;max-width:720px;margin:0 auto;overflow:hidden;
+    height:clamp(380px,56vw,540px);border-radius:16px;
+    background:radial-gradient(ellipse at 50% 0%, #11131a 0%, #05060a 70%);
+    border:1px solid var(--glass-border);
+    box-shadow:0 1px 0 var(--glass-sheen) inset, 0 30px 80px -24px var(--glass-shadow);
+  }
+  .stage-star{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.55);animation:twinkle 2.6s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:0.25;}50%{opacity:0.9;}}
+  .stage-ground{position:absolute;left:0;right:0;bottom:0;height:16%;background:linear-gradient(180deg, rgba(64,46,28,0.95), rgba(16,11,6,1));box-shadow:0 -1px 0 rgba(255,255,255,0.06) inset;z-index:1;}
+  .fx-canvas{position:absolute;inset:0;z-index:3;pointer-events:none;}
+  .stage-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:6;}
+  .stage-flash.go{opacity:0.55;transition:opacity 0.45s ease-out;}
+
+  .cracker-rig{position:absolute;inset:0;z-index:2;display:none;}
+  .cracker-rig.is-active{display:block;}
+  .fuse-point{position:absolute;width:14px;height:14px;border-radius:50%;cursor:pointer;}
+  .fuse-point::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed var(--accent-border);opacity:0.55;animation:fusePulse 1.6s ease-in-out infinite;}
+  @keyframes fusePulse{0%,100%{transform:scale(0.9);opacity:0.35;}50%{transform:scale(1.15);opacity:0.75;}}
+  .stage.fuse-near .fuse-point::after{border-color:var(--accent-strong);opacity:1;}
+
+  /* sparkler */
+  .rig-sparkler .rod{position:absolute;left:50%;bottom:16%;width:5px;height:150px;transform:translateX(-50%);background:linear-gradient(180deg,#cfd3da,#8a8f99);border-radius:3px;}
+  .rig-sparkler .tip{left:50%;top:-7px;transform:translateX(-50%);background:radial-gradient(circle,#d7dadf 0%,#9a9ea6 70%,transparent 100%);}
+  .rig-sparkler .tip.lit{background:radial-gradient(circle,#fff3c4 0%,#ffb03d 50%,#c23b0e 80%,transparent 100%);box-shadow:0 0 16px 5px rgba(255,170,60,0.75),0 0 34px 12px rgba(255,90,20,0.4);}
+
+  /* anaar / flower pot */
+  .rig-anaar .pot{position:absolute;left:50%;bottom:16%;width:64px;height:54px;transform:translateX(-50%);
+    background:linear-gradient(180deg,#8a5a34,#5c3a1f);border-radius:6px 6px 26px 26px/6px 6px 40px 40px;
+    box-shadow:0 1px 0 rgba(255,255,255,0.12) inset;}
+  .rig-anaar .pot-band{position:absolute;left:50%;bottom:calc(16% + 40px);width:70px;height:8px;transform:translateX(-50%);background:#3f2817;border-radius:3px;}
+  .rig-anaar .fuse-wick{position:absolute;left:50%;bottom:calc(16% + 48px);width:3px;height:22px;transform:translateX(-50%);background:#5b4a3a;border-radius:2px;}
+  .rig-anaar .fuse-point{left:50%;bottom:calc(16% + 68px);transform:translateX(-50%);background:#9a7a4a;}
+
+  /* chakra */
+  .rig-chakra .pin{position:absolute;left:50%;bottom:16%;width:6px;height:16px;transform:translateX(-50%);background:#555;border-radius:2px;}
+  .rig-chakra .wheel{
+    position:absolute;left:50%;bottom:calc(16% + 10px);width:120px;height:120px;transform:translate(-50%,-50%) rotate(0deg);
+    border-radius:50%;
+    background:conic-gradient(#e63946 0deg 45deg,#ffd23f 45deg 90deg,#2ec4b6 90deg 135deg,#e63946 135deg 180deg,#ffd23f 180deg 225deg,#2ec4b6 225deg 270deg,#e63946 270deg 315deg,#ffd23f 315deg 360deg);
+    box-shadow:0 0 0 4px #2b1c10, 0 6px 18px rgba(0,0,0,0.5);
+  }
+  .rig-chakra .hub{position:absolute;left:50%;bottom:calc(16% + 10px);width:16px;height:16px;transform:translate(-50%,-50%);border-radius:50%;background:#2b1c10;}
+  .rig-chakra .fuse-point{left:calc(50% + 58px);bottom:calc(16% + 8px);background:#9a7a4a;}
+
+  /* rocket */
+  .rig-rocket .tube{position:absolute;left:50%;bottom:16%;width:22px;height:40px;transform:translateX(-50%);background:linear-gradient(180deg,#2b2b30,#121214);border-radius:3px 3px 0 0;}
+  .rig-rocket .rocket-group{position:absolute;left:50%;bottom:16%;width:0;height:0;transform:translate(-50%,0);}
+  .rig-rocket .body{position:absolute;left:50%;bottom:0px;width:16px;height:46px;transform:translateX(-50%);background:linear-gradient(180deg,#e63946,#9c1c2e);border-radius:3px 3px 1px 1px;}
+  .rig-rocket .cone{position:absolute;left:50%;bottom:46px;width:0;height:0;transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:18px solid #ffd23f;}
+  .rig-rocket .fin-l{position:absolute;left:calc(50% - 15px);bottom:0px;width:0;height:0;border-left:9px solid transparent;border-bottom:16px solid #9c1c2e;}
+  .rig-rocket .fin-r{position:absolute;left:calc(50% + 6px);bottom:0px;width:0;height:0;border-right:9px solid transparent;border-bottom:16px solid #9c1c2e;}
+  .rig-rocket .fuse-point{left:50%;bottom:16%;transform:translate(-50%,2px);background:#9a7a4a;}
+
+  /* ladi / string */
+  .rig-ladi .thread{position:absolute;left:50%;bottom:calc(16% + 26px);width:260px;height:2px;transform:translateX(-50%);background:#4a3c2c;}
+  .rig-ladi .units{position:absolute;left:50%;bottom:calc(16% + 10px);width:260px;transform:translateX(-50%);display:flex;justify-content:space-between;}
+  .rig-ladi .unit{width:14px;height:30px;border-radius:3px;background:linear-gradient(180deg,#e63946,#9c1c2e);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset;transition:background 0.25s ease,transform 0.1s ease;}
+  .rig-ladi .unit.flash{background:#fff;box-shadow:0 0 16px 6px rgba(255,255,255,0.9);transform:scale(1.12);}
+  .rig-ladi .unit.spent{background:linear-gradient(180deg,#3a3a3a,#232323);}
+  .rig-ladi .fuse-point{left:calc(50% - 130px);bottom:calc(16% + 26px);background:#9a7a4a;}
+
+  /* ---------- doop stick ---------- */
+  .stick-holder{position:absolute;right:16px;bottom:16%;width:60px;height:150px;z-index:4;}
+  .doop-stick{
+    position:absolute;right:16px;bottom:4px;width:8px;height:120px;border-radius:5px;
+    background:linear-gradient(180deg,#8a6a45,#4a3220);
+    transform:translate(0,0) rotate(-32deg);transform-origin:bottom center;
+    cursor:grab;touch-action:none;box-shadow:0 6px 14px rgba(0,0,0,0.45);
+    transition:transform 0.38s cubic-bezier(.22,.9,.3,1.1);
+  }
+  .doop-stick.dragging{cursor:grabbing;transition:none;}
+  .doop-stick:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}
+  .stick-tip{
+    position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:15px;height:15px;border-radius:50%;
+    background:radial-gradient(circle,#fff2c4 0%,#ff8a3d 45%,#c23b0e 78%,transparent 100%);
+    box-shadow:0 0 14px 4px rgba(255,138,61,0.65),0 0 28px 10px rgba(255,80,20,0.3);
+    animation:emberFlicker 0.55s ease-in-out infinite alternate;
+  }
+  @keyframes emberFlicker{from{opacity:0.82;transform:translateX(-50%) scale(0.9);}to{opacity:1;transform:translateX(-50%) scale(1.1);}}
+
+  .stage-toast{
+    position:absolute;left:50%;bottom:4%;transform:translateX(-50%);z-index:5;max-width:88%;
+    background:linear-gradient(160deg, var(--glass-hi), var(--glass-lo)), rgba(9,10,12,0.72);
+    border:1px solid var(--glass-border);border-radius:10px;padding:12px 16px;
+    font-size:0.86rem;color:var(--text-soft);text-align:center;
+    opacity:0;pointer-events:none;transition:opacity 0.4s ease;
+  }
+  .stage-toast.show{opacity:1;}
+
+  .stage-hint{text-align:center;font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-faint);margin-top:16px;}
+
+  .eco-note{margin-top:40px;padding-top:24px;border-top:1px solid var(--border);}
+  .eco-note h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.15rem;margin-bottom:10px;}
+  .eco-note p{color:var(--text-soft);max-width:640px;font-size:0.95rem;}
+
+  @media (prefers-reduced-motion: reduce){
+    .stick-tip{animation:none;}
+    .fuse-point::after{animation:none;}
+    .stage-star{animation:none;opacity:0.5;}
+  }
+
+  footer{padding:40px 0 60px;}
+  footer p{font-size:0.82rem;color:var(--text-faint);margin:0 0 8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="back" href="index.html">← sarathkumar</a>
+  </nav>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="section-label"><span>ECO</span> — A Cleaner Diwali</p>
+    <h1>Burst The Joy. <em>Not</em> The Planet.</h1>
+    <p class="review-intro">Pick a cracker, drag the stick to the fuse, and let it go — the full sound and spark, none of the smoke, none of the noise, none of the risk. Built end-to-end by Jarvis, my personal AI system. No build tools, no tracking, nothing stored.</p>
+  </div>
+</header>
+
+<section>
+  <div class="section-glow" aria-hidden="true"></div>
+  <div class="wrap">
+
+    <div class="cracker-shelf" role="tablist" aria-label="Choose a cracker">
+      <button class="cracker-choice" type="button" data-cracker="sparkler" aria-selected="true">✨ Sparkler</button>
+      <button class="cracker-choice" type="button" data-cracker="anaar" aria-selected="false">🌺 Flower Pot</button>
+      <button class="cracker-choice" type="button" data-cracker="chakra" aria-selected="false">🌀 Chakra</button>
+      <button class="cracker-choice" type="button" data-cracker="rocket" aria-selected="false">🚀 Rocket</button>
+      <button class="cracker-choice" type="button" data-cracker="ladi" aria-selected="false">🧨 Ladi</button>
+    </div>
+
+    <div class="stage" data-stage>
+      <canvas class="fx-canvas" data-fx-canvas></canvas>
+      <div class="stage-flash" data-flash></div>
+      <div class="stage-ground"></div>
+
+      <div class="cracker-rig rig-sparkler is-active" data-rig="sparkler">
+        <div class="rod"></div>
+        <div class="fuse-point tip" data-tip></div>
+      </div>
+
+      <div class="cracker-rig rig-anaar" data-rig="anaar">
+        <div class="pot"></div>
+        <div class="pot-band"></div>
+        <div class="fuse-wick"></div>
+        <div class="fuse-point" data-tip></div>
+      </div>
+
+      <div class="cracker-rig rig-chakra" data-rig="chakra">
+        <div class="wheel" data-wheel></div>
+        <div class="hub"></div>
+        <div class="pin"></div>
+        <div class="fuse-point" data-tip></div>
+      </div>
+
+      <div class="cracker-rig rig-rocket" data-rig="rocket">
+        <div class="tube"></div>
+        <div class="rocket-group" data-rocket-group>
+          <div class="cone"></div>
+          <div class="body"></div>
+          <div class="fin-l"></div>
+          <div class="fin-r"></div>
+        </div>
+        <div class="fuse-point" data-tip></div>
+      </div>
+
+      <div class="cracker-rig rig-ladi" data-rig="ladi">
+        <div class="thread"></div>
+        <div class="units" data-ladi-units>
+          <div class="unit" data-unit="0"></div>
+          <div class="unit" data-unit="1"></div>
+          <div class="unit" data-unit="2"></div>
+          <div class="unit" data-unit="3"></div>
+          <div class="unit" data-unit="4"></div>
+          <div class="unit" data-unit="5"></div>
+          <div class="unit" data-unit="6"></div>
+        </div>
+        <div class="fuse-point" data-tip></div>
+      </div>
+
+      <div class="stick-holder">
+        <div class="doop-stick" data-stick tabindex="0" role="button" aria-label="Lighting stick — drag onto the glowing fuse, or press Enter to light it">
+          <div class="stick-tip"></div>
+        </div>
+      </div>
+
+      <div class="stage-toast" data-toast></div>
+    </div>
+
+    <p class="stage-hint">Drag the glowing stick onto the pulsing fuse — or just tap the fuse, or focus the stick and press Enter.</p>
+
+    <div class="eco-note">
+      <h3>Why this exists</h3>
+      <p>Every Diwali, the air over Indian cities spikes to some of the worst particulate levels of the year, burn wards fill up, and streets full of dogs, birds, and infants sit through hours of noise well past safe limits — all for a few seconds of color each. This page is the same spark, the same sound, the same small ritual of lighting something by hand — just moved entirely off the atmosphere and onto a screen. Pick a cracker, light it as many times as you want, and leave nothing behind.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><a href="index.html">← back to sarathkumar</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var stage = document.querySelector('[data-stage]');
+  var canvas = document.querySelector('[data-fx-canvas]');
+  var ctx = canvas.getContext('2d');
+  var flash = document.querySelector('[data-flash]');
+  var stick = document.querySelector('[data-stick]');
+  var toast = document.querySelector('[data-toast]');
+  var wheel = document.querySelector('[data-wheel]');
+  var rocketGroup = document.querySelector('[data-rocket-group]');
+  var ladiUnits = Array.prototype.slice.call(document.querySelectorAll('[data-ladi-units] .unit'));
+  var shelfButtons = Array.prototype.slice.call(document.querySelectorAll('.cracker-choice'));
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var motionScale = reduceMotion ? 0.5 : 1;
+
+  var currentType = 'sparkler';
+  var lit = false;
+  var timers = []; // interval/timeout ids to clear on reset
+  var raf1 = null; // dedicated rAF ids for chakra / rocket loops
+
+  // ---------- a few twinkling stars ----------
+  (function addStars () {
+    for (var i = 0; i < 26; i++) {
+      var s = document.createElement('div');
+      s.className = 'stage-star';
+      s.style.left = (Math.random() * 100) + '%';
+      s.style.top = (Math.random() * 55) + '%';
+      s.style.animationDelay = (Math.random() * 2.6) + 's';
+      stage.appendChild(s);
+    }
+  })();
+
+  // ---------- canvas sizing ----------
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var stageRect = { left: 0, top: 0, width: 0, height: 0 };
+  function resize () {
+    var r = stage.getBoundingClientRect();
+    stageRect = r;
+    canvas.width = r.width * dpr;
+    canvas.height = r.height * dpr;
+    canvas.style.width = r.width + 'px';
+    canvas.style.height = r.height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---------- audio (fully synthesized, no external files) ----------
+  var actx = null;
+  function audio () {
+    if (!actx) { actx = new (window.AudioContext || window.webkitAudioContext)(); }
+    if (actx.state === 'suspended') { actx.resume(); }
+    return actx;
+  }
+  function noiseBurst (opts) {
+    opts = opts || {};
+    var ac = audio();
+    var dur = opts.duration || 0.3;
+    var buf = ac.createBuffer(1, Math.max(1, Math.floor(ac.sampleRate * dur)), ac.sampleRate);
+    var data = buf.getChannelData(0);
+    var decay = opts.decay == null ? 2 : opts.decay;
+    for (var i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, decay);
+    }
+    var src = ac.createBufferSource();
+    src.buffer = buf;
+    var filter = ac.createBiquadFilter();
+    filter.type = opts.filterType || 'bandpass';
+    filter.frequency.value = opts.freq || 1200;
+    filter.Q.value = opts.q || 1;
+    var gain = ac.createGain();
+    gain.gain.value = opts.volume == null ? 0.4 : opts.volume;
+    src.connect(filter); filter.connect(gain); gain.connect(ac.destination);
+    src.start(ac.currentTime + (opts.delay || 0));
+  }
+  function tone (opts) {
+    var ac = audio();
+    var osc = ac.createOscillator();
+    osc.type = opts.type || 'sine';
+    var gain = ac.createGain();
+    var t0 = ac.currentTime + (opts.delay || 0);
+    var dur = opts.duration || 0.2;
+    osc.frequency.setValueAtTime(Math.max(opts.freqStart, 1), t0);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(opts.freqEnd, 1), t0 + dur);
+    gain.gain.setValueAtTime(opts.volume == null ? 0.3 : opts.volume, t0);
+    gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.start(t0); osc.stop(t0 + dur + 0.05);
+  }
+  var SFX = {
+    fuseHiss: function (delay) { noiseBurst({ duration: 0.5, freq: 3400, q: 0.7, filterType: 'highpass', volume: 0.1, delay: delay || 0, decay: 0.8 }); },
+    fizzle: function (dur, delay) { noiseBurst({ duration: dur || 2.6, freq: 4200, q: 0.5, filterType: 'highpass', volume: 0.09, delay: delay || 0, decay: 0.2 }); },
+    pop: function (delay) {
+      noiseBurst({ duration: 0.12, freq: 1800, filterType: 'bandpass', q: 0.8, volume: 0.5, delay: delay || 0, decay: 1.4 });
+      tone({ type: 'sine', freqStart: 190, freqEnd: 55, duration: 0.12, volume: 0.28, delay: delay || 0 });
+    },
+    whoosh: function (dur, delay) { noiseBurst({ duration: dur || 1.0, freq: 900, filterType: 'lowpass', q: 0.5, volume: 0.28, delay: delay || 0, decay: 0.9 }); },
+    boom: function (delay) {
+      noiseBurst({ duration: 0.55, freq: 300, filterType: 'lowpass', q: 0.6, volume: 0.55, delay: delay || 0, decay: 1.2 });
+      tone({ type: 'sine', freqStart: 120, freqEnd: 28, duration: 0.4, volume: 0.45, delay: delay || 0 });
+    },
+    whistleUp: function (dur, delay) { tone({ type: 'sine', freqStart: 280, freqEnd: 1300, duration: dur || 1.0, volume: 0.2, delay: delay || 0 }); },
+    whirrPulse: function (delay) { noiseBurst({ duration: 0.16, freq: 650, filterType: 'bandpass', q: 2.4, volume: 0.16, delay: delay || 0, decay: 1.6 }); }
+  };
+
+  // ---------- particle engine ----------
+  var particles = [];
+  function pick (arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function emitSpark (x, y, o) {
+    o = o || {};
+    var angle = o.angle != null ? o.angle : Math.random() * Math.PI * 2;
+    var spread = o.spread != null ? o.spread : Math.PI * 2;
+    var a = angle + (Math.random() - 0.5) * spread;
+    var speed = (o.minSpeed || 40) + Math.random() * ((o.maxSpeed || 120) - (o.minSpeed || 40));
+    particles.push({
+      x: x, y: y,
+      vx: Math.cos(a) * speed, vy: Math.sin(a) * speed,
+      gravity: o.gravity != null ? o.gravity : 220,
+      size: (o.minSize || 1) + Math.random() * ((o.maxSize || 2.4) - (o.minSize || 1)),
+      color: o.color || pick(['#FFD98A', '#FFB84D', '#FFF3D1']),
+      life: ((o.minLife || 0.5) + Math.random() * ((o.maxLife || 1.1) - (o.minLife || 0.5))),
+      age: 0, glow: o.glow !== false, glowSize: o.glowSize || 9
+    });
+  }
+  function stepParticles (dt) {
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.vy += (p.gravity || 0) * dt;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      p.age += dt;
+      if (p.age >= p.life) { particles.splice(i, 1); }
+    }
+  }
+  function drawParticles () {
+    ctx.clearRect(0, 0, stageRect.width, stageRect.height);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      var t = p.age / p.life;
+      var alpha = 1 - t;
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = p.glow ? p.glowSize : 0;
+      ctx.shadowColor = p.color;
+      var size = Math.max(0.4, p.size * (1 - t * 0.5));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+  }
+  var lastT = null;
+  function engineLoop (ts) {
+    if (lastT == null) { lastT = ts; }
+    var dt = Math.min((ts - lastT) / 1000, 0.05);
+    lastT = ts;
+    stepParticles(dt);
+    drawParticles();
+    requestAnimationFrame(engineLoop);
+  }
+  requestAnimationFrame(engineLoop);
+
+  function doFlash () {
+    if (reduceMotion) { return; }
+    flash.classList.add('go');
+    setTimeout(function () { flash.classList.remove('go'); }, 60);
+  }
+
+  function toStage (clientX, clientY) {
+    return { x: clientX - stageRect.left, y: clientY - stageRect.top };
+  }
+  function activeRig () { return document.querySelector('.cracker-rig.is-active'); }
+  function fusePointEl () { return activeRig().querySelector('[data-tip]'); }
+  function fuseCenter () {
+    var r = fusePointEl().getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+  function stickTipCenter () {
+    var r = stick.querySelector('.stick-tip').getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+  function dist (a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+  // ---------- eco facts per type ----------
+  var FACTS = {
+    sparkler: 'A real sparkler burns at close to 1800°C and showers hot metal flakes onto hands and feet — more Diwali ER visits than almost any other cracker. This one only glows on your screen.',
+    anaar: 'Flower pots tipping over mid-burn cause some of the worst Diwali burn injuries every year. This one can\'t tip, can\'t burn, can\'t scar.',
+    chakra: 'Ground chakras fling sparks low and sideways, right at ankles and bare feet. This one only spins light.',
+    rocket: 'Stray rockets are behind more Diwali fire-brigade calls than any other cracker — roofs, trees, parked bikes. This one always lands exactly where you are: your screen.',
+    ladi: 'A single ladi can peak past 125 dB — loud enough to spike real anxiety in pets, infants, and elderly ears for streets around. This one is silent outside your own speakers.'
+  };
+  var toastTimer = null;
+  function showToast (text) {
+    toast.textContent = text;
+    toast.classList.add('show');
+    if (toastTimer) { clearTimeout(toastTimer); }
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 5200);
+  }
+
+  function clearTimers () {
+    timers.forEach(function (id) { clearTimeout(id); clearInterval(id); });
+    timers = [];
+    if (raf1) { cancelAnimationFrame(raf1); raf1 = null; }
+  }
+
+  function resetVisual (type) {
+    if (type === 'sparkler') {
+      var tip = document.querySelector('.rig-sparkler .tip');
+      tip.classList.remove('lit');
+    } else if (type === 'chakra') {
+      wheel.style.transform = 'translate(-50%,-50%) rotate(0deg)';
+    } else if (type === 'rocket') {
+      rocketGroup.style.transition = 'none';
+      rocketGroup.style.transform = 'translate(-50%,0px)';
+      rocketGroup.style.opacity = '1';
+    } else if (type === 'ladi') {
+      ladiUnits.forEach(function (u) { u.classList.remove('flash', 'spent'); });
+    }
+  }
+
+  function ignite () {
+    if (lit) { return; }
+    lit = true;
+    var fuse = fuseCenter();
+    var local = toStage(fuse.x, fuse.y);
+    var type = currentType;
+
+    if (type === 'sparkler') {
+      var tip = document.querySelector('.rig-sparkler .tip');
+      tip.classList.add('lit');
+      SFX.fizzle(3.0, 0);
+      var dur = 3100, start = performance.now();
+      var id = setInterval(function () {
+        var elapsed = performance.now() - start;
+        if (elapsed > dur) {
+          clearInterval(id); tip.classList.remove('lit'); lit = false; return;
+        }
+        var fade = 1 - elapsed / dur;
+        var n = Math.round((3 + Math.random() * 3) * motionScale);
+        for (var k = 0; k < n; k++) {
+          emitSpark(local.x, local.y, {
+            spread: Math.PI * 2, minSpeed: 15, maxSpeed: 20 + 80 * fade,
+            minSize: 0.7, maxSize: 2.1, color: pick(['#FFE9B0', '#FFFFFF', '#FFC24D']),
+            minLife: 0.25, maxLife: 0.6, gravity: 150
+          });
+        }
+      }, 40);
+      timers.push(id);
+      showToast(FACTS.sparkler);
+
+    } else if (type === 'anaar') {
+      SFX.fuseHiss(0);
+      var t1 = setTimeout(function () {
+        doFlash();
+        SFX.whoosh(2.0, 0);
+        var dur2 = 2100, start2 = performance.now();
+        var id2 = setInterval(function () {
+          var elapsed = performance.now() - start2;
+          if (elapsed > dur2) {
+            clearInterval(id2);
+            SFX.pop(0);
+            setTimeout(function () { lit = false; }, 300);
+            return;
+          }
+          var n2 = Math.round(5 * motionScale);
+          for (var k = 0; k < n2; k++) {
+            emitSpark(local.x, local.y - 4, {
+              angle: -Math.PI / 2, spread: 0.55, minSpeed: 130, maxSpeed: 250,
+              gravity: 420, color: pick(['#FF6B4A', '#FFD23F', '#8CFF9E', '#FF4FA0']),
+              minSize: 1.2, maxSize: 2.6, minLife: 0.6, maxLife: 1.1
+            });
+          }
+        }, 30);
+        timers.push(id2);
+      }, 600);
+      timers.push(t1);
+      showToast(FACTS.anaar);
+
+    } else if (type === 'chakra') {
+      SFX.fuseHiss(0);
+      var t2 = setTimeout(function () {
+        var dur3 = 3200, start3 = performance.now();
+        var rot = 0;
+        var rimR = 60;
+        var wheelRect = wheel.getBoundingClientRect();
+        var center = toStage(wheelRect.left + wheelRect.width / 2, wheelRect.top + wheelRect.height / 2);
+        function spin (ts) {
+          var elapsed = performance.now() - start3;
+          if (elapsed > dur3) {
+            raf1 = null; lit = false; return;
+          }
+          var p = elapsed / dur3;
+          var speed = p < 0.25 ? (p / 0.25) : (p > 0.75 ? (1 - p) / 0.25 : 1);
+          rot += (4 + speed * 14);
+          wheel.style.transform = 'translate(-50%,-50%) rotate(' + rot + 'deg)';
+          if (Math.random() < 0.9) {
+            var rad = rot * Math.PI / 180;
+            [0, Math.PI].forEach(function (off) {
+              var a = rad + off;
+              var px = center.x + Math.cos(a) * rimR;
+              var py = center.y + Math.sin(a) * rimR;
+              var tangent = a + Math.PI / 2;
+              emitSpark(px, py, {
+                angle: tangent, spread: 0.3, minSpeed: 60 * speed + 20, maxSpeed: 140 * speed + 40,
+                gravity: 200, color: pick(['#FFD23F', '#FF6B4A', '#FFF3D1']),
+                minSize: 1, maxSize: 2, minLife: 0.3, maxLife: 0.6
+              });
+            });
+          }
+          if (Math.random() < 0.12) { SFX.whirrPulse(0); }
+          raf1 = requestAnimationFrame(spin);
+        }
+        raf1 = requestAnimationFrame(spin);
+      }, 450);
+      timers.push(t2);
+      showToast(FACTS.chakra);
+
+    } else if (type === 'rocket') {
+      SFX.fuseHiss(0);
+      var t3 = setTimeout(function () {
+        SFX.whistleUp(1.0, 0);
+        var riseDur = 1050, start4 = performance.now();
+        var travel = stageRect.height * 0.62;
+        function rise () {
+          var elapsed = performance.now() - start4;
+          var p = Math.min(1, elapsed / riseDur);
+          var eased = 1 - Math.pow(1 - p, 2);
+          var y = -eased * travel;
+          rocketGroup.style.transform = 'translate(-50%,' + y + 'px)';
+          var rect = rocketGroup.getBoundingClientRect();
+          var base = toStage(rect.left + rect.width / 2, rect.bottom);
+          if (Math.random() < 0.9) {
+            emitSpark(base.x, base.y, {
+              angle: Math.PI / 2, spread: 0.3, minSpeed: 30, maxSpeed: 80,
+              gravity: 60, color: pick(['#FFD23F', '#FFB84D']), minSize: 1, maxSize: 2,
+              minLife: 0.25, maxLife: 0.45
+            });
+          }
+          if (p < 1) {
+            raf1 = requestAnimationFrame(rise);
+          } else {
+            raf1 = null;
+            var rect2 = rocketGroup.getBoundingClientRect();
+            var apex = toStage(rect2.left + rect2.width / 2, rect2.top);
+            rocketGroup.style.opacity = '0';
+            doFlash();
+            SFX.boom(0);
+            var n3 = Math.round(70 * motionScale);
+            for (var k = 0; k < n3; k++) {
+              emitSpark(apex.x, apex.y, {
+                spread: Math.PI * 2, minSpeed: 60, maxSpeed: 260,
+                gravity: 260, color: pick(['#FF6B4A', '#FFD23F', '#8CFF9E', '#4DB8FF', '#FF4FA0', '#FFFFFF']),
+                minSize: 1.2, maxSize: 2.8, minLife: 0.6, maxLife: 1.3
+              });
+            }
+            var t4 = setTimeout(function () {
+              rocketGroup.style.transition = 'none';
+              rocketGroup.style.transform = 'translate(-50%,0px)';
+              rocketGroup.style.opacity = '1';
+              lit = false;
+            }, 650);
+            timers.push(t4);
+          }
+        }
+        raf1 = requestAnimationFrame(rise);
+      }, 380);
+      timers.push(t3);
+      showToast(FACTS.rocket);
+
+    } else if (type === 'ladi') {
+      ladiUnits.forEach(function (u) { u.classList.remove('flash', 'spent'); });
+      ladiUnits.forEach(function (u, idx) {
+        var delay = idx * 130 + Math.random() * 40;
+        var id3 = setTimeout(function () {
+          var rect = u.getBoundingClientRect();
+          var p = toStage(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          u.classList.add('flash');
+          SFX.pop(0);
+          var n4 = Math.round(8 * motionScale);
+          for (var k = 0; k < n4; k++) {
+            emitSpark(p.x, p.y, {
+              spread: Math.PI * 2, minSpeed: 30, maxSpeed: 110, gravity: 260,
+              color: pick(['#FFD23F', '#FF6B4A', '#FFFFFF']), minSize: 1, maxSize: 2,
+              minLife: 0.3, maxLife: 0.55
+            });
+          }
+          var id4 = setTimeout(function () { u.classList.remove('flash'); u.classList.add('spent'); }, 140);
+          timers.push(id4);
+          if (idx === ladiUnits.length - 1) {
+            var id5 = setTimeout(function () { lit = false; }, 300);
+            timers.push(id5);
+          }
+        }, delay);
+        timers.push(id3);
+      });
+      showToast(FACTS.ladi);
+    }
+  }
+
+  // ---------- stick drag ----------
+  var dragging = false, baseX = 0, baseY = 0, startX = 0, startY = 0;
+  stick.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    stick.classList.add('dragging');
+    startX = e.clientX; startY = e.clientY;
+    baseX = 0; baseY = 0;
+    try { stick.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  stick.addEventListener('pointermove', function (e) {
+    if (!dragging) { return; }
+    var dx = e.clientX - startX;
+    var dy = e.clientY - startY;
+    var maxDx = stageRect.width, maxDy = stageRect.height;
+    dx = Math.max(-maxDx, Math.min(maxDx, dx));
+    dy = Math.max(-maxDy, Math.min(maxDy, dy));
+    stick.style.transform = 'translate(' + (baseX + dx) + 'px,' + (baseY + dy) + 'px) rotate(-32deg)';
+    var tip = stickTipCenter();
+    var fuse = fuseCenter();
+    stage.classList.toggle('fuse-near', dist(tip, fuse) < 32);
+    if (Math.random() < 0.5) {
+      var p = toStage(tip.x, tip.y);
+      emitSpark(p.x, p.y, { spread: 0.9, minSpeed: 5, maxSpeed: 20, minSize: 0.5, maxSize: 1.1, color: '#FFC24D', minLife: 0.15, maxLife: 0.3, gravity: 40, glowSize: 5 });
+    }
+  });
+  function endDrag (e) {
+    if (!dragging) { return; }
+    dragging = false;
+    stick.classList.remove('dragging');
+    stage.classList.remove('fuse-near');
+    var tip = stickTipCenter();
+    var fuse = fuseCenter();
+    var hit = dist(tip, fuse) < 34;
+    stick.style.transition = 'transform 0.38s cubic-bezier(.22,.9,.3,1.1)';
+    stick.style.transform = 'translate(0,0) rotate(-32deg)';
+    if (hit) { ignite(); }
+  }
+  stick.addEventListener('pointerup', endDrag);
+  stick.addEventListener('pointercancel', endDrag);
+  stick.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ignite(); }
+  });
+
+  // tap-to-light fallback on the fuse itself
+  stage.addEventListener('click', function (e) {
+    if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-tip')) {
+      ignite();
+    }
+  });
+
+  // ---------- cracker switching ----------
+  function selectType (type) {
+    if (type === currentType && !lit) { return; }
+    clearTimers();
+    resetVisual(currentType);
+    lit = false;
+    toast.classList.remove('show');
+    particles.length = 0;
+    currentType = type;
+    document.querySelectorAll('.cracker-rig').forEach(function (r) {
+      r.classList.toggle('is-active', r.getAttribute('data-rig') === type);
+    });
+    shelfButtons.forEach(function (b) {
+      b.setAttribute('aria-selected', b.getAttribute('data-cracker') === type ? 'true' : 'false');
+    });
+    resize();
+  }
+  shelfButtons.forEach(function (b) {
+    b.addEventListener('click', function () { selectType(b.getAttribute('data-cracker')); });
+  });
+})();
+</script>
+</body>
+</html>
