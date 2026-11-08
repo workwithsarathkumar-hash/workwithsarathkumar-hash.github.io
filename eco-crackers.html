@@ -109,12 +109,13 @@
   .rig-rocket .fuse-point{left:50%;bottom:16%;transform:translate(-50%,2px);background:#9a7a4a;}
 
   /* ladi / string */
-  .rig-ladi .thread{position:absolute;left:50%;bottom:calc(16% + 26px);width:88%;max-width:320px;height:2px;transform:translateX(-50%);background:#4a3c2c;}
-  .rig-ladi .units{position:absolute;left:50%;bottom:calc(16% + 10px);width:88%;max-width:320px;transform:translateX(-50%);display:flex;justify-content:space-between;}
-  .rig-ladi .unit{width:7px;height:26px;border-radius:2px;background:linear-gradient(180deg,#e63946,#9c1c2e);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset;transition:background 0.2s ease,transform 0.08s ease;}
-  .rig-ladi .unit.flash{background:#fff;box-shadow:0 0 16px 6px rgba(255,255,255,0.9);transform:scale(1.25);}
+  .rig-ladi .thread{position:absolute;left:50%;bottom:calc(16% + 6px);width:88%;max-width:320px;height:2px;transform:translateX(-50%);background:#4a3c2c;}
+  .rig-ladi .units-rows{position:absolute;left:50%;bottom:calc(16% + 12px);width:88%;max-width:320px;transform:translateX(-50%);display:flex;flex-direction:column;gap:5px;}
+  .rig-ladi .units{display:flex;justify-content:space-between;}
+  .rig-ladi .unit{width:6px;height:15px;border-radius:2px;background:linear-gradient(180deg,#e63946,#9c1c2e);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset;transition:background 0.2s ease,transform 0.08s ease;}
+  .rig-ladi .unit.flash{background:#fff;box-shadow:0 0 14px 5px rgba(255,255,255,0.9);transform:scale(1.3);}
   .rig-ladi .unit.spent{background:linear-gradient(180deg,#3a3a3a,#232323);}
-  .rig-ladi .fuse-point{left:calc(50% - min(44%,160px) - 3px);bottom:calc(16% + 26px);background:#9a7a4a;}
+  .rig-ladi .fuse-point{left:calc(50% - min(44%,160px) - 3px);bottom:calc(16% + 27px);background:#9a7a4a;}
 
   /* ---------- doop stick ---------- */
   .stick-holder{position:absolute;right:16px;bottom:16%;width:60px;height:150px;z-index:4;}
@@ -227,7 +228,7 @@
 
       <div class="cracker-rig rig-ladi" data-rig="ladi">
         <div class="thread"></div>
-        <div class="units" data-ladi-units></div>
+        <div class="units-rows" data-ladi-rows></div>
         <div class="fuse-point" data-tip></div>
       </div>
 
@@ -266,17 +267,25 @@
   var toast = document.querySelector('[data-toast]');
   var wheel = document.querySelector('[data-wheel]');
   var rocketGroup = document.querySelector('[data-rocket-group]');
-  var LADI_COUNT = 26;
+  var LADI_ROWS = 3, LADI_PER_ROW = 16;
+  var ladiUnitsRows = [];
   (function buildLadiUnits () {
-    var wrap = document.querySelector('[data-ladi-units]');
-    for (var i = 0; i < LADI_COUNT; i++) {
-      var u = document.createElement('div');
-      u.className = 'unit';
-      u.setAttribute('data-unit', i);
-      wrap.appendChild(u);
+    var rowsWrap = document.querySelector('[data-ladi-rows]');
+    for (var r = 0; r < LADI_ROWS; r++) {
+      var rowEl = document.createElement('div');
+      rowEl.className = 'units';
+      var rowUnits = [];
+      for (var i = 0; i < LADI_PER_ROW; i++) {
+        var u = document.createElement('div');
+        u.className = 'unit';
+        rowEl.appendChild(u);
+        rowUnits.push(u);
+      }
+      rowsWrap.appendChild(rowEl);
+      ladiUnitsRows.push(rowUnits);
     }
   })();
-  var ladiUnits = Array.prototype.slice.call(document.querySelectorAll('[data-ladi-units] .unit'));
+  var ladiUnits = ladiUnitsRows.reduce(function (a, b) { return a.concat(b); }, []);
   var shelfButtons = Array.prototype.slice.call(document.querySelectorAll('.cracker-choice'));
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
@@ -610,36 +619,42 @@
 
     } else if (type === 'ladi') {
       ladiUnits.forEach(function (u) { u.classList.remove('flash', 'spent'); });
-      var order = ladiUnits.map(function (_, i) { return i; });
-      for (var oi = order.length - 1; oi > 0; oi--) {
-        var oj = Math.floor(Math.random() * (oi + 1));
-        var tmp = order[oi]; order[oi] = order[oj]; order[oj] = tmp;
-      }
-      var tAcc = 0;
-      order.forEach(function (unitIdx, seq) {
-        tAcc += 10 + Math.random() * Math.random() * 90;
-        var u = ladiUnits[unitIdx];
-        var id3 = setTimeout(function () {
-          var rect = u.getBoundingClientRect();
-          var p = toStage(rect.left + rect.width / 2, rect.top + rect.height / 2);
-          u.classList.add('flash');
-          SFX.pop(0);
-          var n4 = Math.round(6 * motionScale);
-          for (var k = 0; k < n4; k++) {
-            emitSpark(p.x, p.y, {
-              spread: Math.PI * 2, minSpeed: 30, maxSpeed: 110, gravity: 260,
-              color: pick(['#FFD23F', '#FF6B4A', '#FFFFFF']), minSize: 1, maxSize: 2,
-              minLife: 0.3, maxLife: 0.55
-            });
-          }
-          var id4 = setTimeout(function () { u.classList.remove('flash'); u.classList.add('spent'); }, 140);
-          timers.push(id4);
-          if (seq === order.length - 1) {
-            var id5 = setTimeout(function () { lit = false; }, 300);
-            timers.push(id5);
-          }
-        }, tAcc);
-        timers.push(id3);
+      var rowsDone = 0;
+      ladiUnitsRows.forEach(function (rowUnits) {
+        var order = rowUnits.map(function (_, i) { return i; });
+        for (var oi = order.length - 1; oi > 0; oi--) {
+          var oj = Math.floor(Math.random() * (oi + 1));
+          var tmp = order[oi]; order[oi] = order[oj]; order[oj] = tmp;
+        }
+        var tAcc = Math.random() * 40;
+        order.forEach(function (unitIdx, seq) {
+          tAcc += 10 + Math.random() * Math.random() * 90;
+          var u = rowUnits[unitIdx];
+          var id3 = setTimeout(function () {
+            var rect = u.getBoundingClientRect();
+            var p = toStage(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            u.classList.add('flash');
+            SFX.pop(0);
+            var n4 = Math.round(5 * motionScale);
+            for (var k = 0; k < n4; k++) {
+              emitSpark(p.x, p.y, {
+                spread: Math.PI * 2, minSpeed: 30, maxSpeed: 110, gravity: 260,
+                color: pick(['#FFD23F', '#FF6B4A', '#FFFFFF']), minSize: 1, maxSize: 2,
+                minLife: 0.3, maxLife: 0.55
+              });
+            }
+            var id4 = setTimeout(function () { u.classList.remove('flash'); u.classList.add('spent'); }, 140);
+            timers.push(id4);
+            if (seq === order.length - 1) {
+              rowsDone++;
+              if (rowsDone === ladiUnitsRows.length) {
+                var id5 = setTimeout(function () { lit = false; }, 300);
+                timers.push(id5);
+              }
+            }
+          }, tAcc);
+          timers.push(id3);
+        });
       });
       showToast(FACTS.ladi);
     }
